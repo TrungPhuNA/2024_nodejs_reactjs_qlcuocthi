@@ -92,3 +92,52 @@ export const regexEmail = /[a-z][a-z0-9_\.]{0,31}[a-z0-9]{0,}@[a-z0-9\-]{2,}(\.[
 export const regexPass = /[a-zA-Z0-9]{6,20}/g;
 export const regexUserName = /([a-zA-Z0-9]){6,20}/g;
 export const regexPhone = /([0-9]{9,10}\b)/g; //(09|03|07|08|05|04|\+84|84)+
+
+
+export const SERVICE_STATUS = [
+	{
+		value: 1,
+		name: 'Khởi tạo',
+		code: 'INIT',
+	},
+	{
+		value: 2,
+		name: 'Hoạt động',
+		code: 'ACTIVE'
+	},
+	{
+		value: -1,
+		name: 'Không Hoạt động',
+		code: 'INACTIVE'
+	},
+	{
+		value: 3,
+		name: 'Hết hạn',
+		code: 'EXPIRED'
+	},
+	
+];
+
+export const SERVICE_TYPE: any = [
+	{
+		value: 1,
+		name: 'Gói ngày',
+		code: 'DAY',
+	},
+	{
+		value: 7,
+		name: 'Gói tuần',
+		code: 'WEEK'
+	},
+	{
+		value: 30,
+		name: 'Gói tháng',
+		code: 'MONTH'
+	},
+	{
+		value: 365,
+		name: 'Gói tháng',
+		code: 'YEAR'
+	},
+	
+];

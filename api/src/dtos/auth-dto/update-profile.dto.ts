@@ -35,7 +35,7 @@ export class UpdateProfileDto {
 
 	@ApiProperty()
 	@IsOptional()
-	birthDay?: Date;
+	birthday?: Date;
 
 	updated_at = new Date();
 }

@@ -1,13 +1,8 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsArray, IsInt, IsNotEmpty, IsNumber, IsOptional, IsString, MaxLength, MinLength } from "class-validator";
-import { USER_CONST } from "src/helpers/helper";
-
+import { Transform } from "class-transformer";
+import { IsIn, IsNotEmpty, IsOptional, IsString, MaxLength, MinLength } from "class-validator";
 export class RegisterDto {
 
-	@ApiProperty()
-	@IsOptional()
-	@IsString()
-	username: string;
 
 	@ApiProperty()
 	@IsNotEmpty()
@@ -28,15 +23,38 @@ export class RegisterDto {
 
 	@ApiProperty()
 	@IsOptional()
+	username: string;
+
+	@ApiProperty()
+	@IsOptional()
+	code: string;
+
+	@ApiProperty()
+	@IsOptional()
+	avatar: string;
+
+
+	@ApiProperty()
+	@IsOptional()
+	@IsIn([1,-1])
 	status?: number;
 
-	@ApiProperty()
-	@IsOptional()
-	avatar?: string;
 
 	@ApiProperty()
 	@IsOptional()
+	@Transform(({ value }) => value?.toUpperCase())
+	@IsIn(['MALE', 'FEMALE', 'OTHER'])
 	gender: string;
+
+	@ApiProperty()
+	@IsOptional()
+	@Transform(({ value }) => value?.toUpperCase())
+	@IsIn(['ADMIN', 'MEMBER'])
+	type: string;
+
+	@ApiProperty()
+	@IsOptional()
+	phone: string;
 
 	@ApiProperty()
 	@IsOptional()
@@ -44,16 +62,11 @@ export class RegisterDto {
 
 	@ApiProperty()
 	@IsOptional()
-	dob: any;
+	health_information: any;
 
 	@ApiProperty()
 	@IsOptional()
-	phone: string;
-	
-	created_at = new Date();
+	birthday: Date;
+
 	updated_at = new Date();
-	
-	@ApiProperty()
-	@IsOptional()
-	type: number;
 }

@@ -12,8 +12,6 @@ import { UserService } from 'src/service/user.service';
 import { LoginDto } from 'src/dtos/auth-dto/login.dto';
 import { RefreshTokenDto } from 'src/dtos/auth-dto/refresh.dto';
 import { UpdateProfileDto } from 'src/dtos/auth-dto/update-profile.dto';
-import { RegisterAdminDto } from 'src/dtos/auth-dto/register-admin.dto';
-import { RegisterDto } from 'src/dtos/auth-dto/register.dto';
 
 @Injectable()
 export class AuthService {
@@ -29,7 +27,11 @@ export class AuthService {
 	}
 
 	async login(loginDto: LoginDto) {
-		let user = await this.userService.findOneByCondition({ email: loginDto.username });
+		let condition: any = {
+			username: loginDto.username
+		}
+
+		let user: any = await this.userService.findOneByCondition(condition);
 		if (!_.isEmpty(user)) {
 			const isPasswordMatching = await bcrypt.compare(
 				loginDto.password.trim(),
@@ -38,7 +40,7 @@ export class AuthService {
 			if (!isPasswordMatching) {
 				throw new BadRequestException({ code: 'LG0003', message: 'Mật khẩu không đúng' });
 			}
-			if (user.status !== 1) {
+			if (user.status != 1) {
 				throw new BadRequestException({ code: 'LG0004', message: 'Tài khoản chưa được kích hoạt' });
 			}
 			const token = await this.genTokenByUser(user);
@@ -47,7 +49,7 @@ export class AuthService {
 				token_info: token, user
 			}
 		}
-		throw new BadRequestException({ code: 'LG0002' });
+		throw new BadRequestException({ code: 'LG0002', 'message': 'Không tìm thấy tài khoản' });
 	}
 
 	async refreshToken(refreshDto: RefreshTokenDto) {
@@ -56,11 +58,10 @@ export class AuthService {
 
 	async genTokenByUser(user: any) {
 		const payload: any = {
-			username: user.username,
+			username: user?.username,
 			id: user?.id || 0,
-			roles: user?.roles,
 			type: user?.type,
-			email: user?.email
+			email: user?.email,
 		};
 		const expIn = Number(process.env.JWT_EXPIRATION_TIME) || 144000;
 		payload.expires_at = getSecond() + expIn;
@@ -75,28 +76,28 @@ export class AuthService {
 	}
 
 	async updateProfile(userId: number, data: UpdateProfileDto) {
-		let user = await this.userRepo.findOneBy({ id: userId });
+		let user = await this.userService.findOneByCondition({ id: userId });
 		if (_.isEmpty(user)) {
 			throw new BadRequestException({ code: 'U0002' });
 		}
 		return await this.userService.update(userId, data);
 
 	}
-	
+
 	async changePassword(userId: number, data: any) {
-		let user = await this.userRepo.findOneBy({ id: userId });
+		let user = await this.userService.findOneByCondition({ id: userId });
 		if (_.isEmpty(user)) {
 			throw new BadRequestException({ code: 'U0002' });
 		}
-		
+
 		let newPassword = await bcrypt.hash(data.password.trim(), 10);
-		
-		await this.userRepo.update(userId, {password: newPassword});
+
+		await this.userService.update(userId, { password: newPassword });
 		return user;
 	}
 
 	async reset(data: any) {
-		let user = await this.userRepo.findOneBy({ email: data.email });
+		let user = await this.userService.findOneByCondition({ email: data.email });
 		if (_.isEmpty(user)) {
 			throw new BadRequestException({ code: 'U0002' });
 		}
@@ -104,24 +105,24 @@ export class AuthService {
 			data.old_password,
 			user.password
 		);
-		if(!isPasswordMatching) {
-			throw new BadRequestException({code: "U0002", message: "Mật khẩu cũ không đúng"})
+		if (!isPasswordMatching) {
+			throw new BadRequestException({ code: "U0002", message: "Mật khẩu cũ không đúng" })
 		}
 		let newPassword = await bcrypt.hash(data.password.trim(), 10);
-		await this.userRepo.update(user?.id || 0, {password: newPassword});
+		await this.userService.update(user?.id || 0, { password: newPassword });
 		return user;
 	}
 
 
 	async resetPassword(data: any) {
-		let user = await this.userRepo.findOneBy({ email: data.email});
+		let user = await this.userService.findOneByCondition({ email: data.email });
 		if (_.isEmpty(user)) {
 			throw new BadRequestException({ code: 'U0002' });
 		}
-		const newPass = makeId( 6 ); 
+		const newPass = makeId(6);
 		let newPassword = await bcrypt.hash(newPass, 10);
-		await this.userRepo.update(user?.id || 0, {password: newPassword});
-		this.mailService.resetPassword({...data, password: newPass});
+		await this.userService.update(user?.id || 0, { password: newPassword });
+		// this.mailService.resetPassword({...data, password: newPass});
 		return user;
 	}
 
@@ -129,28 +130,24 @@ export class AuthService {
 		return await this.userService.findById(userId);
 	}
 
-	async registerAdmin(data: RegisterAdminDto) {
-		data.status = 1;
-		await this.validateService.validateUser(data, true);
-		data.roles = [1];
+	async registerAdmin(data: any) {
 
 		data.password = await bcrypt.hash(data.password.trim(), 10);
-		const newData = await this.userRepo.create(data);
-		await this.userRepo.save(newData);
-		if(!_.isEmpty(data.roles)) {
-			// await this.userService.syncRolesByUser(data.roles, newData.id);
-		}
+		const newData = await this.userService.store(data);
+
 		return newData;
 	}
 
-	async register(data: RegisterDto) {
-		data.status = 1;
+	async register(data: any) {
 		await this.validateService.validateUser(data, true);
-		// delete data.password_cf;
+		
 		data.password = await bcrypt.hash(data.password.trim(), 10);
-		const newData = await this.userRepo.create(data);
-		await this.userRepo.save(newData);
-		this.mailService.sendUserConfirmation(data);
-		return data;
+		const newData = await this.userService.store(data);
+		return newData;
+	}
+
+	async storeUser(data: any) {
+		const newData = await this.userService.store(data);
+		return newData;
 	}
 }

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/entities';
-import { BadRequestException, newArrayError, regexPass, regexPhone } from 'src/helpers/helper';
+import { BadRequestException, newArrayError, regexPass, regexPhone, regexUserName } from 'src/helpers/helper';
 import { UserRepository } from 'src/repository';
 import { Like, Repository } from 'typeorm';
 import * as _ from 'lodash';
@@ -22,20 +22,22 @@ export class UserValidatorService {
 		let message = null;
 
 		if (isCreated) {
-			// if (!userDto.username || userDto.username?.trim() == '') {
-			// 	errorData.username = newArrayError(errorData.email, 'User name is required');
-			// } else if (!regexUserName.test(userDto.username)) {
-			// 	errorData.username = newArrayError(errorData.username, 'User name is invalid');
-			// } else {
-			// 	let user = await this.userRepository.findOne({
-			// 		where: {
-			// 			username: userDto.username.trim()
-			// 		}
-			// 	});
-			// 	if (!_.isEmpty(user)) {
-			// 		errorData.username = newArrayError(errorData.username, 'User name is existed');
-			// 	}
+			if (!userDto.username || userDto.username?.trim() == '') {
+				errorData.username = newArrayError(errorData.email, 'Tên tài khoản không được để trống');
+			} 
+			// else if (!userDto.username.match(regexUserName)) {
+			// 	errorData.username = newArrayError(errorData.username, 'Tên tài khoản không đúng định dạng');
 			// }
+			 else {
+				let user = await this.userRepository.findOne({
+					where: {
+						username: userDto.username.trim()
+					}
+				});
+				if (!_.isEmpty(user)) {
+					errorData.username = newArrayError(errorData.username, 'Tài khoản đã tồn tại');
+				}
+			}
 			if (!userDto.password.match(regexPass)) {
 				errorData.password = newArrayError(errorData.password, 'Password không đúng định dạng!');
 				message = 'Password không đúng định dạng!';
@@ -55,11 +57,11 @@ export class UserValidatorService {
 			let userEmail: any = await this.userRepository.findOne({ where: { email: userDto.email } });
 			if (!_.isEmpty(userEmail)) {
 				if (isCreated) {
-					errorData.email = newArrayError(errorData.email, 'Email is existed');
+					errorData.email = newArrayError(errorData.email, 'Email đã tồn tại');
 					message = 'Email đã được sử dụng!';
 				}
 				else if (userEmail.id === user_id) {
-					errorData.email = newArrayError(errorData.email, 'Email is existed');
+					errorData.email = newArrayError(errorData.email, 'Email đã tồn tại');
 					message = 'Email đã được sử dụng!';
 				}
 			}
@@ -78,11 +80,11 @@ export class UserValidatorService {
 				});
 				if (!_.isEmpty(user)) {
 					if (isCreated) {
-						errorData.phone = newArrayError(errorData.phone, 'Phone is existed');
+						errorData.phone = newArrayError(errorData.phone, 'Phone đã tồn tại');
 						message = 'Số điện thoại đã được sử dụng!';
 					}
 					else if (user?.id || 0 === user_id) {
-						errorData.phone = newArrayError(errorData.phone, 'Phone is existed');
+						errorData.phone = newArrayError(errorData.phone, 'Phone đã tồn tại');
 						message = 'Số điện thoại đã được sử dụng!';
 					}
 				}

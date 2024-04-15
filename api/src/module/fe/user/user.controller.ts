@@ -6,7 +6,7 @@ import { UserService } from 'src/service/user.service';
 import * as _ from 'lodash';
 
 @Controller('user')
-@ApiTags('User')
+@ApiTags('FE User')
 export class UserController {
 
 	constructor(
@@ -46,59 +46,59 @@ export class UserController {
 		}
 	}
 
-	@Post('store')
-	@HttpCode(HttpStatus.OK)
-	@ApiResponse({ status: 200, description: 'success' })
-	async store(@Body() createDto: any, @Request() req: any) {
-		try {
-			if (_.isEmpty(createDto)) throw new BadRequestException({ code: 'F0001' });
-			// if (!createDto?.user_id) createDto.user_id = req.user?.user_id || 0
-			return BaseResponse(
-				HTTP_STATUS.success,
-				await this.service.store(createDto),
-				'',
-				'Created successfully!'
-			);
-		} catch (e) {
-			console.log('create menu ---------> ', e.message);
-			return BaseResponse(e.status, e.response, e.code || 'E0001', e.message);
-		}
-	}
+	// @Post('store')
+	// @HttpCode(HttpStatus.OK)
+	// @ApiResponse({ status: 200, description: 'success' })
+	// async store(@Body() createDto: any, @Request() req: any) {
+	// 	try {
+	// 		if (_.isEmpty(createDto)) throw new BadRequestException({ code: 'F0001' });
+	// 		// if (!createDto?.user_id) createDto.user_id = req.user?.user_id || 0
+	// 		return BaseResponse(
+	// 			HTTP_STATUS.success,
+	// 			await this.service.store(createDto),
+	// 			'',
+	// 			'Created successfully!'
+	// 		);
+	// 	} catch (e) {
+	// 		console.log('create menu ---------> ', e.message);
+	// 		return BaseResponse(e.status, e.response, e.code || 'E0001', e.message);
+	// 	}
+	// }
 
-	@Put('update/:id')
-	@HttpCode(HttpStatus.OK)
-	@ApiResponse({ status: 200, description: 'success' })
-	async update(@Param('id') id: number, @Body() updateDto: any) {
-		try {
-			const check = await this.service.findById(id);
-			if (!check) return BaseResponse(HTTP_STATUS.fail, {}, 'E0001', 'Dữ liệu không tồn tại');
-			if (_.isEmpty(updateDto)) throw new BadRequestException({ code: 'F0001' });
+	// @Put('update/:id')
+	// @HttpCode(HttpStatus.OK)
+	// @ApiResponse({ status: 200, description: 'success' })
+	// async update(@Param('id') id: number, @Body() updateDto: any) {
+	// 	try {
+	// 		const check = await this.service.findById(id);
+	// 		if (!check) return BaseResponse(HTTP_STATUS.fail, {}, 'E0001', 'Dữ liệu không tồn tại');
+	// 		if (_.isEmpty(updateDto)) throw new BadRequestException({ code: 'F0001' });
 
-			return BaseResponse(HTTP_STATUS.success,
-				await this.service.update(id, updateDto), '', 'Updated successfully!');
-		} catch (e) {
-			console.log('put menu ---------->', e.message);
-			return BaseResponse(e.status, e.response, e.code || 'E0001', e.message);
-		}
-	}
+	// 		return BaseResponse(HTTP_STATUS.success,
+	// 			await this.service.update(id, updateDto), '', 'Updated successfully!');
+	// 	} catch (e) {
+	// 		console.log('put menu ---------->', e.message);
+	// 		return BaseResponse(e.status, e.response, e.code || 'E0001', e.message);
+	// 	}
+	// }
 
-	@Delete('delete/:id')
-	@HttpCode(HttpStatus.OK)
-	@ApiResponse({ status: 200, description: 'success' })
-	async deleteMenu(@Param('id') id: number) {
-		try {
-			let menu = await this.service.findById(id);
+	// @Delete('delete/:id')
+	// @HttpCode(HttpStatus.OK)
+	// @ApiResponse({ status: 200, description: 'success' })
+	// async deleteMenu(@Param('id') id: number) {
+	// 	try {
+	// 		let menu = await this.service.findById(id);
 
-			if (!menu) {
-				return BaseResponse(HTTP_STATUS.fail, {}, 'E0001', 'Dữ liệu không tồn tại!');
-			} else {
-				await this.service.deleteById(id);
-				return BaseResponse(HTTP_STATUS.success, {}, '', 'Deleted successfully!');
-			}
-		} catch (e) {
-			return BaseResponse(e.status, e.response, e.code || 'E0001', e.message);
-		}
-	}
+	// 		if (!menu) {
+	// 			return BaseResponse(HTTP_STATUS.fail, {}, 'E0001', 'Dữ liệu không tồn tại!');
+	// 		} else {
+	// 			await this.service.deleteById(id);
+	// 			return BaseResponse(HTTP_STATUS.success, {}, '', 'Deleted successfully!');
+	// 		}
+	// 	} catch (e) {
+	// 		return BaseResponse(e.status, e.response, e.code || 'E0001', e.message);
+	// 	}
+	// }
 
 	async buildFilter(req: any) {
 		const filters = {

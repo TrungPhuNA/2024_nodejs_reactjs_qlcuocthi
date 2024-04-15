@@ -1,33 +1,19 @@
 import { Module } from '@nestjs/common';
-import { ProductModule } from './product/product.module';
-import { CategoryModule } from './category/category.module';
-import { SlideModule } from './slide/slide.module';
+import { ArticleModule } from './article/article.module';
 import { UserModule } from './user/user.module';
-import { MenuModule } from './menu/menu.module';
-import { OrderModule } from './order/order.module';
-import { SettingModule } from './setting/setting.module';
-import { TagModule } from './tag/tag.module';
-import { VoteModule } from './vote/vote.module';
-import { CompanyModule } from './company/company.module';
-import { JobModule } from './job/job.module';
-import { CareersModule } from './careers/careers.module';
-import { UserJobModule } from './user-job/user-job.module';
+import { RoomModule } from './room/room.module';
+import { ServiceModule } from './service/service.module';
+import { UserServiceModule } from './user-service/user-service.module';
+import { CommonApiModule } from './common/common.module';
 
 @Module({
 	imports: [
-		ProductModule,
-		CategoryModule,
-		SlideModule,
+		ArticleModule,
 		UserModule,
-		MenuModule,
-		OrderModule,
-		SettingModule,
-		TagModule,
-		VoteModule,
-		CompanyModule,
-		JobModule,
-		CareersModule,
-		UserJobModule
+		RoomModule,
+		ServiceModule,
+		UserServiceModule,
+		CommonApiModule
 	],
 	controllers: []
 })

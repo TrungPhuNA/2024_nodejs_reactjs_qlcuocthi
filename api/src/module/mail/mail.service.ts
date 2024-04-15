@@ -3,7 +3,6 @@ import { MailerService } from "@nestjs-modules/mailer";
 import nodemailer = require('nodemailer');
 import { ConfigService } from '@nestjs/config';
 import * as _ from 'lodash';
-import * as moment from 'moment';
 
 @Injectable()
 export class MailService {

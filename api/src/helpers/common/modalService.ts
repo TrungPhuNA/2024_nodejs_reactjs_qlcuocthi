@@ -13,7 +13,6 @@ export const buildModalService = async (query: any, queryType: IQueryType) => {
 		return newArr
 	}, []);
 	
-	console.log(newQueryTypeArr);
 	if(query?.filters) {
 		console.log("query-------> ", query?.filters);
 		for(let [key, value] of Object.entries(query?.filters)) {

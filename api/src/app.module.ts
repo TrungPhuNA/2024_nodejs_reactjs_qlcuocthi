@@ -11,6 +11,7 @@ import { BeModule } from './module/be/be.module';
 import { FeModule } from './module/fe/fe.module';
 import { UploadModule } from './module/upload/upload.module';
 import { AuthModule } from './module/auth/auth.module';
+import { DashboardService } from './service/dashboard.service';
 @Module({
     controllers: [AppController],
     imports: [

@@ -16,7 +16,7 @@ export class JwtGuard extends AuthGuard('jwt') {
 		if(process.env.CHECK_AUTH == 'false') {
 			return user;
 		}
-        if ((err || !user) && process) {
+        if ((err || !user)) {
             throw new BadRequestException({code: 'LG0401'});
         }
         return user;

@@ -39,6 +39,9 @@ export class UserRepository extends Repository<User>{
 
         const [data, total] =  await this.findAndCount({
             where: condition,
+			order: {
+				id: 'DESC'
+			},
             take: paging.page_size,
             skip: (paging.page - 1) * paging.page_size
         });

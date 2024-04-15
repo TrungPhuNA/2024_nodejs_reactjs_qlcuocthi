@@ -9,11 +9,13 @@ npm-debug.log*
 pnpm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+yarn.lock
 lerna-debug.log*
 .env
 .package-log.json
-package-log.json
-yarn.lock
+package-lock.json
+.yarn.lock
+/package-log.json
 
 # OS
 .DS_Store
