@@ -30,6 +30,9 @@ export class CriteriaEntityRepository extends Repository<CriteriaEntity>{
 			order: {
 				id: 'DESC'
 			},
+			relations: {
+				competitions: true
+			},
 			take: paging.page_size,
 			skip: (paging.page - 1) * paging.page_size
 		});

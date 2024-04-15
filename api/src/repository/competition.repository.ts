@@ -31,6 +31,11 @@ export class CompetitionEntityRepository extends Repository<CompetitionEntity>{
 			order: {
 				id: 'DESC'
 			},
+			relations: {
+				judges: true,
+				author: true,
+				criterias: true
+			},
             take: paging.page_size,
             skip: (paging.page - 1) * paging.page_size
         });
@@ -43,7 +48,12 @@ export class CompetitionEntityRepository extends Repository<CompetitionEntity>{
         return await this.findOne({
             where: {
                 id: id
-            }
+            },
+			relations: {
+				judges: true,
+				author: true,
+				criterias: true
+			},
         });
     }
 }

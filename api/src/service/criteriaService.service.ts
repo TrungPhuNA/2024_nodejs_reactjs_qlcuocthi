@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { IPaging } from 'src/helpers/helper';
-import { SchoolEntityRepository } from 'src/repository';
+import { CriteriaEntityRepository } from 'src/repository';
 
 @Injectable()
-export class SchoolService {
+export class CriteriaEntityService  {
 
 	constructor(
-		private repository: SchoolEntityRepository
+		private repository: CriteriaEntityRepository
 	) {
 
 	}
@@ -39,10 +39,7 @@ export class SchoolService {
 	async findOneByCondition(condition: any = {}) {
 		return await this.repository.findOne(
 			{
-				where: condition,
-				relations: {
-					user: true
-				},
+				where: condition
 			}
 		);
 	}

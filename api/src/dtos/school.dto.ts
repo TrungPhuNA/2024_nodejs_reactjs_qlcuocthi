@@ -1,7 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { IsArray, IsInt, IsNotEmpty, IsNumber, IsOptional, IsString, MaxLength, MinLength } from "class-validator";
 
-export class ArticleDto {
+export class SchoolDto {
 	
 	@ApiProperty()
 	@IsOptional()
@@ -9,15 +9,15 @@ export class ArticleDto {
 
 	@ApiProperty()
 	@IsOptional()
-	avatar: string;
+	rector_id: number;
 
 	@ApiProperty()
 	@IsOptional()
-	content: string;
+	status: number;
 
-	// @ApiProperty()
-	// @IsOptional()
-	// created_at?: Date;
+	@ApiProperty()
+	@IsOptional()
+	created_at?: Date;
 
 	updated_at = new Date();
 }

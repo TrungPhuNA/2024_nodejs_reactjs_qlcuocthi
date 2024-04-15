@@ -3,25 +3,23 @@ import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { BadRequestException, BaseResponse, HTTP_STATUS, IPaging } from 'src/helpers/helper';
 import { JwtGuard } from 'src/module/auth/guards/jwt/jwt.guard';
 import * as _ from 'lodash';
-import { ArticleService } from 'src/service/school.service';
-import { ServiceEntityService } from 'src/service/competition.service';
-import { UserServiceDto } from 'src/dtos/user-service.dto';
-import { UserSerivceService } from 'src/service/result.service';
+import { SchoolService } from 'src/service/school.service';
+import { SchoolDto } from 'src/dtos';
 
-@Controller('cms/user-service')
-@ApiTags('Cms User Service')
+@Controller('cms/school')
+@ApiTags('CMS School')
 @UseGuards(JwtGuard)
-export class UserServiceController {
+export class SchoolController {
 
 	constructor(
-		private service: UserSerivceService
+		private service: SchoolService
 	) { }
 
 
 	@Get('/list')
 	@HttpCode(HttpStatus.OK)
 	@ApiResponse({ status: 200, description: 'success' })
-	async findAndCount(@Request() req: any) {
+	async getusers(@Request() req: any) {
 		try {
 			const paging: IPaging = {
 				page: req.query.page || 1,
@@ -32,7 +30,7 @@ export class UserServiceController {
 
 			return BaseResponse(HTTP_STATUS.success, users, '', 'Successful');
 		} catch (e) {
-			console.log('CMS USER SERVICE CONTROLLER list-------------> ', e.message);
+			console.log('SchoolController list-------------> ', e.message);
 			return BaseResponse(e.status, e.response, e.code || 'E0001', e.message);
 		}
 	}
@@ -53,7 +51,7 @@ export class UserServiceController {
 	@Post('store')
 	@HttpCode(HttpStatus.OK)
 	@ApiResponse({ status: 200, description: 'success' })
-	async store(@Body() createDto: UserServiceDto, @Request() req: any) {
+	async store(@Body() createDto: SchoolDto, @Request() req: any) {
 		try {
 			if (_.isEmpty(createDto)) throw new BadRequestException({ code: 'F0001' });
 			return BaseResponse(
@@ -71,7 +69,7 @@ export class UserServiceController {
 	@Put('update/:id')
 	@HttpCode(HttpStatus.OK)
 	@ApiResponse({ status: 200, description: 'success' })
-	async update(@Param('id') id: number, @Body() updateDto: UserServiceDto) {
+	async update(@Param('id') id: number, @Body() updateDto: SchoolDto) {
 		try {
 			const check = await this.service.findById(id);
 			if (!check) return BaseResponse(HTTP_STATUS.fail, {}, 'E0001', 'Dữ liệu không tồn tại');
@@ -80,7 +78,7 @@ export class UserServiceController {
 			return BaseResponse(HTTP_STATUS.success,
 				await this.service.update(id, updateDto), '', 'Updated successfully!');
 		} catch (e) {
-			console.log('put user ---------->', e);
+			console.log('put user ---------->', e.message);
 			return BaseResponse(e.status, e.response, e.code || 'E0001', e.message);
 		}
 	}
@@ -88,11 +86,11 @@ export class UserServiceController {
 	@Delete('delete/:id')
 	@HttpCode(HttpStatus.OK)
 	@ApiResponse({ status: 200, description: 'success' })
-	async delete(@Param('id') id: number) {
+	async deleteuser(@Param('id') id: number) {
 		try {
-			let user = await this.service.findById(id);
+			let data = await this.service.findById(id);
 
-			if (!user) {
+			if (!data) {
 				return BaseResponse(HTTP_STATUS.fail, {}, 'E0001', 'Dữ liệu không tồn tại!');
 			} else {
 				await this.service.deleteById(id);

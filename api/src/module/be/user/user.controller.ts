@@ -4,6 +4,7 @@ import { BadRequestException, BaseResponse, HTTP_STATUS, IPaging } from 'src/hel
 import { JwtGuard } from 'src/module/auth/guards/jwt/jwt.guard';
 import { UserService } from 'src/service/user.service';
 import * as _ from 'lodash';
+import { RegisterDto, UpdateProfileDto } from 'src/dtos';
 
 @Controller('cms/user')
 @ApiTags('CMS User')
@@ -50,7 +51,7 @@ export class UserController {
 	@Post('store')
 	@HttpCode(HttpStatus.OK)
 	@ApiResponse({ status: 200, description: 'success' })
-	async store(@Body() createDto: any, @Request() req: any) {
+	async store(@Body() createDto: RegisterDto, @Request() req: any) {
 		try {
 			if (_.isEmpty(createDto)) throw new BadRequestException({ code: 'F0001' });
 			// if (!createDto?.user_id) createDto.user_id = req.user?.user_id || 0
@@ -69,7 +70,7 @@ export class UserController {
 	@Put('update/:id')
 	@HttpCode(HttpStatus.OK)
 	@ApiResponse({ status: 200, description: 'success' })
-	async update(@Param('id') id: number, @Body() updateDto: any) {
+	async update(@Param('id') id: number, @Body() updateDto: UpdateProfileDto) {
 		try {
 			const check = await this.service.findById(id);
 			if (!check) return BaseResponse(HTTP_STATUS.fail, {}, 'E0001', 'Dữ liệu không tồn tại');

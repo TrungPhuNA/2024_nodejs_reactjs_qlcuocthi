@@ -3,8 +3,8 @@ import { ResultEntity } from "./result.entity";
 import { User } from "./user.entity";
 import { CriteriaEntity } from "./criterias.entity";
 
-@Index('users_pkey', ['id'], { unique: true })
-@Entity("users")
+@Index('competitions_pkey', ['id'], { unique: true })
+@Entity("competitions")
 export class CompetitionEntity {
 	@PrimaryGeneratedColumn()
 	id: number;
@@ -17,6 +17,9 @@ export class CompetitionEntity {
 
 	@Column({nullable: true })
 	author_id: number;
+
+	@Column({nullable: true })
+	status: number;
 
 	@Column('varchar', {nullable: true , length: 255})
 	image: string;
@@ -50,4 +53,13 @@ export class CompetitionEntity {
 		inverseJoinColumn: { name: 'criterias_id', referencedColumnName: 'id' },
 	})
 	criterias?: CriteriaEntity[];
+
+
+	@ManyToMany(() => User)
+	@JoinTable({
+		name: 'judges',
+		joinColumn: { name: 'competition_id', referencedColumnName: 'id' },
+		inverseJoinColumn: { name: 'user_id', referencedColumnName: 'id' },
+	})
+	judges: User[];
 }

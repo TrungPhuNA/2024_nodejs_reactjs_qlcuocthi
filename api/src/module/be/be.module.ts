@@ -1,19 +1,21 @@
 import { Module } from '@nestjs/common';
-import { ArticleModule } from './article/article.module';
 import { UserModule } from './user/user.module';
-import { RoomModule } from './room/room.module';
-import { ServiceModule } from './service/service.module';
-import { UserServiceModule } from './user-service/user-service.module';
 import { CommonApiModule } from './common/common.module';
+import { SchoolModule } from './school/school.module';
+import { ClassEntityModule } from './class-entity/class-entity.module';
+import { CompetitionModule } from './competition/competition.module';
+import { ResultModule } from './result/result.module';
+import { CriteriaModule } from './criteria/criteria.module';
 
 @Module({
 	imports: [
-		ArticleModule,
 		UserModule,
-		RoomModule,
-		ServiceModule,
-		UserServiceModule,
-		CommonApiModule
+		CommonApiModule,
+		SchoolModule,
+		ClassEntityModule,
+		CompetitionModule,
+		ResultModule,
+		CriteriaModule
 	],
 	controllers: []
 })

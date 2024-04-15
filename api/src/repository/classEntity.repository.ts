@@ -30,6 +30,9 @@ export class ClassEntityRepository extends Repository<ClassEntity>{
 			order: {
 				id: 'DESC'
 			},
+			relations: {
+				school: true
+			},
 			take: paging.page_size,
 			skip: (paging.page - 1) * paging.page_size
 		});
@@ -41,7 +44,10 @@ export class ClassEntityRepository extends Repository<ClassEntity>{
 		return await this.findOne({
 			where: {
 				id: id
-			}
+			},
+			relations: {
+				school: true
+			},
 		});
 	}
 }

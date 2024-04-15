@@ -3,34 +3,34 @@ import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { BadRequestException, BaseResponse, HTTP_STATUS, IPaging } from 'src/helpers/helper';
 import { JwtGuard } from 'src/module/auth/guards/jwt/jwt.guard';
 import * as _ from 'lodash';
-import { UserServiceDto } from 'src/dtos/user-service.dto';
-import { UserSerivceService } from 'src/service/result.service';
+import { CriteriaEntityService } from 'src/service/criteriaService.service';
+import { CriteriaDto } from 'src/dtos';
 
-@Controller('user-service')
-@ApiTags('FE User Service')
+@Controller('cms/criteria')
+@ApiTags('CMS criteria')
 @UseGuards(JwtGuard)
-export class UserServiceController {
+export class CriteriaController {
 
 	constructor(
-		private service: UserSerivceService
+		private service: CriteriaEntityService
 	) { }
 
 
 	@Get('/list')
 	@HttpCode(HttpStatus.OK)
 	@ApiResponse({ status: 200, description: 'success' })
-	async findAndCount(@Request() req: any) {
+	async getusers(@Request() req: any) {
 		try {
 			const paging: IPaging = {
 				page: req.query.page || 1,
 				page_size: req.query.page_size || 20
 			};
 
-			let users: any = await this.service.getLists(paging, req.query);
+			let data: any = await this.service.getLists(paging, req.query);
 
-			return BaseResponse(HTTP_STATUS.success, users, '', 'Successful');
+			return BaseResponse(HTTP_STATUS.success, data, '', 'Successful');
 		} catch (e) {
-			console.log('JobController list-------------> ', e.message);
+			console.log('ClassroomController list-------------> ', e.message);
 			return BaseResponse(e.status, e.response, e.code || 'E0001', e.message);
 		}
 	}
@@ -51,7 +51,7 @@ export class UserServiceController {
 	@Post('store')
 	@HttpCode(HttpStatus.OK)
 	@ApiResponse({ status: 200, description: 'success' })
-	async store(@Body() createDto: UserServiceDto, @Request() req: any) {
+	async store(@Body() createDto: CriteriaDto, @Request() req: any) {
 		try {
 			if (_.isEmpty(createDto)) throw new BadRequestException({ code: 'F0001' });
 			return BaseResponse(
@@ -61,7 +61,7 @@ export class UserServiceController {
 				'Created successfully!'
 			);
 		} catch (e) {
-			console.log('create user service ---------> ', e);
+			console.log('create classroom ---------> ', e.message);
 			return BaseResponse(e.status, e.response, e.code || 'E0001', e.message);
 		}
 	}
@@ -69,7 +69,7 @@ export class UserServiceController {
 	@Put('update/:id')
 	@HttpCode(HttpStatus.OK)
 	@ApiResponse({ status: 200, description: 'success' })
-	async update(@Param('id') id: number, @Body() updateDto: UserServiceDto) {
+	async update(@Param('id') id: number, @Body() updateDto: CriteriaDto) {
 		try {
 			const check = await this.service.findById(id);
 			if (!check) return BaseResponse(HTTP_STATUS.fail, {}, 'E0001', 'Dữ liệu không tồn tại');
@@ -78,28 +78,28 @@ export class UserServiceController {
 			return BaseResponse(HTTP_STATUS.success,
 				await this.service.update(id, updateDto), '', 'Updated successfully!');
 		} catch (e) {
-			console.log('put user ---------->', e);
+			console.log('put classroom ---------->', e.message);
 			return BaseResponse(e.status, e.response, e.code || 'E0001', e.message);
 		}
 	}
 
-	// @Delete('delete/:id')
-	// @HttpCode(HttpStatus.OK)
-	// @ApiResponse({ status: 200, description: 'success' })
-	// async delete(@Param('id') id: number) {
-	// 	try {
-	// 		let user = await this.service.findById(id);
+	@Delete('delete/:id')
+	@HttpCode(HttpStatus.OK)
+	@ApiResponse({ status: 200, description: 'success' })
+	async deleteuser(@Param('id') id: number) {
+		try {
+			let data = await this.service.findById(id);
 
-	// 		if (!user) {
-	// 			return BaseResponse(HTTP_STATUS.fail, {}, 'E0001', 'Dữ liệu không tồn tại!');
-	// 		} else {
-	// 			await this.service.deleteById(id);
-	// 			return BaseResponse(HTTP_STATUS.success, {}, '', 'Deleted successfully!');
-	// 		}
-	// 	} catch (e) {
-	// 		return BaseResponse(e.status, e.response, e.code || 'E0001', e.message);
-	// 	}
-	// }
+			if (!data) {
+				return BaseResponse(HTTP_STATUS.fail, {}, 'E0001', 'Dữ liệu không tồn tại!');
+			} else {
+				await this.service.deleteById(id);
+				return BaseResponse(HTTP_STATUS.success, {}, '', 'Deleted successfully!');
+			}
+		} catch (e) {
+			return BaseResponse(e.status, e.response, e.code || 'E0001', e.message);
+		}
+	}
 
 	async buildFilter(req: any) {
 		const filters = {

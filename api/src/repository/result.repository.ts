@@ -38,6 +38,7 @@ export class ResultEntityRepository extends Repository<ResultEntity>{
 			},
 			relations: {
 				user: true,
+				competition: true
 			},
             take: paging.page_size,
             skip: (paging.page - 1) * paging.page_size
@@ -54,7 +55,8 @@ export class ResultEntityRepository extends Repository<ResultEntity>{
             },
 			relations: {
 				user: true,
-			}
+				competition: true
+			},
         });
     }
 }

@@ -39,17 +39,10 @@ export class RegisterDto {
 	@IsIn([1,-1])
 	status?: number;
 
-
 	@ApiProperty()
 	@IsOptional()
 	@Transform(({ value }) => value?.toUpperCase())
-	@IsIn(['MALE', 'FEMALE', 'OTHER'])
-	gender: string;
-
-	@ApiProperty()
-	@IsOptional()
-	@Transform(({ value }) => value?.toUpperCase())
-	@IsIn(['ADMIN', 'MEMBER'])
+	@IsIn(['TEACHER', 'STUDENT', 'RECTOR'])
 	type: string;
 
 	@ApiProperty()
@@ -59,14 +52,13 @@ export class RegisterDto {
 	@ApiProperty()
 	@IsOptional()
 	address: string;
+	@ApiProperty()
+	@IsOptional()
+	created_at: string;
 
 	@ApiProperty()
 	@IsOptional()
-	health_information: any;
-
-	@ApiProperty()
-	@IsOptional()
-	birthday: Date;
+	competition_ids: number[];
 
 	updated_at = new Date();
 }

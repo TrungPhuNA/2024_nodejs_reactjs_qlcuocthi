@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put, Request, UseGuards } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
-import { BadRequestException, BaseResponse, HTTP_STATUS, IPaging, SERVICE_STATUS, SERVICE_TYPE } from 'src/helpers/helper';
+import { BadRequestException, BaseResponse, HTTP_STATUS, IPaging, SERVICE_TYPE } from 'src/helpers/helper';
 import { JwtGuard } from 'src/module/auth/guards/jwt/jwt.guard';
 import * as _ from 'lodash';
 import { DashboardService } from 'src/service/dashboard.service';
@@ -21,7 +21,6 @@ export class CommonController {
 		try {
 			
 			const config: any = {
-				status: SERVICE_STATUS,
 				service_type: SERVICE_TYPE 
 			}
 
@@ -38,7 +37,7 @@ export class CommonController {
 	async findById(@Request() req: any) {
 		try {
 			
-			return BaseResponse('success', await this.service.statistic(req.query), '', 'Successful');
+			return BaseResponse('success', {}, '', 'Successful');
 		} catch (e) {
 			console.log('dashboard list-------------> ', e);
 			return BaseResponse(e.status, e.response, e.code || 'E0001', e.message);

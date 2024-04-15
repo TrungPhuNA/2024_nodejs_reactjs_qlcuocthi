@@ -3,35 +3,34 @@ import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { BadRequestException, BaseResponse, HTTP_STATUS, IPaging } from 'src/helpers/helper';
 import { JwtGuard } from 'src/module/auth/guards/jwt/jwt.guard';
 import * as _ from 'lodash';
-import { ArticleService } from 'src/service/school.service';
-import { RoomDto } from 'src/dtos/room.dto';
-import { RoomService } from 'src/service/classEntity.service';
+import { ClassEntityService } from 'src/service/classEntity.service';
+import { ClassDto } from 'src/dtos';
 
-@Controller('cms/room')
-@ApiTags('Cms Room')
+@Controller('cms/classroom')
+@ApiTags('CMS Classroom')
 @UseGuards(JwtGuard)
-export class RoomController {
+export class ClassEntityController {
 
 	constructor(
-		private service: RoomService
+		private service: ClassEntityService
 	) { }
 
 
 	@Get('/list')
 	@HttpCode(HttpStatus.OK)
 	@ApiResponse({ status: 200, description: 'success' })
-	async findAndCount(@Request() req: any) {
+	async getusers(@Request() req: any) {
 		try {
 			const paging: IPaging = {
 				page: req.query.page || 1,
 				page_size: req.query.page_size || 20
 			};
 
-			let users: any = await this.service.getLists(paging, req.query);
+			let data: any = await this.service.getLists(paging, req.query);
 
-			return BaseResponse(HTTP_STATUS.success, users, '', 'Successful');
+			return BaseResponse(HTTP_STATUS.success, data, '', 'Successful');
 		} catch (e) {
-			console.log('JobController list-------------> ', e.message);
+			console.log('ClassroomController list-------------> ', e.message);
 			return BaseResponse(e.status, e.response, e.code || 'E0001', e.message);
 		}
 	}
@@ -52,7 +51,7 @@ export class RoomController {
 	@Post('store')
 	@HttpCode(HttpStatus.OK)
 	@ApiResponse({ status: 200, description: 'success' })
-	async store(@Body() createDto: RoomDto, @Request() req: any) {
+	async store(@Body() createDto: ClassDto, @Request() req: any) {
 		try {
 			if (_.isEmpty(createDto)) throw new BadRequestException({ code: 'F0001' });
 			return BaseResponse(
@@ -62,7 +61,7 @@ export class RoomController {
 				'Created successfully!'
 			);
 		} catch (e) {
-			console.log('create user ---------> ', e.message);
+			console.log('create classroom ---------> ', e.message);
 			return BaseResponse(e.status, e.response, e.code || 'E0001', e.message);
 		}
 	}
@@ -70,7 +69,7 @@ export class RoomController {
 	@Put('update/:id')
 	@HttpCode(HttpStatus.OK)
 	@ApiResponse({ status: 200, description: 'success' })
-	async update(@Param('id') id: number, @Body() updateDto: RoomDto) {
+	async update(@Param('id') id: number, @Body() updateDto: ClassDto) {
 		try {
 			const check = await this.service.findById(id);
 			if (!check) return BaseResponse(HTTP_STATUS.fail, {}, 'E0001', 'Dữ liệu không tồn tại');
@@ -79,7 +78,7 @@ export class RoomController {
 			return BaseResponse(HTTP_STATUS.success,
 				await this.service.update(id, updateDto), '', 'Updated successfully!');
 		} catch (e) {
-			console.log('put user ---------->', e.message);
+			console.log('put classroom ---------->', e.message);
 			return BaseResponse(e.status, e.response, e.code || 'E0001', e.message);
 		}
 	}
@@ -87,11 +86,11 @@ export class RoomController {
 	@Delete('delete/:id')
 	@HttpCode(HttpStatus.OK)
 	@ApiResponse({ status: 200, description: 'success' })
-	async delete(@Param('id') id: number) {
+	async deleteuser(@Param('id') id: number) {
 		try {
-			let user = await this.service.findById(id);
+			let data = await this.service.findById(id);
 
-			if (!user) {
+			if (!data) {
 				return BaseResponse(HTTP_STATUS.fail, {}, 'E0001', 'Dữ liệu không tồn tại!');
 			} else {
 				await this.service.deleteById(id);

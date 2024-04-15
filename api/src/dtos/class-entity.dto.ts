@@ -1,14 +1,13 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { Transform } from "class-transformer";
 import { IsArray, IsIn, IsInt, IsNotEmpty, IsNumber, IsOptional, IsString, MaxLength, MinLength } from "class-validator";
-import { SERVICE_TYPE } from "src/helpers/helper";
-
-const VALUE_TYPE = () => {
-	return SERVICE_TYPE.map((item: any) => {
-		return item.code
+import { UNIT } from "src/helpers/helper";
+const VALUE_STATUS = () => {
+	return UNIT.map((item: any) => {
+		return item?.value
 	})
 }
-export class ServiceDto {
+export class ClassDto {
 	
 	@ApiProperty()
 	@IsOptional()
@@ -16,13 +15,7 @@ export class ServiceDto {
 
 	@ApiProperty()
 	@IsOptional()
-	@Transform(({ value }) => value?.toUpperCase())
-	@IsIn(VALUE_TYPE())
-	type: string;
-
-	@ApiProperty()
-	@IsOptional()
-	price: number;
+	school_id: number;
 
 	@ApiProperty()
 	@IsOptional()
@@ -30,15 +23,13 @@ export class ServiceDto {
 
 	@ApiProperty()
 	@IsOptional()
-	sale: number;
+	@Transform(({ value }) => value?.toLowerCase())
+	@IsIn(VALUE_STATUS())
+	unit: string;
 
 	@ApiProperty()
 	@IsOptional()
-	image: string;
-
-	// @ApiProperty()
-	// @IsOptional()
-	// created_at?: Date;
+	created_at?: Date;
 
 	updated_at = new Date();
 }

@@ -94,26 +94,26 @@ export const regexUserName = /([a-zA-Z0-9]){6,20}/g;
 export const regexPhone = /([0-9]{9,10}\b)/g; //(09|03|07|08|05|04|\+84|84)+
 
 
-export const SERVICE_STATUS = [
+export const UNIT = [
 	{
-		value: 1,
-		name: 'Khởi tạo',
-		code: 'INIT',
+		value: 'a',
+		name: 'Khối A',
+		code: 'A',
 	},
 	{
-		value: 2,
-		name: 'Hoạt động',
-		code: 'ACTIVE'
+		value: 'b',
+		name: 'Khối B',
+		code: 'B',
 	},
 	{
-		value: -1,
-		name: 'Không Hoạt động',
-		code: 'INACTIVE'
+		value: 'c',
+		name: 'Khối C',
+		code: 'C',
 	},
 	{
-		value: 3,
-		name: 'Hết hạn',
-		code: 'EXPIRED'
+		value: 'd',
+		name: 'Khối D',
+		code: 'D',
 	},
 	
 ];

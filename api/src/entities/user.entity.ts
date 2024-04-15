@@ -73,5 +73,5 @@ export class User {
 		joinColumn: { name: 'user_id', referencedColumnName: 'id' },
 		inverseJoinColumn: { name: 'competition_id', referencedColumnName: 'id' },
 	})
-	judges?: CompetitionEntity[];
+	judge_competitions: CompetitionEntity[];
 }

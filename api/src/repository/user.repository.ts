@@ -42,6 +42,9 @@ export class UserRepository extends Repository<User>{
 			order: {
 				id: 'DESC'
 			},
+			relations: {
+				judge_competitions: true
+			},
             take: paging.page_size,
             skip: (paging.page - 1) * paging.page_size
         });
@@ -54,7 +57,10 @@ export class UserRepository extends Repository<User>{
         return await this.findOne({
             where: {
                 id: id
-            }
+            },
+			relations: {
+				judge_competitions: true
+			}
         });
     }
 }
