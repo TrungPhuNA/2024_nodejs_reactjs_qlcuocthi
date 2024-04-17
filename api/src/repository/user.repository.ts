@@ -34,8 +34,9 @@ export class UserRepository extends Repository<User>{
 
     async getLists(paging: IPaging, filters){
         let condition: any = {};
-        if (filters.hot) condition.hot = filters.hot;
-        if (filters.status) condition.status = filters.status;
+        if (filters?.hot) condition.hot = filters.hot;
+        if (filters?.status) condition.status = filters.status;
+        if (filters?.type) condition.type = filters.type;
 
         const [data, total] =  await this.findAndCount({
             where: condition,

@@ -1,5 +1,5 @@
 import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put, Request, UseGuards } from '@nestjs/common';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { BadRequestException, BaseResponse, HTTP_STATUS, IPaging } from 'src/helpers/helper';
 import { JwtGuard } from 'src/module/auth/guards/jwt/jwt.guard';
 import { UserService } from 'src/service/user.service';
@@ -8,6 +8,7 @@ import { RegisterDto, UpdateProfileDto } from 'src/dtos';
 
 @Controller('cms/user')
 @ApiTags('CMS User')
+@ApiBearerAuth()
 @UseGuards(JwtGuard)
 export class UserController {
 
@@ -55,6 +56,7 @@ export class UserController {
 		try {
 			if (_.isEmpty(createDto)) throw new BadRequestException({ code: 'F0001' });
 			// if (!createDto?.user_id) createDto.user_id = req.user?.user_id || 0
+			
 			return BaseResponse(
 				HTTP_STATUS.success,
 				await this.service.store(createDto),
