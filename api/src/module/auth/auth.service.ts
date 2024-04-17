@@ -131,17 +131,12 @@ export class AuthService {
 	}
 
 	async registerAdmin(data: any) {
-
-		data.password = await bcrypt.hash(data.password.trim(), 10);
 		const newData = await this.userService.store(data);
-
 		return newData;
 	}
 
 	async register(data: any) {
 		await this.validateService.validateUser(data, true);
-		
-		data.password = await bcrypt.hash(data.password.trim(), 10);
 		const newData = await this.userService.store(data);
 		return newData;
 	}

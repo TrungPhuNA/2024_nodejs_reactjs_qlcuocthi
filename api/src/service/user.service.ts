@@ -3,6 +3,7 @@ import { IPaging } from 'src/helpers/helper';
 import { JudgeEntityRepository, UserRepository } from 'src/repository';
 import { Like, Not } from 'typeorm';
 import { UserValidatorService } from './user-validator.service';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
@@ -22,6 +23,7 @@ export class UserService {
 	async store(data: any) {
 		await this.userValidateService.validateUser(data, true);
 		data.created_at = new Date();
+		data.password = await bcrypt.hash(data.password.trim(), 10);
 		const newData: any = await this.repository.create({ ...data });
 		await this.repository.save(newData);
 
