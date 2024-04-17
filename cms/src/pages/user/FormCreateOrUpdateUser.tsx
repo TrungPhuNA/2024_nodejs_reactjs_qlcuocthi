@@ -1,20 +1,19 @@
-import React, {Fragment, useEffect, useRef, useState} from "react";
+import React, {Fragment, useRef, useState} from "react";
 import {Dialog, Transition} from '@headlessui/react';
-import {SCHOOL_SERVICE, USER_SERVICE} from "../../services/api.service.ts";
-import {INIT_PAGING} from "../../services/constant.ts";
+import {USER_SERVICE} from "../../services/api.service.ts";
+
 
 // @ts-ignore
-const FormCreateOrUpdateSchool: React.FC = ({open, setOpen, school}) => {
+const FormCreateOrUpdateUser: React.FC = ({open, setOpen}) => {
 
     const cancelButtonRef = useRef(null)
-    const [dataList, setDataList] = useState([]);
     const [selectedOption, setSelectedOption] = useState<string>('');
     const [isOptionSelected, setIsOptionSelected] = useState<boolean>(false);
-    const [paging, setPaging] = useState(INIT_PAGING);
-    // const [validated, setValidated] = useState(false);
 
     const [name, setName] = useState("");
-
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [username, setUsername] = useState("");
 
     const changeTextColor = () => {
         setIsOptionSelected(true);
@@ -23,21 +22,30 @@ const FormCreateOrUpdateSchool: React.FC = ({open, setOpen, school}) => {
     const handleNameChange = (e: any) => {
         setName(e.target.value);
     };
+    const handleEmailChange = (e: any) => {
+        setEmail(e.target.value);
+    };
+    const handlePasswordChange = (e: any) => {
+        setPassword(e.target.value);
+    };
+    const handleUsernameChange = (e: any) => {
+        setUsername(e.target.value);
+    };
 
     const handleSubmit = async (event: any) => {
         event.preventDefault();
         event.stopPropagation();
         let data = {
-            name : name,
-            rector_id: selectedOption,
+            name: name,
+            email: email,
             status: 1,
+            password: password,
+            username: username,
+            type: selectedOption
         }
-        if (school) {
-            const response = await SCHOOL_SERVICE.update(school.id, data);
-        }else {
-            const response = await SCHOOL_SERVICE.store(data);
-        }
+        console.log('--------------- data', data);
 
+        const response = await USER_SERVICE.store(data);
         console.log('============ response: ', response);
         if (response.status === 'fail') {
             alert("Có lỗi xẩy ra, xin vui lòng thử lại");
@@ -45,25 +53,6 @@ const FormCreateOrUpdateSchool: React.FC = ({open, setOpen, school}) => {
             setOpen(false);
         }
     };
-
-    useEffect(() => {
-        getRectorLists({...paging,...{
-                type: 'rector'
-            }}).then(r =>{});
-
-        console.log("=============== school : ", school)
-        if(school) {
-            setName(school.name);
-            setSelectedOption(school.rector_id);
-        }
-     }, [open]);
-
-    const getRectorLists = async (filters: any) => {
-        const response: any = await USER_SERVICE.getList(filters);
-        if (response?.status == 'success') {
-            setDataList(response.data.result || []);
-        }
-    }
 
     return (
         <Transition.Root show={open} as={Fragment} appear>
@@ -100,27 +89,67 @@ const FormCreateOrUpdateSchool: React.FC = ({open, setOpen, school}) => {
                                         <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
                                             <Dialog.Title as="h3"
                                                           className="text-base font-semibold leading-6 text-gray-900">
-                                                Thêm mới trường học
+                                                Thêm mới thành viên
                                             </Dialog.Title>
                                             <div className="mt-2">
                                                 <form onSubmit={handleSubmit}>
                                                     <div className="mb-4.5">
                                                         <label
                                                             className="mb-2.5 block text-black dark:text-white">
-                                                            Tên trường
+                                                            Họ tên
                                                         </label>
                                                         <input
-                                                            type="name"
+                                                            type="text"
                                                             value={name}
                                                             onChange={handleNameChange}
-                                                            placeholder="Tên trường"
+                                                            placeholder="Họ tên"
+                                                            className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                                                        />
+                                                    </div>
+                                                    <div className="mb-4.5">
+                                                        <label
+                                                            className="mb-2.5 block text-black dark:text-white">
+                                                            Username
+                                                        </label>
+                                                        <input
+                                                            type="text"
+                                                            value={username}
+                                                            onChange={handleUsernameChange}
+                                                            placeholder="Username"
+                                                            className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                                                        />
+                                                    </div>
+                                                    <div className="mb-4.5">
+                                                        <label
+                                                            className="mb-2.5 block text-black dark:text-white">
+                                                            Email
+                                                        </label>
+                                                        <input
+                                                            type="email"
+                                                            value={email}
+                                                            onChange={handleEmailChange}
+                                                            placeholder="Địa chỉ email"
+                                                            className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                                                        />
+                                                    </div>
+                                                    <div className="mb-4.5">
+                                                        <label
+                                                            className="mb-2.5 block text-black dark:text-white">
+                                                            Mật khẩu
+                                                        </label>
+                                                        <input
+                                                            type="password"
+                                                            value={password}
+                                                            secureTextEntry={true}
+                                                            onChange={handlePasswordChange}
+                                                            placeholder="******"
                                                             className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                                                         />
                                                     </div>
                                                     <div className="mb-4.5">
                                                         <label className="mb-2.5 block text-black dark:text-white">
                                                             {' '}
-                                                            Hiệu trưởng{' '}
+                                                            Cấp bật{' '}
                                                         </label>
 
                                                         <div
@@ -135,12 +164,22 @@ const FormCreateOrUpdateSchool: React.FC = ({open, setOpen, school}) => {
                                                                     isOptionSelected ? 'text-black dark:text-white' : ''
                                                                 }`}
                                                             >
-                                                                {dataList.map((item, key) => (
-                                                                    <option value={item.id} key={key}
-                                                                            className="text-body dark:text-bodydark">
-                                                                        {item.name}
-                                                                    </option>
-                                                                ))}
+                                                                <option value="student" disabled
+                                                                        className="text-body dark:text-bodydark">
+                                                                    Chọn cấp bậc
+                                                                </option>
+                                                                <option value="student"
+                                                                        className="text-body dark:text-bodydark">
+                                                                    Học sinh
+                                                                </option>
+                                                                <option value="teacher"
+                                                                        className="text-body dark:text-bodydark">
+                                                                    Giáo viên
+                                                                </option>
+                                                                <option value="rector"
+                                                                        className="text-body dark:text-bodydark">
+                                                                    Hiệu trưởng
+                                                                </option>
                                                             </select>
 
                                                             <span
@@ -165,7 +204,8 @@ const FormCreateOrUpdateSchool: React.FC = ({open, setOpen, school}) => {
                                                                 </span>
                                                         </div>
                                                     </div>
-                                                    <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+                                                    <div
+                                                        className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
                                                         <button
                                                             type="submit"
                                                             className="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto"
@@ -195,4 +235,4 @@ const FormCreateOrUpdateSchool: React.FC = ({open, setOpen, school}) => {
     )
 }
 
-export default FormCreateOrUpdateSchool;
+export default FormCreateOrUpdateUser;
