@@ -22,9 +22,6 @@ const FormCreateOrUpdateCompetition: React.FC = ({open, setOpen, competition}) =
     const handleNameChange = (e: any) => {
         setName(e.target.value);
     };
-    const handlePasswordChange = (e: any) => {
-        setPassword(e.target.value);
-    };
     const handleContentsChange = (e: any) => {
         setContents(e.target.value);
     };
@@ -58,6 +55,7 @@ const FormCreateOrUpdateCompetition: React.FC = ({open, setOpen, competition}) =
     useEffect(() => {
         if(competition) {
             setName(competition.name);
+            setContents(competition.contents);
         }
     }, [open]);
 
