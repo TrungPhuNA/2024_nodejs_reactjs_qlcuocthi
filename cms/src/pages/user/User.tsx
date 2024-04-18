@@ -10,6 +10,7 @@ const UserPage: React.FC = () => {
     const [open, setOpen] = useState(false);
     const [dataList, setDataList] = useState([]);
     const [paging, setPaging] = useState(INIT_PAGING);
+    const [user, setUser] = useState(null);
 
     const triggerModalForm = () => {
         setOpen(!open);
@@ -27,11 +28,16 @@ const UserPage: React.FC = () => {
         }
     }
 
+    const updateData = async (item) => {
+        setOpen(!open);
+        setUser(item);
+        console.log('-------------- update: ', item);
+    }
 
     return (
         <DefaultLayout>
             <Breadcrumb pageName="Quản lý user" />
-            <FormCreateOrUpdateUser open={open} setOpen={setOpen}/>
+            <FormCreateOrUpdateUser open={open} setOpen={setOpen} user={user}/>
             <div className="flex flex-col gap-10">
                 <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
                     <div className={'mb-3 flex justify-end'}>
@@ -68,7 +74,7 @@ const UserPage: React.FC = () => {
                                     <tr key={key}>
                                         <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
                                             <div className={'flex'}>
-                                                <div>
+                                                <div onClick={() => updateData(packageItem)} className={'cursor-pointer'}>
                                                     <h5 className="font-medium text-black dark:text-white">
                                                         {packageItem.name}
                                                     </h5>

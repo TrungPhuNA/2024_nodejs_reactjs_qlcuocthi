@@ -1,20 +1,19 @@
 import React, {Fragment, useEffect, useRef, useState} from "react";
 import {Dialog, Transition} from '@headlessui/react';
-import {SCHOOL_SERVICE, USER_SERVICE} from "../../services/api.service.ts";
-import {INIT_PAGING} from "../../services/constant.ts";
+import {COMPETITION_SERVICE, USER_SERVICE} from "../../services/api.service.ts";
+
 
 // @ts-ignore
-const FormCreateOrUpdateSchool: React.FC = ({open, setOpen, school}) => {
+const FormCreateOrUpdateCompetition: React.FC = ({open, setOpen, competition}) => {
 
     const cancelButtonRef = useRef(null)
-    const [dataList, setDataList] = useState([]);
     const [selectedOption, setSelectedOption] = useState<string>('');
     const [isOptionSelected, setIsOptionSelected] = useState<boolean>(false);
-    const [paging, setPaging] = useState(INIT_PAGING);
-    // const [validated, setValidated] = useState(false);
 
     const [name, setName] = useState("");
-
+    const [contents, setContents] = useState("");
+    const [password, setPassword] = useState("");
+    const [username, setUsername] = useState("");
 
     const changeTextColor = () => {
         setIsOptionSelected(true);
@@ -23,21 +22,29 @@ const FormCreateOrUpdateSchool: React.FC = ({open, setOpen, school}) => {
     const handleNameChange = (e: any) => {
         setName(e.target.value);
     };
+    const handlePasswordChange = (e: any) => {
+        setPassword(e.target.value);
+    };
+    const handleContentsChange = (e: any) => {
+        setContents(e.target.value);
+    };
 
     const handleSubmit = async (event: any) => {
         event.preventDefault();
         event.stopPropagation();
         let data = {
-            name : name,
-            rector_id: selectedOption,
+            name: name,
             status: 1,
+            contents: contents,
         }
+
+        console.log('--------------- data', data);
+
         let response = null;
-        console.log('=============== school: ', school);
-        if (school && school != null) {
-            response = await SCHOOL_SERVICE.update(school.id, data);
+        if(competition || competition != null) {
+            response = await COMPETITION_SERVICE.update(competition.id, data);
         }else {
-            response = await SCHOOL_SERVICE.store(data);
+            response = await COMPETITION_SERVICE.store(data);
         }
 
         console.log('============ response: ', response);
@@ -49,24 +56,13 @@ const FormCreateOrUpdateSchool: React.FC = ({open, setOpen, school}) => {
     };
 
     useEffect(() => {
-        getRectorLists({...paging,...{
-                type: 'rector'
-            }}).then(r =>{});
-
-        console.log("=============== school : ", school)
-        if(school) {
-            setName(school.name);
-            setSelectedOption(school.rector_id);
+        if(competition) {
+            setName(competition.name);
         }
-     }, [open]);
+    }, [open]);
 
-    const getRectorLists = async (filters: any) => {
-        const response: any = await USER_SERVICE.getList(filters);
-        if (response?.status == 'success') {
-            setDataList(response.data.result || []);
-        }
-    }
-
+    // @ts-ignore
+    // @ts-ignore
     return (
         <Transition.Root show={open} as={Fragment} appear>
             <Dialog as="div" className="relative z-10 inset-0 overflow-y-auto" initialFocus={cancelButtonRef}
@@ -102,72 +98,50 @@ const FormCreateOrUpdateSchool: React.FC = ({open, setOpen, school}) => {
                                         <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
                                             <Dialog.Title as="h3"
                                                           className="text-base font-semibold leading-6 text-gray-900">
-                                                Thêm mới trường học
+                                                Thêm mới cuộc thi
                                             </Dialog.Title>
                                             <div className="mt-2">
                                                 <form onSubmit={handleSubmit}>
                                                     <div className="mb-4.5">
                                                         <label
                                                             className="mb-2.5 block text-black dark:text-white">
-                                                            Tên trường
+                                                            Tên cuôc thi
                                                         </label>
                                                         <input
-                                                            type="name"
+                                                            type="text"
                                                             value={name}
                                                             onChange={handleNameChange}
-                                                            placeholder="Tên trường"
+                                                            placeholder="Họ tên"
+                                                            className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                                                        />
+                                                    </div>
+                                                    <div className="mb-4.5">
+                                                        <label
+                                                            className="mb-2.5 block text-black dark:text-white">
+                                                            Nội dung cuộc thi
+                                                        </label>
+                                                        <input
+                                                            type="text"
+                                                            value={contents}
+                                                            onChange={handleContentsChange}
+                                                            placeholder="Username"
                                                             className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                                                         />
                                                     </div>
                                                     <div className="mb-4.5">
                                                         <label className="mb-2.5 block text-black dark:text-white">
                                                             {' '}
-                                                            Hiệu trưởng{' '}
+                                                            Tiêu chí {' '}
                                                         </label>
-
-                                                        <div
-                                                            className="relative z-20 bg-transparent dark:bg-form-input">
-                                                            <select
-                                                                value={selectedOption}
-                                                                onChange={(e) => {
-                                                                    setSelectedOption(e.target.value);
-                                                                    changeTextColor();
-                                                                }}
-                                                                className={`relative z-20 w-full appearance-none rounded border border-stroke bg-transparent py-3 px-5 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary ${
-                                                                    isOptionSelected ? 'text-black dark:text-white' : ''
-                                                                }`}
-                                                            >
-                                                                {dataList.map((item, key) => (
-                                                                    <option value={item.id} key={key}
-                                                                            className="text-body dark:text-bodydark">
-                                                                        {item.name}
-                                                                    </option>
-                                                                ))}
-                                                            </select>
-
-                                                            <span
-                                                                className="absolute top-1/2 right-4 z-30 -translate-y-1/2">
-                                                                  <svg
-                                                                      className="fill-current"
-                                                                      width="24"
-                                                                      height="24"
-                                                                      viewBox="0 0 24 24"
-                                                                      fill="none"
-                                                                      xmlns="http://www.w3.org/2000/svg"
-                                                                  >
-                                                                    <g opacity="0.8">
-                                                                      <path
-                                                                          fillRule="evenodd"
-                                                                          clipRule="evenodd"
-                                                                          d="M5.29289 8.29289C5.68342 7.90237 6.31658 7.90237 6.70711 8.29289L12 13.5858L17.2929 8.29289C17.6834 7.90237 18.3166 7.90237 18.7071 8.29289C19.0976 8.68342 19.0976 9.31658 18.7071 9.70711L12.7071 15.7071C12.3166 16.0976 11.6834 16.0976 11.2929 15.7071L5.29289 9.70711C4.90237 9.31658 4.90237 8.68342 5.29289 8.29289Z"
-                                                                          fill=""
-                                                                      ></path>
-                                                                    </g>
-                                                                  </svg>
-                                                                </span>
-                                                        </div>
                                                     </div>
-                                                    <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+                                                    <div className="mb-4.5">
+                                                        <label className="mb-2.5 block text-black dark:text-white">
+                                                            {' '}
+                                                            Ban dám khảo {' '}
+                                                        </label>
+                                                    </div>
+                                                    <div
+                                                        className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
                                                         <button
                                                             type="submit"
                                                             className="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto"
@@ -197,4 +171,4 @@ const FormCreateOrUpdateSchool: React.FC = ({open, setOpen, school}) => {
     )
 }
 
-export default FormCreateOrUpdateSchool;
+export default FormCreateOrUpdateCompetition;

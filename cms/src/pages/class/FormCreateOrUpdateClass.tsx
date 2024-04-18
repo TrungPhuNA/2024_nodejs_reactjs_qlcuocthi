@@ -1,15 +1,34 @@
 import React, {Fragment, useEffect, useRef, useState} from "react";
 import {Dialog, Transition} from '@headlessui/react';
-import {SCHOOL_SERVICE, USER_SERVICE} from "../../services/api.service.ts";
+import {CLASS_SERVICE, SCHOOL_SERVICE, USER_SERVICE} from "../../services/api.service.ts";
 import {INIT_PAGING} from "../../services/constant.ts";
 
+
+const units = [
+    {
+        name: "Khối A",
+        id: "a"
+    },
+    {
+        name: "Khối B",
+        id: "b"
+    },
+    {
+        name: "Khối C",
+        id: "c"
+    },
+]
 // @ts-ignore
-const FormCreateOrUpdateSchool: React.FC = ({open, setOpen, school}) => {
+const FormCreateOrUpdateClass: React.FC = ({open, setOpen, classUpdate}) => {
 
     const cancelButtonRef = useRef(null)
     const [dataList, setDataList] = useState([]);
-    const [selectedOption, setSelectedOption] = useState<string>('');
+    const [selectedOption, setSelectedOption] = useState<string>('0');
     const [isOptionSelected, setIsOptionSelected] = useState<boolean>(false);
+
+    const [selectedOptionUni, setSelectedOptionUni] = useState<string>('a');
+    const [isOptionSelectedUni, setIsOptionSelectedUni] = useState<boolean>(false);
+
     const [paging, setPaging] = useState(INIT_PAGING);
     // const [validated, setValidated] = useState(false);
 
@@ -18,6 +37,10 @@ const FormCreateOrUpdateSchool: React.FC = ({open, setOpen, school}) => {
 
     const changeTextColor = () => {
         setIsOptionSelected(true);
+    };
+
+    const changeUni = () => {
+        setIsOptionSelectedUni(true);
     };
 
     const handleNameChange = (e: any) => {
@@ -29,39 +52,40 @@ const FormCreateOrUpdateSchool: React.FC = ({open, setOpen, school}) => {
         event.stopPropagation();
         let data = {
             name : name,
-            rector_id: selectedOption,
+            school_id: selectedOption,
             status: 1,
+            unit: selectedOptionUni
         }
         let response = null;
-        console.log('=============== school: ', school);
-        if (school && school != null) {
-            response = await SCHOOL_SERVICE.update(school.id, data);
+        console.log('=============== classUpdate: ', classUpdate);
+        if (classUpdate || classUpdate != null) {
+            response = await CLASS_SERVICE.update(classUpdate.id, data);
         }else {
-            response = await SCHOOL_SERVICE.store(data);
+            response = await CLASS_SERVICE.store(data);
         }
 
         console.log('============ response: ', response);
         if (response.status === 'fail') {
             alert("Có lỗi xẩy ra, xin vui lòng thử lại");
         } else {
+            document.getElementById("formData").reset();
             setOpen(false);
         }
     };
 
     useEffect(() => {
-        getRectorLists({...paging,...{
-                type: 'rector'
-            }}).then(r =>{});
+        getSchoolLists({...paging}).then(r =>{});
 
-        console.log("=============== school : ", school)
-        if(school) {
-            setName(school.name);
-            setSelectedOption(school.rector_id);
+        console.log("=============== school : ", classUpdate)
+        if(classUpdate) {
+            setName(classUpdate.name);
+            setSelectedOption(classUpdate.school_id);
+            setSelectedOptionUni(classUpdate.unit);
         }
-     }, [open]);
+    }, [open]);
 
-    const getRectorLists = async (filters: any) => {
-        const response: any = await USER_SERVICE.getList(filters);
+    const getSchoolLists = async (filters: any) => {
+        const response: any = await SCHOOL_SERVICE.getList(filters);
         if (response?.status == 'success') {
             setDataList(response.data.result || []);
         }
@@ -102,27 +126,27 @@ const FormCreateOrUpdateSchool: React.FC = ({open, setOpen, school}) => {
                                         <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
                                             <Dialog.Title as="h3"
                                                           className="text-base font-semibold leading-6 text-gray-900">
-                                                Thêm mới trường học
+                                                Thêm mới lớp học
                                             </Dialog.Title>
                                             <div className="mt-2">
-                                                <form onSubmit={handleSubmit}>
+                                                <form onSubmit={handleSubmit} id="formData">
                                                     <div className="mb-4.5">
                                                         <label
                                                             className="mb-2.5 block text-black dark:text-white">
-                                                            Tên trường
+                                                            Tên lớp
                                                         </label>
                                                         <input
                                                             type="name"
                                                             value={name}
                                                             onChange={handleNameChange}
-                                                            placeholder="Tên trường"
+                                                            placeholder="Tên lớp"
                                                             className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                                                         />
                                                     </div>
                                                     <div className="mb-4.5">
                                                         <label className="mb-2.5 block text-black dark:text-white">
                                                             {' '}
-                                                            Hiệu trưởng{' '}
+                                                            Chọn trường{' '}
                                                         </label>
 
                                                         <div
@@ -138,6 +162,54 @@ const FormCreateOrUpdateSchool: React.FC = ({open, setOpen, school}) => {
                                                                 }`}
                                                             >
                                                                 {dataList.map((item, key) => (
+                                                                    <option value={item.id} key={key}
+                                                                            className="text-body dark:text-bodydark">
+                                                                        {item.name}
+                                                                    </option>
+                                                                ))}
+                                                            </select>
+
+                                                            <span
+                                                                className="absolute top-1/2 right-4 z-30 -translate-y-1/2">
+                                                                  <svg
+                                                                      className="fill-current"
+                                                                      width="24"
+                                                                      height="24"
+                                                                      viewBox="0 0 24 24"
+                                                                      fill="none"
+                                                                      xmlns="http://www.w3.org/2000/svg"
+                                                                  >
+                                                                    <g opacity="0.8">
+                                                                      <path
+                                                                          fillRule="evenodd"
+                                                                          clipRule="evenodd"
+                                                                          d="M5.29289 8.29289C5.68342 7.90237 6.31658 7.90237 6.70711 8.29289L12 13.5858L17.2929 8.29289C17.6834 7.90237 18.3166 7.90237 18.7071 8.29289C19.0976 8.68342 19.0976 9.31658 18.7071 9.70711L12.7071 15.7071C12.3166 16.0976 11.6834 16.0976 11.2929 15.7071L5.29289 9.70711C4.90237 9.31658 4.90237 8.68342 5.29289 8.29289Z"
+                                                                          fill=""
+                                                                      ></path>
+                                                                    </g>
+                                                                  </svg>
+                                                                </span>
+                                                        </div>
+                                                    </div>
+                                                    <div className="mb-4.5">
+                                                        <label className="mb-2.5 block text-black dark:text-white">
+                                                            {' '}
+                                                            Chọn khối{' '}
+                                                        </label>
+
+                                                        <div
+                                                            className="relative z-20 bg-transparent dark:bg-form-input">
+                                                            <select
+                                                                value={selectedOptionUni}
+                                                                onChange={(e) => {
+                                                                    setSelectedOptionUni(e.target.value);
+                                                                    changeUni();
+                                                                }}
+                                                                className={`relative z-20 w-full appearance-none rounded border border-stroke bg-transparent py-3 px-5 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary ${
+                                                                    isOptionSelectedUni ? 'text-black dark:text-white' : ''
+                                                                }`}
+                                                            >
+                                                                {units.map((item, key) => (
                                                                     <option value={item.id} key={key}
                                                                             className="text-body dark:text-bodydark">
                                                                         {item.name}
@@ -197,4 +269,4 @@ const FormCreateOrUpdateSchool: React.FC = ({open, setOpen, school}) => {
     )
 }
 
-export default FormCreateOrUpdateSchool;
+export default FormCreateOrUpdateClass;

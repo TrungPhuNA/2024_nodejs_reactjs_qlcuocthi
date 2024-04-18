@@ -17,7 +17,7 @@ const SchoolPage: React.FC = () => {
 
     const [dataList, setDataList] = useState([]);
     const [paging, setPaging] = useState(INIT_PAGING);
-    const [school, setSchool] = useState({});
+    const [school, setSchool] = useState(null);
 
     useEffect(() => {
         getDataList({ ...paging })
@@ -93,7 +93,7 @@ const SchoolPage: React.FC = () => {
 
                                     <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                                         <p className="text-black dark:text-white cursor-pointer" onClick={() => updateData(packageItem)}>
-                                            {packageItem.name}
+                                            {packageItem?.user?.name}
                                         </p>
                                     </td>
                                     <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">

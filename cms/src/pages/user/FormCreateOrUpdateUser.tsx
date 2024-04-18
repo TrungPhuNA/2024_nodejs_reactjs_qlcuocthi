@@ -1,10 +1,10 @@
-import React, {Fragment, useRef, useState} from "react";
+import React, {Fragment, useEffect, useRef, useState} from "react";
 import {Dialog, Transition} from '@headlessui/react';
 import {USER_SERVICE} from "../../services/api.service.ts";
 
 
 // @ts-ignore
-const FormCreateOrUpdateUser: React.FC = ({open, setOpen}) => {
+const FormCreateOrUpdateUser: React.FC = ({open, setOpen, user}) => {
 
     const cancelButtonRef = useRef(null)
     const [selectedOption, setSelectedOption] = useState<string>('');
@@ -39,13 +39,20 @@ const FormCreateOrUpdateUser: React.FC = ({open, setOpen}) => {
             name: name,
             email: email,
             status: 1,
-            password: password,
+            password: '',
             username: username,
             type: selectedOption
         }
+        if(password) data.password = password;
         console.log('--------------- data', data);
 
-        const response = await USER_SERVICE.store(data);
+        let response = null;
+        if(user || user != null) {
+            response = await USER_SERVICE.update(user.id, data);
+        }else {
+            response = await USER_SERVICE.store(data);
+        }
+
         console.log('============ response: ', response);
         if (response.status === 'fail') {
             alert("Có lỗi xẩy ra, xin vui lòng thử lại");
@@ -54,6 +61,17 @@ const FormCreateOrUpdateUser: React.FC = ({open, setOpen}) => {
         }
     };
 
+    useEffect(() => {
+        if(user) {
+            setName(user.name);
+            setEmail(user.email);
+            setUsername(user.username);
+            setSelectedOption(user.type);
+        }
+    }, [open]);
+
+    // @ts-ignore
+    // @ts-ignore
     return (
         <Transition.Root show={open} as={Fragment} appear>
             <Dialog as="div" className="relative z-10 inset-0 overflow-y-auto" initialFocus={cancelButtonRef}
