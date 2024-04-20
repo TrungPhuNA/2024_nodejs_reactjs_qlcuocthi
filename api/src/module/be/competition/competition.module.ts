@@ -8,13 +8,15 @@ import { CompetitionCriteriasEntityRepository, CompetitionEntityRepository, Judg
 @Module({imports: [
 	TypeOrmModule.forFeature([
 		CompetitionEntity, 
-		CompetitionCriteriasEntity
+		CompetitionCriteriasEntity,
+		JudgeEntity
 	])
 ],
 providers: [
 	CompetitionService, 
 	CompetitionEntityRepository, 
-	CompetitionCriteriasEntityRepository
+	CompetitionCriteriasEntityRepository,
+	JudgeEntityRepository
 ],
   controllers: [CompetitionController]
 })

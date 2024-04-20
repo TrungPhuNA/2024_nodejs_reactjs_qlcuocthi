@@ -34,7 +34,7 @@ function App() {
     }, []);
 
     return loading ? (
-        <Loader/>
+        <Loader isShowAll={loading}/>
     ) : (
         <>
             <Routes>

@@ -29,3 +29,15 @@ export const INIT_PAGING = {
 	total_page: 1,
 	total: 0
 };
+
+export const STATUSES = [
+	{
+		id: 1,
+		name: 'Hoạt động'
+	},
+	{
+		id: -1,
+		name: 'Tạm dừng'
+	},
+	
+];

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { IPaging } from 'src/helpers/helper';
-import { CompetitionCriteriasEntityRepository, CompetitionEntityRepository } from 'src/repository';
+import { CompetitionCriteriasEntityRepository, CompetitionEntityRepository, JudgeEntityRepository } from 'src/repository';
 
 @Injectable()
 export class CompetitionService  {
@@ -8,6 +8,7 @@ export class CompetitionService  {
 	constructor(
 		private repository: CompetitionEntityRepository,
 		private dbRepository: CompetitionCriteriasEntityRepository,
+		private judgeRepo: JudgeEntityRepository,
 	) {
 
 	}
@@ -20,16 +21,16 @@ export class CompetitionService  {
 		data.created_at = new Date()
 		const newData: any = await this.repository.create({ ...data });
 		await this.repository.save(newData);
-		await this.createOrUpdateJudge(newData.id, data);
+		await this.createOrUpdateJudgeAndCriteriaCompetition(newData.id, data);
 		return newData;
 	}
 
-	async createOrUpdateJudge(id: any,data: any) {
+	async createOrUpdateJudgeAndCriteriaCompetition(id: any,data: any) {
 		if(data.criteria_ids?.length > 0) {
 			await this.dbRepository.delete({
 				competition_id: id
 			});
-			let judges = data.criteria_ids.reduce((newItem: any, item: any) => {
+			let criteria = data.criteria_ids.reduce((newItem: any, item: any) => {
 				newItem.push({
 					competition_id: id,
 					criterias_id: item,
@@ -38,7 +39,22 @@ export class CompetitionService  {
 				});
 				return newItem;
 			}, []);
-			await this.dbRepository.insert(judges);
+			await this.dbRepository.insert(criteria);
+		}
+		if(data.judge_ids?.length > 0) {
+			await this.judgeRepo.delete({
+				competition_id: id
+			});
+			let judges = data.judge_ids.reduce((newItem: any, item: any) => {
+				newItem.push({
+					competition_id: id,
+					user_id: item,
+					created_at: new Date(),
+					updated_at: new Date()
+				});
+				return newItem;
+			}, []);
+			await this.judgeRepo.insert(judges);
 		}
 	}
 
@@ -47,7 +63,7 @@ export class CompetitionService  {
 		const newData = {...data};
 		delete newData.criteria_ids;
 		await this.repository.update(id, newData);
-		await this.createOrUpdateJudge(id, data);
+		await this.createOrUpdateJudgeAndCriteriaCompetition(id, data);
 		return await this.findById(id);
 	}
 

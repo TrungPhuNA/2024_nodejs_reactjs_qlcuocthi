@@ -31,5 +31,9 @@ export class CompetitionDto {
 	@IsOptional()
 	criteria_ids: number[];
 
+	@ApiProperty()
+	@IsOptional()
+	judge_ids: number[];
+
 	updated_at = new Date();
 }

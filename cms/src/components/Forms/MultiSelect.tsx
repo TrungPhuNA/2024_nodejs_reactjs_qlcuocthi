@@ -11,7 +11,7 @@ interface DropdownProps {
   id: string;
 }
 
-const MultiSelect: React.FC<DropdownProps> = ({ id }) => {
+const MultiSelect: React.FC<DropdownProps> = ({ id, ...props }: any) => {
   const [options, setOptions] = useState<Option[]>([]);
   const [selected, setSelected] = useState<number[]>([]);
   const [show, setShow] = useState(false);
@@ -19,23 +19,23 @@ const MultiSelect: React.FC<DropdownProps> = ({ id }) => {
   const trigger = useRef<any>(null);
 
   useEffect(() => {
-    const loadOptions = () => {
-      const select = document.getElementById(id) as HTMLSelectElement | null;
-      if (select) {
-        const newOptions: Option[] = [];
-        for (let i = 0; i < select.options.length; i++) {
-          newOptions.push({
-            value: select.options[i].value,
-            text: select.options[i].innerText,
-            selected: select.options[i].hasAttribute('selected'),
-          });
-        }
-        setOptions(newOptions);
-      }
-    };
-
     loadOptions();
   }, [id]);
+
+  const loadOptions = () => {
+	const select = document.getElementById(id) as HTMLSelectElement | null;
+	if (select) {
+	  const newOptions: Option[] = [];
+	  for (let i = 0; i < select.options.length; i++) {
+		newOptions.push({
+		  value: select.options[i].value,
+		  text: select.options[i].innerText,
+		  selected: select.options[i].hasAttribute('selected'),
+		});
+	  }
+	  setOptions(newOptions);
+	}
+  };
 
    const open = () => {
      setShow(true);
@@ -96,7 +96,7 @@ const MultiSelect: React.FC<DropdownProps> = ({ id }) => {
   return (
     <div className="relative z-50">
       <label className="mb-3 block text-sm font-medium text-black dark:text-white">
-        Multiselect Dropdown
+        {props.title || 'Select Option'}
       </label>
       <div>
         <select className="hidden" id={id}>

@@ -41,7 +41,7 @@ export class RegisterDto {
 
 	@ApiProperty()
 	@IsOptional()
-	@Transform(({ value }) => value?.toUpperCase())
+	@Transform(({ value }) => value?.toString().toUpperCase())
 	@IsIn(['TEACHER', 'STUDENT', 'RECTOR'])
 	type: string;
 

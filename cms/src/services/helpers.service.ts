@@ -78,3 +78,11 @@ export const range = (start: any, end: any) => {
 	*/
 	return Array.from({ length }, (_, idx) => idx + start);
 };
+
+export const setField = (value: any, name: any, form: any, setForm: any) => {
+	form[name] = value;
+
+	setForm({
+		...form,
+	});
+}

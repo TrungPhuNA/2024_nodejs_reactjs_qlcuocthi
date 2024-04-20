@@ -1,15 +1,19 @@
 import React, {Fragment, useEffect, useRef, useState} from "react";
 import {Dialog, Transition} from '@headlessui/react';
 import {CRITERIA_SERVICE, USER_SERVICE} from "../../services/api.service.ts";
+import { useDispatch } from "react-redux";
+import { toggleShowLoading } from "../../hooks/redux/actions/common.tsx";
 
 
 // @ts-ignore
-const FormCreateOrUpdateCriteria: React.FC = ({open, setOpen, criteria}) => {
+const FormCreateOrUpdateCriteria: React.FC = ({open, setOpen, detail, ...props }: any) => {
 
     const cancelButtonRef = useRef(null)
 
     const [name, setName] = useState("");
     const [content, setContent] = useState("");
+
+	const dispatch = useDispatch()
 
     const handleNameChange = (e: any) => {
         setName(e.target.value);
@@ -27,27 +31,34 @@ const FormCreateOrUpdateCriteria: React.FC = ({open, setOpen, criteria}) => {
         }
 
         console.log('--------------- data', data);
-
+		
         let response = null;
-        if(criteria || criteria !== null) {
-            response = await CRITERIA_SERVICE.update(criteria.id, data);
+		dispatch(toggleShowLoading(true));
+        if(detail || detail !== null) {
+            response = await CRITERIA_SERVICE.update(detail.id, data);
         }else {
             response = await CRITERIA_SERVICE.store(data);
         }
+		dispatch(toggleShowLoading(false));
 
         console.log('============ response: ', response);
-        if (response.status === 'fail') {
-            alert("Có lỗi xẩy ra, xin vui lòng thử lại");
+        if (response.status != 'success') {
+            alert("Có lỗi xảy ra, xin vui lòng thử lại");
         } else {
             setOpen(false);
+			props.getDataList({...props.params})
         }
     };
 
     useEffect(() => {
-        if(criteria) {
-            setName(criteria.name);
-            setContent(criteria.contents);
-        }
+        if(detail) {
+            setName(detail.name);
+            setContent(detail.contents);
+        } else {
+			setName("");
+            setContent("");
+		}
+		
     }, [open]);
 
     // @ts-ignore

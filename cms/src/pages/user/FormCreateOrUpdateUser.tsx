@@ -54,8 +54,8 @@ const FormCreateOrUpdateUser: React.FC = ({open, setOpen, user}) => {
         }
 
         console.log('============ response: ', response);
-        if (response.status === 'fail') {
-            alert("Có lỗi xẩy ra, xin vui lòng thử lại");
+        if (response.status != 'success') {
+            alert("Có lỗi xảy ra, xin vui lòng thử lại");
         } else {
             setOpen(false);
         }

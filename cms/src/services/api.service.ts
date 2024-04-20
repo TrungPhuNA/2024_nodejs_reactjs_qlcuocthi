@@ -135,3 +135,17 @@ export const COMPETITION_SERVICE = {
 		return await deleteMethod(`cms/competition/delete/` + id);
 	},
 };
+
+export const COMMON_SERVICE = {
+	async getConfig() {
+		await timeDelay(1000)
+		return await getMethod(`cms/config`, {});
+	},
+
+	async getStatistic(filters: any) {
+		await timeDelay(1000)
+		const params = buildFilter(filters);
+		return await getMethod(`cms/dashboard`, params);
+	},
+	
+};
