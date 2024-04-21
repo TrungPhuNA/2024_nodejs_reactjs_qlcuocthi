@@ -63,13 +63,13 @@ const FormCreateOrUpdateCompetition: React.FC = ({ open, setOpen, detail, ...pro
 
 	useEffect(() => {
 		if (detail) {
-			let criteriaIds = detail?.criterias?.map((item: any) => item.id) || []
 			setForm({
 				name: detail?.name || "",
 				author_id: detail?.author_id || "",
 				status: detail?.status || "",
 				contents: detail?.contents || "",
-				criteria_ids: criteriaIds || [],
+				criteria_ids: detail?.criteria_ids || [],
+				judge_ids: detail?.judge_ids || [],
 			})
 		} else {
 			resetForm()
@@ -173,7 +173,7 @@ const FormCreateOrUpdateCompetition: React.FC = ({ open, setOpen, detail, ...pro
 															setForm={setForm}
 															placeholder='Chọn tiêu chí'
 															obj_key={'criteria_ids'}
-															value={form.criteria_ids}
+															value_data={form.criteria_ids}
 														/>
 													</div>
 													<div className="mb-4.5">

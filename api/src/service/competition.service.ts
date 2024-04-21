@@ -1,32 +1,49 @@
 import { Injectable } from '@nestjs/common';
 import { IPaging } from 'src/helpers/helper';
-import { CompetitionCriteriasEntityRepository, CompetitionEntityRepository, JudgeEntityRepository } from 'src/repository';
+import { CompetitionCriteriasEntityRepository, CompetitionEntityRepository, CriteriaEntityRepository, JudgeEntityRepository } from 'src/repository';
 
 @Injectable()
-export class CompetitionService  {
+export class CompetitionService {
 
 	constructor(
 		private repository: CompetitionEntityRepository,
 		private dbRepository: CompetitionCriteriasEntityRepository,
 		private judgeRepo: JudgeEntityRepository,
+		private dbRepo: CompetitionCriteriasEntityRepository,
+		private criterRepo: CriteriaEntityRepository,
 	) {
 
 	}
 
 	async getLists(paging: IPaging, filters: any) {
-		return await this.repository.getLists(paging, filters);
+		let response: any = await this.repository.getLists(paging, filters);
+		if (response?.result?.length > 0) {
+			for (let item of response?.result) {
+				let d: any = await this.dbRepo.find({ where: { competition_id: item.id } })
+				item.criteria_ids = d?.map((e: any) => e.criterias_id);
+
+				let j: any = await this.judgeRepo.find({ where: { competition_id: item.id } })
+				item.judge_ids = j?.map((e: any) => e.criterias_id);
+			}
+		}
+		return response;
 	}
 
 	async store(data: any) {
-		data.created_at = new Date()
-		const newData: any = await this.repository.create({ ...data });
+		data.created_at = new Date();
+		let newData = {...data};
+		delete(newData.judge_ids)
+		delete(newData.criteria_ids);
+		console.log("newData---------> ", newData);
+		newData = await this.repository.create({ ...newData });
 		await this.repository.save(newData);
-		await this.createOrUpdateJudgeAndCriteriaCompetition(newData.id, data);
+		console.log("newData---------> ", newData);
+		await this.createOrUpdateJudgeAndCriteriaCompetition(newData.id, {...data});
 		return newData;
 	}
 
-	async createOrUpdateJudgeAndCriteriaCompetition(id: any,data: any) {
-		if(data.criteria_ids?.length > 0) {
+	async createOrUpdateJudgeAndCriteriaCompetition(id: any, data: any) {
+		if (data.criteria_ids?.length > 0) {
 			await this.dbRepository.delete({
 				competition_id: id
 			});
@@ -41,7 +58,7 @@ export class CompetitionService  {
 			}, []);
 			await this.dbRepository.insert(criteria);
 		}
-		if(data.judge_ids?.length > 0) {
+		if (data.judge_ids?.length > 0) {
 			await this.judgeRepo.delete({
 				competition_id: id
 			});
@@ -60,8 +77,11 @@ export class CompetitionService  {
 
 
 	async update(id: number, data: any) {
-		const newData = {...data};
-		delete newData.criteria_ids;
+		let newData = { ...data };
+		delete(newData.judge_ids)
+		delete(newData.criteria_ids);
+		newData = await this.repository.create({ ...newData });
+		console.log("newData---------> ", newData);
 		await this.repository.update(id, newData);
 		await this.createOrUpdateJudgeAndCriteriaCompetition(id, data);
 		return await this.findById(id);
@@ -72,7 +92,13 @@ export class CompetitionService  {
 	}
 
 	async findById(id: number) {
-		return await this.repository.findById(id);
+		let data: any = await this.repository.findById(id);
+		let d: any = await this.dbRepo.find({ where: { competition_id: data.id } })
+		data.criteria_ids = d?.map((e: any) => e.criterias_id);
+
+		let j: any = await this.judgeRepo.find({ where: { competition_id: data.id } })
+		data.judge_ids = j?.map((e: any) => e.criterias_id);
+		return data
 	}
 
 

@@ -23,10 +23,12 @@ const MultiSelect: React.FC<DropdownProps> = ({ id, ...props }: any) => {
 		loadOptions();
 	}, [id]);
 
+
 	const loadOptions = () => {
 		const select = document.getElementById(id) as HTMLSelectElement | null;
+		console.log(props.value_data);
 		if (select) {
-			const newOptions: Option[] = [];
+			let newOptions: Option[] = [];
 			for (let i = 0; i < select.options.length; i++) {
 				newOptions.push({
 					value: select.options[i].value,
@@ -34,8 +36,15 @@ const MultiSelect: React.FC<DropdownProps> = ({ id, ...props }: any) => {
 					selected: select.options[i].hasAttribute('selected'),
 				});
 			}
+			if(props.value_data?.length > 0 && newOptions?.length > 0) {
+				newOptions = newOptions.map((item: any) => {
+					item.selected = props.value_data.some((e: any) => Number(e) == Number(item.value));
+					return item;
+				});
+			}
 			setOptions(newOptions);
 		}
+		
 	};
 
 	const open = () => {
@@ -166,7 +175,7 @@ const MultiSelect: React.FC<DropdownProps> = ({ id, ...props }: any) => {
 												<input
 													placeholder={props.placeholder || "Select an option"}
 													className="h-full w-full appearance-none bg-transparent p-1 px-2 outline-none"
-													defaultValue={selectedValues()}
+													readOnly={true}
 												/>
 											</div>
 										)}

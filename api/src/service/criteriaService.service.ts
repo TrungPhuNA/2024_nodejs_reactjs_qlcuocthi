@@ -1,18 +1,28 @@
 import { Injectable } from '@nestjs/common';
 import { IPaging } from 'src/helpers/helper';
-import { CriteriaEntityRepository } from 'src/repository';
+import { CompetitionCriteriasEntityRepository, CriteriaEntityRepository, JudgeEntityRepository } from 'src/repository';
 
 @Injectable()
 export class CriteriaEntityService  {
 
 	constructor(
-		private repository: CriteriaEntityRepository
+		private repository: CriteriaEntityRepository,
+		// private dbRepo: CompetitionCriteriasEntityRepository,
+		// private criterRepo: CriteriaEntityRepository,
+		// private judgesRepo: JudgeEntityRepository,
 	) {
 
 	}
 
 	async getLists(paging: IPaging, filters: any) {
-		return await this.repository.getLists(paging, filters);
+		let response: any = await this.repository.getLists(paging, filters);
+		if(response?.result?.length > 0) {
+			// for(let item of response?.result) {
+			// 	item.criteria_ids = await this.dbRepo.find({where: {competition_id: item.id}});
+			// 	item.judge_ids = await this.judgesRepo.find({where: {competition_id: item.id}});
+			// }
+		}
+		return response;
 	}
 
 	async store(data: any) {
