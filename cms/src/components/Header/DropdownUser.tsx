@@ -2,12 +2,15 @@ import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import UserOne from '../../images/user/user-01.png';
+import { getItem } from '../../services/helpers.service';
 
 const DropdownUser = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const trigger = useRef<any>(null);
   const dropdown = useRef<any>(null);
+
+  const [user, setUser] = useState(getItem('user'))
 
   // close on click outside
   useEffect(() => {
@@ -45,9 +48,9 @@ const DropdownUser = () => {
       >
         <span className="hidden text-right lg:block">
           <span className="block text-sm font-medium text-black dark:text-white">
-            Thomas Anree
+            {user?.name || user?.email|| ''}
           </span>
-          <span className="block text-xs">UX Designer</span>
+          <span className="block text-xs">{user?.type}</span>
         </span>
 
         <span className="h-12 w-12 rounded-full">
@@ -81,7 +84,7 @@ const DropdownUser = () => {
         }`}
       >
         <ul className="flex flex-col gap-5 border-b border-stroke px-6 py-7.5 dark:border-strokedark">
-          <li>
+          {/* <li>
             <Link
               to="/profile"
               className="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
@@ -126,10 +129,10 @@ const DropdownUser = () => {
               </svg>
               My Contacts
             </Link>
-          </li>
+          </li> */}
           <li>
             <Link
-              to="/pages/settings"
+              to="/settings"
               className="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
             >
               <svg
@@ -149,11 +152,17 @@ const DropdownUser = () => {
                   fill=""
                 />
               </svg>
-              Account Settings
+              Thiết lập tài khoản
             </Link>
           </li>
         </ul>
-        <button className="flex items-center gap-3.5 px-6 py-4 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base">
+        <button className="flex items-center gap-3.5 px-6 py-4 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
+		onClick={() => {
+			localStorage.removeItem("access_token");
+			localStorage.removeItem("user");
+			window.location.href = '/auth/signin'
+		}}
+		>
           <svg
             className="fill-current"
             width="22"

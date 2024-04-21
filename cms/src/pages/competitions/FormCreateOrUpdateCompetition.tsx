@@ -21,7 +21,8 @@ const formData: any = {
 // @ts-ignore
 const FormCreateOrUpdateCompetition: React.FC = ({ open, setOpen, detail, ...props }) => {
 
-	const cancelButtonRef = useRef(null)
+	const cancelButtonRef = useRef(null);
+	const ref = useRef(null);
 
 	const dispatch = useDispatch();
 	const [form, setForm] = useState({ ...formData });
@@ -160,21 +161,20 @@ const FormCreateOrUpdateCompetition: React.FC = ({ open, setOpen, detail, ...pro
 															onChange={e => {
 																setField(e?.target?.value, 'contents', form, setForm);
 															}}
-															placeholder="Username"
+															placeholder="Nội dung"
 															className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
 														/>
 													</div>
 													<div className="mb-4.5">
-														{/* <SelectGroupTwo
-															labelName={'Tiêu chí'}
-															options={dataList}
-															key_obj={'school_id'}
-															value={form.school_id}
+														<MultiSelect id="criteria_list"
+															title={'Tiêu chí'}
+															data={criteria}
 															form={form}
 															setForm={setForm}
-														/> */}
-
-														<MultiSelect id="multiSelect" />
+															placeholder='Chọn tiêu chí'
+															obj_key={'criteria_ids'}
+															value={form.criteria_ids}
+														/>
 													</div>
 													<div className="mb-4.5">
 														<SelectGroupTwo

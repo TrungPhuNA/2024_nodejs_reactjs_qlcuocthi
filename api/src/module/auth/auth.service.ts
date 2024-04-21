@@ -27,11 +27,17 @@ export class AuthService {
 	}
 
 	async login(loginDto: LoginDto) {
-		let condition: any = {
-			username: loginDto.username
-		}
-
+		let condition: any =[
+			{
+				username: loginDto.username
+			},
+			{
+				email: loginDto.username
+			}
+		]
+			
 		let user: any = await this.userService.findOneByCondition(condition);
+		console.log(user);
 		if (!_.isEmpty(user)) {
 			const isPasswordMatching = await bcrypt.compare(
 				loginDto.password.trim(),

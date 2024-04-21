@@ -5,39 +5,54 @@ import FormCreateOrUpdateUser from "./FormCreateOrUpdateUser.tsx";
 import {INIT_PAGING} from "../../services/constant.ts";
 import {USER_SERVICE} from "../../services/api.service.ts";
 import {formatTime} from "../../services/helpers.service.ts";
+import { PagingPage } from '../../common/paging/PagingCpn.tsx';
+import { useDispatch } from 'react-redux';
+import { toggleShowLoading } from '../../hooks/redux/actions/common.tsx';
 
 const UserPage: React.FC = () => {
     const [open, setOpen] = useState(false);
     const [dataList, setDataList] = useState([]);
     const [paging, setPaging] = useState(INIT_PAGING);
-    const [user, setUser] = useState(null);
+    const [detail, setDetail] = useState(null);
+	const dispatch = useDispatch();
 
     const triggerModalForm = () => {
         setOpen(!open);
+		setDetail(item);
     }
 
     useEffect(() => {
-        getDataList({ ...paging })
+		if(!open) {
+			setDetail(null)
+		}
     }, [open]);
 
     const getDataList = async (filters: any) => {
+		dispatch(toggleShowLoading(true));
         const response: any = await USER_SERVICE.getList(filters);
+		dispatch(toggleShowLoading(false));
         if (response?.status == 'success') {
             setDataList(response.data.result || []);
             setPaging(response.data.meta || INIT_PAGING);
         }
     }
 
-    const updateData = async (item) => {
+    const updateData = async (item: any) => {
         setOpen(!open);
-        setUser(item);
+        setDetail(item);
         console.log('-------------- update: ', item);
     }
+
+	useEffect(() => {
+		getDataList({ ...paging })
+	}, []);
 
     return (
         <DefaultLayout>
             <Breadcrumb pageName="Quản lý user" />
-            <FormCreateOrUpdateUser open={open} setOpen={setOpen} user={user}/>
+            <FormCreateOrUpdateUser open={open} setOpen={setOpen} 
+			detail={detail} getDataList={getDataList} params={paging}
+			/>
             <div className="flex flex-col gap-10">
                 <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
                     <div className={'mb-3 flex justify-end'}>
@@ -142,6 +157,13 @@ const UserPage: React.FC = () => {
                             </tbody>
                         </table>
                     </div>
+					<div className="mt-3 py-5" >
+						<PagingPage paging={paging}
+							setPaging={setPaging}
+							onPageChange={(e: any) => {
+								getDataList({ page: e, page_size: paging.page_size })
+							}} />
+					</div>
                 </div>
             </div>
         </DefaultLayout>

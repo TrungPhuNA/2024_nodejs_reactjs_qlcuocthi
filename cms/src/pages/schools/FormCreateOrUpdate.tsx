@@ -67,7 +67,7 @@ const FormCreateOrUpdateSchool: React.FC = ({ open, setOpen, school, ...props }:
 			let data = {
 				name: school?.name || '',
 				status: school?.status || '',
-				rector_id: school?.rector_id || '',
+				rector_id: school?.rector_id || 's',
 			}
 			setForm(data);
 		} else {

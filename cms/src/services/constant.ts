@@ -41,3 +41,20 @@ export const STATUSES = [
 	},
 	
 ];
+
+export const USER_TYPE = [
+	{
+		id: "RECTOR",
+		name: 'Hiệu Trưởng'
+	},
+	{
+		id: 'TEACHER',
+		name: 'Giáo viên'
+	},
+	{
+		id: 'STUDENT',
+		name: 'Sinh viên'
+	},
+	
+];
+

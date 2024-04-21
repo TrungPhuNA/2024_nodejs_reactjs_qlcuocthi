@@ -149,3 +149,22 @@ export const COMMON_SERVICE = {
 	},
 	
 };
+
+export const AUTH_SERVICE = {
+	async register(data: any) {
+		await timeDelay(1000)
+		return await postMethod(`auth/register`, data);
+	},
+	async login(data: any) {
+		await timeDelay(1000)
+		return await postMethod(`auth/login`, data);
+	},
+	async show() {
+		await timeDelay(1000)
+		return await getMethod(`auth/profile`, {});
+	},
+	async update(dataForm: any) {
+		await timeDelay(1000)
+		return await putMethod(`auth/profile`, dataForm);
+	}
+};

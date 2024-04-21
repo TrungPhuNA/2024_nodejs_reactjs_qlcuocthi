@@ -28,7 +28,6 @@ const SchoolPage: React.FC = () => {
         
 		if(!open) {
 			setSchool(null);
-			
 		}
     }, [open]);
 
