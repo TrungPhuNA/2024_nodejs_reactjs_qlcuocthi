@@ -55,6 +55,8 @@ const SignIn: React.FC = () => {
 			setItem('user', response?.data?.user);
 			setItem('access_token', response?.data?.token_info?.access_token);
 			setErrorForm('');
+			//competitions-result
+			if (response?.data?.user.type === "TEACHER") window.location.href = '/competitions-result';
 			window.location.href = '/';
 		} else {
 			setErrorForm(response?.message || 'Lỗi khi đăng nhập')

@@ -21,6 +21,7 @@ import ClassPage from "./pages/class/Class.tsx";
 import CompetitionsPage from "./pages/competitions/Competitions.tsx";
 import CriteriasPage from "./pages/criterias/Criterias.tsx";
 import CompetitionsMe from "./pages/competitions/CompetitionsMe.tsx";
+import CompetitionsResult from "./pages/competitions/CompetitionsResult.tsx";
 
 function App() {
 	const [loading, setLoading] = useState<boolean>(true);
@@ -90,6 +91,15 @@ function App() {
 						<>
 							<PageTitle title="Cuộc thi của bạn" />
 							<CompetitionsMe />
+						</>
+					}
+				/>
+				<Route
+					path="/competitions-result"
+					element={
+						<>
+							<PageTitle title="Chấm thi" />
+							<CompetitionsResult />
 						</>
 					}
 				/>
