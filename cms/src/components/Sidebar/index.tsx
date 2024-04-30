@@ -1,12 +1,57 @@
 import {useEffect, useRef, useState} from 'react';
 import {NavLink, useLocation} from 'react-router-dom';
-import { FaUser, FaGraduationCap, FaInbox, FaFolder, FaCode } from "react-icons/fa";
+import {FaUser, FaGraduationCap, FaInbox, FaFolder, FaCode} from "react-icons/fa";
+import {getItem} from "../../services/helpers.service.ts";
 
 interface SidebarProps {
     sidebarOpen: boolean;
     setSidebarOpen: (arg: boolean) => void;
 }
 
+const configRoute = [
+    {
+        name: "QL Trường",
+        route: "/school",
+        icon: FaGraduationCap,
+        role: ['RECTOR']
+    },
+    {
+        name: "QL Lớp",
+        route: "/class",
+        icon: FaInbox,
+        role: ['RECTOR']
+    },
+    {
+        name: "Tiêu chí",
+        route: "/criterias",
+        icon: FaFolder,
+        role: ['RECTOR','TEACHER']
+    },
+    {
+        name: "Cuộc Thi",
+        route: "/competitions",
+        icon: FaCode,
+        role: ['RECTOR','TEACHER']
+    },
+    {
+        name: "Thành viên",
+        route: "/user",
+        icon: FaUser,
+        role: ['RECTOR']
+    },
+    {
+        name: "Cuộc thi của bạn",
+        route: "/competitions-me",
+        icon: FaCode,
+        role: ['STUDENT']
+    },
+    {
+        name: "Chấm bài thi",
+        route: "/competitions-result",
+        icon: FaCode,
+        role: ['RECTOR','TEACHER']
+    },
+]
 const Sidebar = ({sidebarOpen, setSidebarOpen}: SidebarProps) => {
     const location = useLocation();
     const {pathname} = location;
@@ -16,10 +61,11 @@ const Sidebar = ({sidebarOpen, setSidebarOpen}: SidebarProps) => {
 
 
     const storedSidebarExpanded = localStorage.getItem('sidebar-expanded');
-    const [sidebarExpanded, setSidebarExpanded] = useState(
+    const [sidebarExpanded] = useState(
         storedSidebarExpanded === null ? false : storedSidebarExpanded === 'true'
     );
-
+    const [user] = useState(getItem('user'))
+    console.info("===========[] ===========[user] : ", user);
     // close on click outside
     useEffect(() => {
         const clickHandler = ({target}: MouseEvent) => {
@@ -46,6 +92,11 @@ const Sidebar = ({sidebarOpen, setSidebarOpen}: SidebarProps) => {
         return () => document.removeEventListener('keydown', keyHandler);
     });
 
+    const checkRole = (type: string, role: any) => {
+        if (role.includes(type)) return true;
+        return false;
+    }
+
     useEffect(() => {
         localStorage.setItem('sidebar-expanded', sidebarExpanded.toString());
         if (sidebarExpanded) {
@@ -65,7 +116,8 @@ const Sidebar = ({sidebarOpen, setSidebarOpen}: SidebarProps) => {
             {/* <!-- SIDEBAR HEADER --> */}
             <div className="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5">
                 <NavLink to="/">
-                    <img src={'https://123code.net/images/logo.png'} style={{ width: '100px',paddingLeft: '10px'}} alt="Logo"/>
+                    <img src={'https://123code.net/images/logo.png'} style={{width: '100px', paddingLeft: '10px'}}
+                         alt="Logo"/>
                 </NavLink>
 
                 <button
@@ -98,66 +150,24 @@ const Sidebar = ({sidebarOpen, setSidebarOpen}: SidebarProps) => {
                     {/* <!-- Menu Group --> */}
                     <div>
                         <ul className="mb-6 flex flex-col gap-1.5">
-                            <li>
-                                <NavLink
-                                    to="/school"
-                                    className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                                        pathname.includes('school') &&
-                                        'bg-graydark dark:bg-meta-4'
-                                    }`}
-                                >
-                                    <FaGraduationCap />
-                                    School
-                                </NavLink>
-                            </li>
-                            <li>
-                                <NavLink
-                                    to="/class"
-                                    className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                                        pathname.includes('class') &&
-                                        'bg-graydark dark:bg-meta-4'
-                                    }`}
-                                >
-                                    <FaInbox />
-                                    Class
-                                </NavLink>
-                            </li>
-                            <li>
-                                <NavLink
-                                    to="/criterias"
-                                    className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                                        pathname.includes('criterias') &&
-                                        'bg-graydark dark:bg-meta-4'
-                                    }`}
-                                >
-                                    <FaFolder />
-                                    Criterias
-                                </NavLink>
-                            </li>
-                            <li>
-                                <NavLink
-                                    to="/competitions"
-                                    className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                                        pathname.includes('competitions') &&
-                                        'bg-graydark dark:bg-meta-4'
-                                    }`}
-                                >
-                                    <FaCode />
-                                    Competitions
-                                </NavLink>
-                            </li>
-                            <li>
-                                <NavLink
-                                    to="/user"
-                                    className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                                        pathname.includes('user') &&
-                                        'bg-graydark dark:bg-meta-4'
-                                    }`}
-                                >
-                                    <FaUser />
-                                    User
-                                </NavLink>
-                            </li>
+                            { configRoute.map((item: any, key: number) => {
+                                return (
+                                    (checkRole(user.type, item.role) === true && (
+                                        <li key={key}>
+                                            <NavLink
+                                                to={`${item.route}`}
+                                                className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
+                                                    pathname.includes(item.route) &&
+                                                    'bg-graydark dark:bg-meta-4'
+                                                }`}
+                                            >
+                                                <item.icon/>
+                                                {item.name}
+                                            </NavLink>
+                                        </li>
+                                    ))
+                                )
+                            })}
                         </ul>
                     </div>
                 </nav>

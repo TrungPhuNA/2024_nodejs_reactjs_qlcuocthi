@@ -28,6 +28,33 @@ export const SCHOOL_SERVICE = {
 	},
 };
 
+export const RESULT_SERVICE = {
+	async getList(filters: any) {
+		await timeDelay(1000)
+
+		const params = buildFilter(filters);
+		return await getMethod(`cms/result/list`, params);
+	},
+	async store(data: any) {
+		await timeDelay(1000)
+
+		return await postMethod(`cms/result/store`, data);
+	},
+	async show(id: any) {
+		await timeDelay(1000)
+
+		return await getMethod(`cms/result/show/` + id, {});
+	},
+	async update(id: any, data: any) {
+		await timeDelay(1000)
+		return await putMethod(`cms/result/update/` + id, data);
+	},
+	async delete(id: any) {
+		await timeDelay(1000)
+		return await deleteMethod(`cms/result/delete/` + id);
+	},
+};
+
 export const USER_SERVICE = {
 	async getList(filters: any) {
 		await timeDelay(1000)

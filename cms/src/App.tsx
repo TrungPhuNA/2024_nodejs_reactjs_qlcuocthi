@@ -20,6 +20,7 @@ import SchoolPage from "./pages/schools/School.tsx";
 import ClassPage from "./pages/class/Class.tsx";
 import CompetitionsPage from "./pages/competitions/Competitions.tsx";
 import CriteriasPage from "./pages/criterias/Criterias.tsx";
+import CompetitionsMe from "./pages/competitions/CompetitionsMe.tsx";
 
 function App() {
 	const [loading, setLoading] = useState<boolean>(true);
@@ -80,6 +81,15 @@ function App() {
 						<>
 							<PageTitle title="Quản lý tiêu chí cuộc thi" />
 							<CriteriasPage />
+						</>
+					}
+				/>
+				<Route
+					path="/competitions-me"
+					element={
+						<>
+							<PageTitle title="Cuộc thi của bạn" />
+							<CompetitionsMe />
 						</>
 					}
 				/>

@@ -6,7 +6,6 @@ import FormCreateOrUpdateSchool from "./FormCreateOrUpdate.tsx";
 import {INIT_PAGING} from "../../services/constant.ts";
 import {SCHOOL_SERVICE} from "../../services/api.service.ts";
 import {formatTime} from "../../services/helpers.service.ts";
-import Loader from '../../common/Loader/index.tsx';
 import { PagingPage } from '../../common/paging/PagingCpn.tsx';
 import { toggleShowLoading } from '../../hooks/redux/actions/common.tsx';
 import { useDispatch } from 'react-redux';

@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Breadcrumb from '../../components/Breadcrumbs/Breadcrumb';
-import LogoDark from '../../images/logo/logo-dark.svg';
-import Logo from '../../images/logo/logo.svg';
 import DefaultLayout from '../../layout/DefaultLayout';
 import { setField, setItem } from '../../services/helpers.service';
 import { AUTH_SERVICE } from '../../services/api.service';
@@ -18,7 +16,7 @@ const SignIn: React.FC = () => {
 	const dispatch = useDispatch();
 
 
-	const [loading, setLoading] = useState(false);
+	// const [loading, setLoading] = useState(false);
 
 	const [error, setError] = useState({
 		username: '',
@@ -37,7 +35,7 @@ const SignIn: React.FC = () => {
 			password: ''
 		}
 		if (!form.username || form.username == '') {
-			objError.email = 'Email không được để trống.'
+			objError.username = 'Email không được để trống.'
 			count++;
 		}
 

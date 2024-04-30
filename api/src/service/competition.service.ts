@@ -83,6 +83,7 @@ export class CompetitionService {
 		newData = await this.repository.create({ ...newData });
 		console.log("newData---------> ", newData);
 		await this.repository.update(id, newData);
+		console.info("===========[] ===========[newData] : ",newData);
 		await this.createOrUpdateJudgeAndCriteriaCompetition(id, data);
 		return await this.findById(id);
 	}

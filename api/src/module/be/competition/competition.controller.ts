@@ -78,7 +78,7 @@ export class CompetitionController {
 			return BaseResponse(HTTP_STATUS.success,
 				await this.service.update(id, updateDto), '', 'Updated successfully!');
 		} catch (e) {
-			console.log('put classroom ---------->', e.message);
+			console.log('put CompetitionController ---------->', e.message);
 			return BaseResponse(e.status, e.response, e.code || 'E0001', e.message);
 		}
 	}

@@ -1,65 +1,67 @@
-import React, {Fragment, useEffect, useRef, useState} from "react";
-import {Dialog, Transition} from '@headlessui/react';
-import {CRITERIA_SERVICE} from "../../services/api.service.ts";
+import React, { Fragment, useEffect, useRef, useState } from "react";
+import { Dialog, Transition } from '@headlessui/react';
 import { useDispatch } from "react-redux";
 import { toggleShowLoading } from "../../hooks/redux/actions/common.tsx";
+import {getItem, setField} from "../../services/helpers.service.ts";
+import {uploadFile} from "../../services/apiService.service.ts";
+import {RESULT_SERVICE, SCHOOL_SERVICE} from "../../services/api.service.ts";
 
-
+const formData: any = {
+    name: "",
+    author_id: "",
+    status: "",
+    contents: "",
+    // image: "",
+    criteria_ids: [],
+    judge_ids: []
+}
 // @ts-ignore
-const FormCreateOrUpdateCriteria: React.FC = ({open, setOpen, detail, ...props }: any) => {
+const ModalResult: React.FC = ({ open, setOpen, criteria, ...props }) => {
 
-    const cancelButtonRef = useRef(null)
+    const cancelButtonRef = useRef(null);
+    const ref = useRef(null);
+    const [ files, setFiles ] = useState( [] );
 
-    const [name, setName] = useState("");
-    const [content, setContent] = useState("");
+    const dispatch = useDispatch();
+    const [form, setForm] = useState({ ...formData });
+    const [file, setFile] = useState(null);
+    const [user] = useState(getItem('user'))
 
-	const dispatch = useDispatch()
-
-    const handleNameChange = (e: any) => {
-        setName(e.target.value);
-    };
-    const handleContentChange = (e: any) => {
-        setContent(e.target.value);
-    };
 
     const handleSubmit = async (event: any) => {
         event.preventDefault();
         event.stopPropagation();
-        let data = {
-            name: name,
-            contents: content
-        }
+        let data : any = {
+            file: file,
+            user_id: user.id,
+            point: 0,
+            competition_id: criteria.id
+        };
+        // let data.author_id = user.id;
+        dispatch(toggleShowLoading(true));
+        console.info("===========[] ===========[data] : ",data);
+        let response = await RESULT_SERVICE.store(data);
 
-        console.log('--------------- data', data);
-
-        let response = null;
-		dispatch(toggleShowLoading(true));
-        if(detail || detail !== null) {
-            response = await CRITERIA_SERVICE.update(detail.id, data);
-        }else {
-            response = await CRITERIA_SERVICE.store(data);
-        }
-		dispatch(toggleShowLoading(false));
-
-        console.log('============ response: ', response);
         if (response.status != 'success') {
             alert("Có lỗi xảy ra, xin vui lòng thử lại");
         } else {
-            setOpen(false);
-			props.getDataList({...props.params})
+            window.location.href = '/competitions-me';
         }
+        console.info("===========[] ===========[response] : ",response);
+        dispatch(toggleShowLoading(false));
     };
 
+    const handleFile = async (event: any) => {
+        console.info("===========[] ===========[event] : ",event.target.files);
+        let avatar = await uploadFile( event.target.files[0]);
+        console.info("===========[] ===========[avatar] : ",avatar);
+    }
+
+
     useEffect(() => {
-        if(detail) {
-            setName(detail.name);
-            setContent(detail.contents);
-        } else {
-			setName("");
-            setContent("");
-		}
 
     }, [open]);
+
 
     // @ts-ignore
     // @ts-ignore
@@ -76,7 +78,7 @@ const FormCreateOrUpdateCriteria: React.FC = ({open, setOpen, detail, ...props }
                     leaveFrom="opacity-100"
                     leaveTo="opacity-0"
                 >
-                    <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"/>
+                    <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
                 </Transition.Child>
 
                 <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
@@ -98,33 +100,18 @@ const FormCreateOrUpdateCriteria: React.FC = ({open, setOpen, detail, ...props }
                                         <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
                                             <Dialog.Title as="h3"
                                                           className="text-base font-semibold leading-6 text-gray-900">
-                                                Thêm mới tiêu chí cuộc thi
+                                                Nộp bài thi
                                             </Dialog.Title>
                                             <div className="mt-2">
                                                 <form onSubmit={handleSubmit}>
                                                     <div className="mb-4.5">
                                                         <label
                                                             className="mb-2.5 block text-black dark:text-white">
-                                                            Tiêu chí
+                                                            Upload file
                                                         </label>
                                                         <input
-                                                            type="text"
-                                                            value={name}
-                                                            onChange={handleNameChange}
-                                                            placeholder="Họ tên"
-                                                            className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                                                        />
-                                                    </div>
-                                                    <div className="mb-4.5">
-                                                        <label
-                                                            className="mb-2.5 block text-black dark:text-white">
-                                                            Nội dung
-                                                        </label>
-                                                        <input
-                                                            type="text"
-                                                            value={content}
-                                                            onChange={handleContentChange}
-                                                            placeholder="Nội dung"
+                                                            type="file"
+                                                            onChange={handleFile}
                                                             className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
                                                         />
                                                     </div>
@@ -135,7 +122,7 @@ const FormCreateOrUpdateCriteria: React.FC = ({open, setOpen, detail, ...props }
                                                             type="submit"
                                                             className="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto"
                                                         >
-                                                            Xử lý dữ liệu
+                                                            Xác nhận
                                                         </button>
                                                         <button
                                                             type="button"
@@ -160,4 +147,4 @@ const FormCreateOrUpdateCriteria: React.FC = ({open, setOpen, detail, ...props }
     )
 }
 
-export default FormCreateOrUpdateCriteria;
+export default ModalResult;

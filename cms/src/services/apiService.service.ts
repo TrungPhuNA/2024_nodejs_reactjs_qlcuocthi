@@ -128,8 +128,9 @@ export const uploadFile = async ( file ) =>
 	let avatar = null;
 	const formData = new FormData();
 	formData.append( 'file', file );
-	const res = await axios.post( `/upload/file`,
+	const res = await axiosClient.post( `/upload/file`,
 		formData, { headers: { 'Accept': 'multipart/form-data' } } );
+	console.info("===========[] ===========[res] : ",res);
 	let data = res.data;
 	if ( data?.status === 'success' )
 	{

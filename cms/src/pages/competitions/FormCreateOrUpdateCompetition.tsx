@@ -3,9 +3,8 @@ import { Dialog, Transition } from '@headlessui/react';
 import { COMPETITION_SERVICE, CRITERIA_SERVICE, USER_SERVICE } from "../../services/api.service.ts";
 import { useDispatch } from "react-redux";
 import { toggleShowLoading } from "../../hooks/redux/actions/common.tsx";
-import { setField } from "../../services/helpers.service.ts";
+import {getItem, setField} from "../../services/helpers.service.ts";
 import SelectGroupTwo from "../../components/Forms/SelectGroup/SelectGroupTwo.tsx";
-import SelectMultiple from "../../components/Forms/SelectGroup/SelectMultiple.tsx";
 import { STATUSES } from "../../services/constant.ts";
 import MultiSelect from "../../components/Forms/MultiSelect.tsx";
 
@@ -29,7 +28,7 @@ const FormCreateOrUpdateCompetition: React.FC = ({ open, setOpen, detail, ...pro
 	const [file, setFile] = useState(null);
 	const [dataList, setDataList] = useState([]);
 	const [criteria, setCriteria] = useState([]);
-
+	const [user] = useState(getItem('user'))
 
 
 	const handleSubmit = async (event: any) => {
@@ -37,7 +36,7 @@ const FormCreateOrUpdateCompetition: React.FC = ({ open, setOpen, detail, ...pro
 		event.stopPropagation();
 		let data = { ...form };
 
-		console.log('--------------- data', data);
+		data.author_id = user.id;
 
 		let response = null;
 		dispatch(toggleShowLoading(true));
@@ -65,7 +64,7 @@ const FormCreateOrUpdateCompetition: React.FC = ({ open, setOpen, detail, ...pro
 		if (detail) {
 			setForm({
 				name: detail?.name || "",
-				author_id: detail?.author_id || "",
+				author_id: detail?.author_id || user.id,
 				status: detail?.status || "",
 				contents: detail?.contents || "",
 				criteria_ids: detail?.criteria_ids || [],
