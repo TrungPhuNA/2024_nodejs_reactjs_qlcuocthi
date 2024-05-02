@@ -9,6 +9,8 @@ import 'flatpickr/dist/flatpickr.min.css';
 import { Provider } from 'react-redux';
 import { createStore } from "redux";
 import rootReducer from './hooks/redux/rootReducer';
+import { ToastContainer } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 
 const store: any = createStore(
 	rootReducer,
@@ -19,6 +21,7 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
 		<Provider store={store}>
 			<Router>
 				<App />
+				<ToastContainer />
 			</Router>
 		</Provider>
 

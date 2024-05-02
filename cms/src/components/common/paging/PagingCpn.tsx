@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { range } from "../../services/helpers.service";
+import { range } from "../../../services/helpers.service";
 
 export const PagingPage = (props: any) => {
 

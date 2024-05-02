@@ -5,7 +5,7 @@ import { INIT_PAGING } from "../../services/constant.ts";
 import { CRITERIA_SERVICE } from "../../services/api.service.ts";
 import FormCreateOrUpdateCriteria from "./FormCreateOrUpdateCriteria.tsx";
 import { formatTime } from "../../services/helpers.service.ts";
-import { PagingPage } from '../../common/paging/PagingCpn.tsx';
+import { PagingPage } from '../../components/common/paging/PagingCpn.tsx';
 import { useDispatch } from 'react-redux';
 import { toggleShowLoading } from '../../hooks/redux/actions/common.tsx';
 

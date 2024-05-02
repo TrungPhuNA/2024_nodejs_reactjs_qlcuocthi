@@ -6,6 +6,8 @@ import { setField, setItem } from '../../services/helpers.service';
 import { AUTH_SERVICE } from '../../services/api.service';
 import { useDispatch } from 'react-redux';
 import { toggleShowLoading } from '../../hooks/redux/actions/common';
+import { toast } from "react-toastify";
+
 
 const SignIn: React.FC = () => {
 	const [form, setForm] = useState({
@@ -55,17 +57,23 @@ const SignIn: React.FC = () => {
 			setItem('user', response?.data?.user);
 			setItem('access_token', response?.data?.token_info?.access_token);
 			setErrorForm('');
+			toast.success('Đăng nhập thành công', {
+				onClose: (() => {
+					if (response?.data?.user.type === "TEACHER") window.location.href = '/competitions-result';
+					window.location.href = '/';
+				})
+			})
 			//competitions-result
-			if (response?.data?.user.type === "TEACHER") window.location.href = '/competitions-result';
-			window.location.href = '/';
+
 		} else {
+			toast.error(response?.message || 'Lỗi khi đăng nhập')
 			setErrorForm(response?.message || 'Lỗi khi đăng nhập')
 		}
 
 	}
 	return (
 		<DefaultLayout>
-			<Breadcrumb pageName="Sign In" is_auth={true}/>
+			<Breadcrumb pageName="Sign In" is_auth={true} />
 
 			<div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
 				<div className="flex flex-wrap items-center">

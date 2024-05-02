@@ -6,6 +6,7 @@ import Logo from '../../images/logo/logo.svg';
 import DefaultLayout from '../../layout/DefaultLayout';
 import { AUTH_SERVICE } from '../../services/api.service';
 import { setField } from '../../services/helpers.service';
+import { toast } from 'react-toastify';
 
 const SignUp: React.FC = () => {
 	const [form, setForm] = useState({
@@ -82,8 +83,14 @@ const SignUp: React.FC = () => {
 
 		if (response?.status == 'success') {
 			setErrorForm('');
-			window.location.href = '/auth/signin';
+			toast.success('Đăng ký thành công', {
+				onClose: (() => {
+					window.location.href = '/auth/signin';
+				}),
+			})
+			
 		} else {
+			toast.error(response?.message || 'Lỗi khi đăng nhập')
 			setErrorForm(response?.message || 'Lỗi khi đăng ký')
 		}
 	}

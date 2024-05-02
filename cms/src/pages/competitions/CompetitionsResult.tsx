@@ -7,7 +7,7 @@ import FormCreateOrUpdateCompetition from "./FormCreateOrUpdateCompetition.tsx";
 import {formatTime, getItem} from "../../services/helpers.service.ts";
 import { useDispatch } from 'react-redux';
 import { toggleShowLoading } from '../../hooks/redux/actions/common.tsx';
-import { PagingPage } from '../../common/paging/PagingCpn.tsx';
+import { PagingPage } from '../../components/common/paging/PagingCpn.tsx';
 import user from "../user/User.tsx";
 
 const CompetitionsResult: React.FC = () => {
