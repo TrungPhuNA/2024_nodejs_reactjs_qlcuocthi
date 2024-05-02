@@ -4,7 +4,7 @@ import Breadcrumb from "../../components/Breadcrumbs/Breadcrumb.tsx";
 import { COMPETITION_SERVICE } from "../../services/api.service.ts";
 import { INIT_PAGING } from "../../services/constant.ts";
 import FormCreateOrUpdateCompetition from "./FormCreateOrUpdateCompetition.tsx";
-import { formatTime } from "../../services/helpers.service.ts";
+import { formatTime, getItem } from "../../services/helpers.service.ts";
 import { useDispatch } from 'react-redux';
 import { toggleShowLoading } from '../../hooks/redux/actions/common.tsx';
 import { PagingPage } from '../../components/common/paging/PagingCpn.tsx';
@@ -12,6 +12,7 @@ import { PagingPage } from '../../components/common/paging/PagingCpn.tsx';
 const CompetitionsPage: React.FC = () => {
 
 	const [open, setOpen] = useState(false)
+	const [user, setUser] = useState(getItem('user'))
 
 	const triggerModalForm = () => {
 		setOpen(!open);
@@ -30,6 +31,9 @@ const CompetitionsPage: React.FC = () => {
 
 	const getDataList = async (filters: any) => {
 		dispatch(toggleShowLoading(true));
+		if(user?.type == 'TEACHER') {
+			filters.judge_id = user.id
+		}
 		const response: any = await COMPETITION_SERVICE.getList(filters);
 		dispatch(toggleShowLoading(false));
 

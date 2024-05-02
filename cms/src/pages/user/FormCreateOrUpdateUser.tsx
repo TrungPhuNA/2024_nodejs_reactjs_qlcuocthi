@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 import { setField } from "../../services/helpers.service.ts";
 import { STATUSES, USER_TYPE } from "../../services/constant.ts";
 import SelectGroupTwo from "../../components/Forms/SelectGroup/SelectGroupTwo.tsx";
+import { toast } from "react-toastify";
 
 
 const formData = {
@@ -45,8 +46,9 @@ const FormCreateOrUpdateUser: React.FC = ({ open, setOpen, detail, ...props }: a
 
 		console.log('============ response: ', response);
 		if (response.status != 'success') {
-			alert("Có lỗi xảy ra, xin vui lòng thử lại");
+			toast.error(response?.message || `${detail ? 'Cập nhật thất bại' : 'Tạo mới thất bại' }`)
 		} else {
+			toast.success(`${detail ? 'Cập nhật thành công' : 'Tạo mới thành công' }`)
 			setOpen(false);
 			props.getDataList({ ...props.params })
 		}

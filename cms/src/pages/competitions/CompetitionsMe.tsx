@@ -4,7 +4,7 @@ import Breadcrumb from "../../components/Breadcrumbs/Breadcrumb.tsx";
 import {COMPETITION_SERVICE, RESULT_SERVICE} from "../../services/api.service.ts";
 import { INIT_PAGING } from "../../services/constant.ts";
 import FormCreateOrUpdateCompetition from "./FormCreateOrUpdateCompetition.tsx";
-import {formatTime, getItem} from "../../services/helpers.service.ts";
+import {buildFile, formatTime, getItem} from "../../services/helpers.service.ts";
 import { useDispatch } from 'react-redux';
 import { toggleShowLoading } from '../../hooks/redux/actions/common.tsx';
 import { PagingPage } from '../../components/common/paging/PagingCpn.tsx';
@@ -91,9 +91,10 @@ const CompetitionsMe: React.FC = () => {
 											</p>
 										</td>
 										<td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-											<a className="text-black dark:text-white" target={'_blank'}>
-												Xem tại đây
-											</a>
+											{packageItem?.file && 
+											<a className="text-sky-500 dark:text-white " href={buildFile(packageItem?.file)} target={'_blank'}>
+												{buildFile(packageItem?.file)}
+											</a>}
 										</td>
 									</tr>
 								))}

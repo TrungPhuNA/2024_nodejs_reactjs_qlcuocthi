@@ -6,7 +6,7 @@ import { ResultEntityRepository } from 'src/repository';
 export class ResultService   {
 
 	constructor(
-		private repository: ResultEntityRepository
+		private repository: ResultEntityRepository,
 	) {
 
 	}
@@ -23,7 +23,8 @@ export class ResultService   {
 	}
 
 	async update(id: number, data: any) {
-		await this.repository.update(id, data);
+		const newData: any = await this.repository.create({ ...data });
+		await this.repository.update(id, newData);
 		return await this.findById(id);
 	}
 

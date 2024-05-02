@@ -3,6 +3,7 @@ import {Dialog, Transition} from '@headlessui/react';
 import {CRITERIA_SERVICE} from "../../services/api.service.ts";
 import { useDispatch } from "react-redux";
 import { toggleShowLoading } from "../../hooks/redux/actions/common.tsx";
+import { toast } from "react-toastify";
 
 
 // @ts-ignore
@@ -43,9 +44,10 @@ const FormCreateOrUpdateCriteria: React.FC = ({open, setOpen, detail, ...props }
 
         console.log('============ response: ', response);
         if (response.status != 'success') {
-            alert("Có lỗi xảy ra, xin vui lòng thử lại");
+			toast.error(response?.message || `${detail ? 'Cập nhật thất bại' : 'Tạo mới thất bại' }`);
         } else {
             setOpen(false);
+			toast.success(`${detail ? 'Cập nhật thành công' : 'Tạo mới thành công' }`);
 			props.getDataList({...props.params})
         }
     };

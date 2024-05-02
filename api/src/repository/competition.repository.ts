@@ -20,6 +20,9 @@ export class CompetitionEntityRepository extends Repository<CompetitionEntity>{
 		let condition: any = {};
 		if (filters?.type) condition.type = filters?.type;
 		if (filters?.name) condition.name = Like(`%${filters.name.trim()}%`);
+		if (filters?.judge_id) condition.judges = {
+			id: filters?.judge_id
+		}
 		return condition;
 	}
 

@@ -6,6 +6,7 @@ import SelectGroupTwo from "../../components/Forms/SelectGroup/SelectGroupTwo.ts
 import { setField } from "../../services/helpers.service.ts";
 import { useDispatch } from "react-redux";
 import { toggleShowLoading } from "../../hooks/redux/actions/common.tsx";
+import { toast } from "react-toastify";
 
 
 const formData: any = {
@@ -42,8 +43,10 @@ const FormCreateOrUpdateClass: React.FC = ({ open, setOpen, detail, ...props }: 
 		console.log('============ response: ', response);
 		if (response.status != 'success') {
 			alert("Có lỗi xảy ra, xin vui lòng thử lại");
+			toast.error(response?.message || `${detail ? 'Cập nhật thất bại' : 'Tạo mới thất bại' }`)
 		} else {
-			resetForm()
+			resetForm();
+			toast.success(`${detail ? 'Cập nhật thành công' : 'Tạo mới thành công' }`)
 			setOpen(false);
 			props.getDataList({ ...props.params })
 		}

@@ -1,5 +1,7 @@
+import axios from "axios";
 import { deleteMethod, getMethod, postMethod, putMethod } from "./apiService.service"
 import { buildFilter, timeDelay } from "./helpers.service";
+import { URL_API } from "./constant";
 
 export const SCHOOL_SERVICE = {
 	async getList(filters: any) {
@@ -174,7 +176,7 @@ export const COMMON_SERVICE = {
 		const params = buildFilter(filters);
 		return await getMethod(`cms/dashboard`, params);
 	},
-	
+
 };
 
 export const AUTH_SERVICE = {
@@ -195,3 +197,21 @@ export const AUTH_SERVICE = {
 		return await putMethod(`auth/profile`, dataForm);
 	}
 };
+
+export const UPLOAD_SERVICE = {
+	async upload(file: any) {
+		try {
+			const formData = new FormData();
+			formData.append('file', file);
+			const res = await axios.post(`${URL_API}upload/file`,
+				formData, { headers: { 'Accept': 'multipart/form-data' } });
+			return res?.data;
+		} catch (error) {
+			return {
+				status: 'error',
+				message: error?.message || 'Lỗi upload file'
+			}
+		}
+
+	}
+}

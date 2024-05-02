@@ -1,4 +1,4 @@
-export const URL_API = 'http://localhost:3001/api/v1/';
+export const URL_API = import.meta.env.VITE_API_URL ||  'http://localhost:3001/api/v1/';
 export const URL_API_PREFIX = {
 	AUTH: 'auth',
 	ORDER: 'order',

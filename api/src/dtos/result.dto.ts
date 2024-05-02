@@ -24,6 +24,10 @@ export class ResultDto {
 
 	@ApiProperty()
 	@IsOptional()
+	content: string;
+
+	@ApiProperty()
+	@IsOptional()
 	competition_id: number;
 
 	@ApiProperty()

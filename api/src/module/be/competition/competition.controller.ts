@@ -25,8 +25,9 @@ export class CompetitionController {
 				page: req.query.page || 1,
 				page_size: req.query.page_size || 20
 			};
+			let filters = {...req.query, user: req.user}
 
-			let data: any = await this.service.getLists(paging, req.query);
+			let data: any = await this.service.getLists(paging, filters);
 
 			return BaseResponse(HTTP_STATUS.success, data, '', 'Successful');
 		} catch (e) {

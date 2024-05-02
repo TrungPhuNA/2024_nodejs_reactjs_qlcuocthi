@@ -24,13 +24,16 @@ export class ResultEntityRepository extends Repository<ResultEntity>{
 		if (filter?.time_start) condition.time_start = MoreThanOrEqual(filter?.time_start);
 		if (filter?.time_stop) condition.time_stop = LessThanOrEqual(filter?.time_stop);
 		if (filter?.status) condition.status = filter.status;
+		if (filter?.judge_id) condition.judges = {
+			id: filter?.judge_id
+		}
 
 		return condition;
 	}
 
     async getLists(paging: IPaging, filters: any){
         let condition: any = await this.buildCondition(filters);
-
+		
         const [data, total] =  await this.findAndCount({
             where: condition,
 			order: {
@@ -38,7 +41,8 @@ export class ResultEntityRepository extends Repository<ResultEntity>{
 			},
 			relations: {
 				user: true,
-				competition: true
+				competition: true,
+				judges: true
 			},
             take: paging.page_size,
             skip: (paging.page - 1) * paging.page_size

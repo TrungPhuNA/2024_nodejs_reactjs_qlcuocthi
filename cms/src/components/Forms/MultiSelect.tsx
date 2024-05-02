@@ -129,7 +129,6 @@ const MultiSelect: React.FC<DropdownProps> = ({ id, ...props }: any) => {
 						)
 					})}
 				</select>
-
 				<div className="flex flex-col items-center">
 					<input name="values" type="hidden" defaultValue={selectedValues()} />
 					<div className="relative z-20 inline-block w-full">

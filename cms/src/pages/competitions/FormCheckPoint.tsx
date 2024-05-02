@@ -1,59 +1,43 @@
 import React, { Fragment, useEffect, useRef, useState } from "react";
 import { Dialog, Transition } from '@headlessui/react';
-import { COMPETITION_SERVICE, CRITERIA_SERVICE, USER_SERVICE } from "../../services/api.service.ts";
+import { COMPETITION_SERVICE, CRITERIA_SERVICE, RESULT_SERVICE, USER_SERVICE } from "../../services/api.service.ts";
 import { useDispatch } from "react-redux";
 import { toggleShowLoading } from "../../hooks/redux/actions/common.tsx";
-import {getItem, setField} from "../../services/helpers.service.ts";
+import { buildFile, getItem, setField } from "../../services/helpers.service.ts";
 import SelectGroupTwo from "../../components/Forms/SelectGroup/SelectGroupTwo.tsx";
 import { STATUSES } from "../../services/constant.ts";
 import MultiSelect from "../../components/Forms/MultiSelect.tsx";
 import { toast } from "react-toastify";
 
 const formData: any = {
-	name: "",
-	author_id: "",
-	status: "",
-	contents: "",
-	// image: "",
-	criteria_ids: [],
-	judge_ids: ""
+	content: "",
+	point: "",
 }
 // @ts-ignore
-const FormCreateOrUpdateCompetition: React.FC = ({ open, setOpen, detail, ...props }) => {
+const FormCheckPoint: React.FC = ({ open, setOpen, detail, ...props }) => {
 
 	const cancelButtonRef = useRef(null);
-
 	const dispatch = useDispatch();
 	const [form, setForm] = useState({ ...formData });
-	const [dataList, setDataList] = useState([]);
-	const [criteria, setCriteria] = useState([]);
-	const [user] = useState(getItem('user'))
 
 
 	const handleSubmit = async (event: any) => {
 		event.preventDefault();
 		event.stopPropagation();
 		let data = { ...form };
-
-		data.author_id = user.id;
-
 		let response = null;
-		
 		data.judge_ids = data.judge_ids?.split(',')
 		dispatch(toggleShowLoading(true));
-		if (detail || detail != null) {
-			response = await COMPETITION_SERVICE.update(detail.id, data);
-		} else {
-			response = await COMPETITION_SERVICE.store(data);
-		}
+		response = await RESULT_SERVICE.update(detail.id, data);
 		dispatch(toggleShowLoading(false));
 
 		console.log('============ response: ', response);
 		if (response.status != 'success') {
-			toast.error(response?.message || `${detail ? 'Cập nhật thất bại' : 'Tạo mới thất bại' }`);
+			toast.error(response?.message || `${detail ? 'Chấm điểm thất bại' : 'Chấm điểm thất bại'}`);
 		} else {
-			toast.success(`${detail ? 'Cập nhật thành công' : 'Tạo mới thành công' }`);
+			toast.success(`${detail ? 'Chấm điểm thành công' : 'Chấm điểm thành công'}`);
 			setOpen(false);
+			props.getDataList({page: 1, page_size: 10})
 		}
 	};
 
@@ -63,40 +47,15 @@ const FormCreateOrUpdateCompetition: React.FC = ({ open, setOpen, detail, ...pro
 
 
 	useEffect(() => {
-		if (detail) {
-			setForm({
-				name: detail?.name || "",
-				author_id: detail?.author_id || user.id,
-				status: detail?.status || "",
-				contents: detail?.contents || "",
-				criteria_ids: detail?.criteria_ids || [],
-				judge_ids: detail?.judge_ids?.length > 0 && detail?.judge_ids?.length[0] || "",
-			})
-		} else {
+		if (!detail) {
 			resetForm()
+		} else {
+			setForm({
+				point: detail?.point || '',
+				content:detail?.content || ''
+			})
 		}
 	}, [open]);
-
-	useEffect(() => {
-		getUserList();
-		getCriteriaList();
-	}, []);
-
-	const getUserList = async () => {
-		const response: any = await USER_SERVICE.getList({ page: 1, page_size: 1000, type: 'TEACHER' });
-		if (response?.status == 'success') {
-			setDataList(response.data.result || []);
-		}
-	}
-	const getCriteriaList = async () => {
-		const response: any = await CRITERIA_SERVICE.getList({ page: 1, page_size: 1000 });
-		if (response?.status == 'success') {
-			setCriteria(response.data.result || []);
-		}
-	}
-
-	// @ts-ignore
-	// @ts-ignore
 	return (
 		<Transition.Root show={open} as={Fragment} appear>
 			<Dialog as="div" className="relative z-10 inset-0 overflow-y-auto" initialFocus={cancelButtonRef}
@@ -132,7 +91,7 @@ const FormCreateOrUpdateCompetition: React.FC = ({ open, setOpen, detail, ...pro
 										<div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
 											<Dialog.Title as="h3"
 												className="text-base font-semibold leading-6 text-gray-900">
-												Thêm mới cuộc thi
+												<p className="mb-0">Chấm điểm</p>
 											</Dialog.Title>
 											<div className="mt-2">
 												<form onSubmit={handleSubmit}>
@@ -143,58 +102,67 @@ const FormCreateOrUpdateCompetition: React.FC = ({ open, setOpen, detail, ...pro
 														</label>
 														<input
 															type="text"
-															value={form.name}
-															onChange={e => {
-																setField(e?.target?.value, 'name', form, setForm);
-															}}
-															placeholder="Họ tên"
+															value={detail?.competition?.name}
+															readOnly={true}
+															placeholder="Tên cuộc thi"
 															className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
 														/>
 													</div>
 													<div className="mb-4.5">
 														<label
 															className="mb-2.5 block text-black dark:text-white">
-															Nội dung cuộc thi
+															Tên thí sinh
 														</label>
 														<input
 															type="text"
-															value={form.contents}
-															onChange={e => {
-																setField(e?.target?.value, 'contents', form, setForm);
-															}}
-															placeholder="Nội dung"
+															value={detail?.user?.name}
+															readOnly={true}
+															placeholder="Tên thí sinh"
 															className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
 														/>
 													</div>
 													<div className="mb-4.5">
-														<MultiSelect id="criteria_list"
-															title={'Tiêu chí'}
-															data={criteria}
-															form={form}
-															setForm={setForm}
-															placeholder='Chọn tiêu chí'
-															obj_key={'criteria_ids'}
-															value_data={form.criteria_ids}
+														<label
+															className="mb-2.5 block text-black dark:text-white">
+															File
+														</label>
+														{detail?.file &&
+															<a className="text-sky-500 dark:text-white " href={buildFile(detail?.file)} target={'_blank'}>
+																{buildFile(detail?.file)}
+															</a>}
+													</div>
+													<div className="mb-4.5">
+														<label
+															className="mb-2.5 block text-black dark:text-white">
+															Điểm số
+														</label>
+														<input
+															type="text"
+															value={form.point}
+															onChange={e => {
+																let value = e?.target?.value;
+																if(value.match( /^[0-9]+\.?([0-9]+)?$/g )) {
+																	setField(value, 'point', form, setForm);
+																} else {
+																	setField(form.point || '', 'point', form, setForm);
+																}
+															}}
+															placeholder="Điểm"
+															className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
 														/>
 													</div>
 													<div className="mb-4.5">
-														<SelectGroupTwo
-															labelName={'Ban dám khảo'}
-															options={dataList}
-															key_obj={'judge_ids'}
-															value={form.judge_ids}
-															form={form}
-															setForm={setForm}
-														/>
-													</div>
-													<div className="mb-4.5">
-														<SelectGroupTwo
-															labelName={'Trạng thái'}
-															options={STATUSES}
-															key_obj={'status'}
-															value={form.status}
-															form={form}
-															setForm={setForm}
+														<label
+															className="mb-2.5 block text-black dark:text-white">
+															Nhận xét
+														</label>
+														<textarea
+															value={form.content}
+															onChange={e => {
+																setField(e?.target?.value, 'content', form, setForm);
+															}}
+															placeholder="Nội dung"
+															className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
 														/>
 													</div>
 													<div
@@ -203,7 +171,7 @@ const FormCreateOrUpdateCompetition: React.FC = ({ open, setOpen, detail, ...pro
 															type="submit"
 															className="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto"
 														>
-															Thêm mới
+															Chấm điểm
 														</button>
 														<button
 															type="button"
@@ -228,4 +196,4 @@ const FormCreateOrUpdateCompetition: React.FC = ({ open, setOpen, detail, ...pro
 	)
 }
 
-export default FormCreateOrUpdateCompetition;
+export default FormCheckPoint;

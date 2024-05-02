@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { IPaging } from 'src/helpers/helper';
-import { CompetitionCriteriasEntityRepository, CompetitionEntityRepository, CriteriaEntityRepository, JudgeEntityRepository } from 'src/repository';
+import { IPaging, USER_CONST, USER_TYPE } from 'src/helpers/helper';
+import { CompetitionCriteriasEntityRepository, CompetitionEntityRepository, CriteriaEntityRepository, JudgeEntityRepository, ResultEntityRepository } from 'src/repository';
 
 @Injectable()
 export class CompetitionService {
@@ -11,19 +11,31 @@ export class CompetitionService {
 		private judgeRepo: JudgeEntityRepository,
 		private dbRepo: CompetitionCriteriasEntityRepository,
 		private criterRepo: CriteriaEntityRepository,
+		private resultRepo: ResultEntityRepository,
 	) {
 
 	}
 
 	async getLists(paging: IPaging, filters: any) {
 		let response: any = await this.repository.getLists(paging, filters);
+		console.log(response);
 		if (response?.result?.length > 0) {
 			for (let item of response?.result) {
+				if(filters?.user?.type == USER_TYPE.STUDENT) {
+					item.check_result = await this.resultRepo.findOne({
+						where: {
+							user_id: filters?.user?.id,
+							competition_id: item.id
+						}
+					}) ? true : false
+				} else {
+					item.check_result = false
+				}
 				let d: any = await this.dbRepo.find({ where: { competition_id: item.id } })
 				item.criteria_ids = d?.map((e: any) => e.criterias_id);
 
 				let j: any = await this.judgeRepo.find({ where: { competition_id: item.id } })
-				item.judge_ids = j?.map((e: any) => e.criterias_id);
+				item.judge_ids = j?.map((e: any) => e.user_id);
 			}
 		}
 		return response;

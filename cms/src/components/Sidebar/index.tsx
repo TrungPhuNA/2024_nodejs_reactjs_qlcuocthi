@@ -65,7 +65,6 @@ const Sidebar = ({sidebarOpen, setSidebarOpen}: SidebarProps) => {
         storedSidebarExpanded === null ? false : storedSidebarExpanded === 'true'
     );
     const [user] = useState(getItem('user'))
-    console.info("===========[] ===========[user] : ", user);
     // close on click outside
     useEffect(() => {
         const clickHandler = ({target}: MouseEvent) => {

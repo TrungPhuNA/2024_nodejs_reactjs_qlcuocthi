@@ -10,7 +10,8 @@ export const USER_CONST: any = {
 	USER_STATUS_ACTIVE: 1,
 	USER_STATUS_LOCK: -1,
 	USER_ADM: 1,
-	USER_PUB: 2
+	USER_PUB: 2,
+	TYPE: ['TEACHER', 'STUDENT', 'RECTOR']
 };
 
 export const STATUS_ORDER: any = {
@@ -141,3 +142,9 @@ export const SERVICE_TYPE: any = [
 	},
 	
 ];
+
+export const USER_TYPE = {
+	STUDENT: 'STUDENT',
+	RECTOR: 'RECTOR',
+	TEACHER: 'TEACHER',
+}

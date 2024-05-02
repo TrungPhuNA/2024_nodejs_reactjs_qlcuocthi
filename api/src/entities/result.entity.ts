@@ -1,4 +1,4 @@
-import { Column, Entity, Index, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, Index, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { User } from "./user.entity";
 import { CompetitionEntity } from "./competition.entity";
 
@@ -19,6 +19,9 @@ export class ResultEntity {
 
 	@Column('float', {nullable: true})
 	point: number;
+
+	@Column( {nullable: true})
+	content: string;
 	
 	@Column('timestamp', {
 		name: 'created_at',
@@ -41,4 +44,12 @@ export class ResultEntity {
 	@ManyToOne(() => CompetitionEntity, (d) => d.results)
 	@JoinColumn([{ name: "competition_id", referencedColumnName: "id" }])
     competition: CompetitionEntity;
+
+	@ManyToMany(() => User)
+	@JoinTable({
+		name: 'judges',
+		joinColumn: { name: 'competition_id', referencedColumnName: 'competition_id' },
+		inverseJoinColumn: { name: 'user_id', referencedColumnName: 'id' },
+	})
+	judges: User[];
 }
