@@ -7,6 +7,7 @@ import DefaultLayout from '../../layout/DefaultLayout';
 import { AUTH_SERVICE } from '../../services/api.service';
 import { setField } from '../../services/helpers.service';
 import { toast } from 'react-toastify';
+import SelectGroupTwo from '../../components/Forms/SelectGroup/SelectGroupTwo';
 
 const SignUp: React.FC = () => {
 	const [form, setForm] = useState({
@@ -25,6 +26,7 @@ const SignUp: React.FC = () => {
 		email: '',
 		username: '',
 		password: '',
+		type: '',
 		name: '',
 		phone: '',
 		cf_password: '',
@@ -66,6 +68,10 @@ const SignUp: React.FC = () => {
 			count++;
 		}
 
+		if (!form.type || form?.type == '') {
+			objError.cf_password = 'Vui lòng chọn vai trò.'
+			count++;
+		}
 		console.log(objError);
 
 		if (count > 0) {
@@ -88,7 +94,7 @@ const SignUp: React.FC = () => {
 					window.location.href = '/auth/signin';
 				}),
 			})
-			
+
 		} else {
 			toast.error(response?.message || 'Lỗi khi đăng nhập')
 			setErrorForm(response?.message || 'Lỗi khi đăng ký')
@@ -97,7 +103,7 @@ const SignUp: React.FC = () => {
 
 	return (
 		<DefaultLayout>
-			<Breadcrumb pageName="Sign Up"is_auth={true} />
+			<Breadcrumb pageName="Sign Up" is_auth={true} />
 
 			<div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
 				<div className="flex flex-wrap items-center">
@@ -107,7 +113,7 @@ const SignUp: React.FC = () => {
 								<img className="hidden dark:block" src={Logo} alt="Logo" />
 								<img className="dark:hidden" src={LogoDark} alt="Logo" />
 							</Link>
-							
+
 
 							<span className="mt-15 inline-block">
 								<svg
@@ -240,7 +246,7 @@ const SignUp: React.FC = () => {
 								Sign Up
 							</h2>
 
-							{errorForm && <span className="text-red text-xl text-bold">{errorForm}</span>}
+							{errorForm && <span className="text-red-500 text-xl text-bold">{errorForm}</span>}
 							<form>
 								<div className="mb-4">
 									<label className="mb-2.5 block font-medium text-black dark:text-white">
@@ -256,7 +262,7 @@ const SignUp: React.FC = () => {
 												setField(value, 'name', form, setForm)
 											}}
 											className={`w-full rounded-lg border 
-											${error.name != '' ? 'border-red' : 'border-stroke'}  bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary`}
+											${error.name != '' ? 'border-red-500' : 'border-stroke'}  bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary`}
 										/>
 
 										<span className="absolute right-4 top-4">
@@ -280,7 +286,7 @@ const SignUp: React.FC = () => {
 												</g>
 											</svg>
 										</span>
-										{error.name != '' && <span className="text-red text-xl mt-3">{error.name}</span>}
+										{error.name != '' && <span className="text-red-500 text-xl mt-3">{error.name}</span>}
 
 									</div>
 								</div>
@@ -299,7 +305,7 @@ const SignUp: React.FC = () => {
 												setField(value, 'username', form, setForm)
 											}}
 											className={`w-full rounded-lg border 
-											${error.username != '' ? 'border-red' : 'border-stroke'}  bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary`}
+											${error.username != '' ? 'border-red-500' : 'border-stroke'}  bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary`}
 										/>
 
 										<span className="absolute right-4 top-4">
@@ -323,7 +329,7 @@ const SignUp: React.FC = () => {
 												</g>
 											</svg>
 										</span>
-										{error.username != '' && <span className="text-red text-xl mt-3">{error.username}</span>}
+										{error.username != '' && <span className="text-red-500 text-xl mt-3">{error.username}</span>}
 
 									</div>
 								</div>
@@ -342,7 +348,7 @@ const SignUp: React.FC = () => {
 											}}
 											className={`w-full 
 											rounded-lg border 
-											${error.email != '' ? 'border-red' : 'border-stroke'} bg-transparent 
+											${error.email != '' ? 'border-red-500' : 'border-stroke'} bg-transparent 
 											py-4 pl-6 pr-10 text-black outline-none 
 											focus:border-primary focus-visible:shadow-none 
 											dark:border-form-strokedark dark:bg-form-input 
@@ -367,7 +373,29 @@ const SignUp: React.FC = () => {
 											</svg>
 										</span>
 									</div>
-									{error.email != '' && <span className="text-red text-xl mt-3">{error.email}</span>}
+									{error.email != '' && <span className="text-red-500 text-xl mt-3">{error.email}</span>}
+								</div>
+
+								<div className="mb-4.5">
+									<SelectGroupTwo
+										labelName={'Chọn vai trò'}
+										options={[
+											{
+												id: "TEACHER",
+												name: "Giáo viên"
+											},
+											{
+												id: "STUDENT",
+												name: "Sinh viên"
+											}
+										]}
+										key_obj={'type'}
+										value={form.type}
+										form={form}
+										setForm={setForm}
+									/>
+										{error.type != '' && <span className="text- text-xl mt-3">{error.type}</span>}
+
 								</div>
 
 								<div className="mb-6">
@@ -384,7 +412,7 @@ const SignUp: React.FC = () => {
 											}}
 											placeholder="6+ Characters, 1 Capital letter"
 											className={`w-full rounded-lg border 
-											${error.password != '' ? 'border-red' : 'border-stroke'} 
+											${error.password != '' ? 'border-red-500' : 'border-stroke'} 
 											bg-transparent py-4 pl-6 pr-10 dark:text-white outline-none 
 											focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary`}
 										/>
@@ -410,7 +438,7 @@ const SignUp: React.FC = () => {
 												</g>
 											</svg>
 										</span>
-										{error.password != '' && <span className="text-red text-xl mt-3">{error.password}</span>}
+										{error.password != '' && <span className="text-red-500 text-xl mt-3">{error.password}</span>}
 
 									</div>
 								</div>
@@ -430,7 +458,7 @@ const SignUp: React.FC = () => {
 												setField(value, 'cf_password', form, setForm)
 											}}
 											className={`w-full rounded-lg border 
-											${error.cf_password != 'border-red' && 'border-stroke'} bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary`}
+											${error.cf_password != 'border-red-500' && 'border-stroke'} bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary`}
 										/>
 
 										<span className="absolute right-4 top-4">
@@ -454,7 +482,7 @@ const SignUp: React.FC = () => {
 												</g>
 											</svg>
 										</span>
-										{error.cf_password != '' && <span className="text-red text-xl mt-3">{error.cf_password}</span>}
+										{error.cf_password != '' && <span className="text-red-500 text-xl mt-3">{error.cf_password}</span>}
 
 									</div>
 								</div>

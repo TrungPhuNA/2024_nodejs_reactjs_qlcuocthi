@@ -216,7 +216,7 @@ const SignIn: React.FC = () => {
 							<h2 className="mb-9 text-2xl font-bold text-black dark:text-white sm:text-title-xl2">
 								Sign In to  System
 							</h2>
-							{errorForm && <span className="text-red text-xl text-bold">{errorForm}</span>}
+							{errorForm && <span className="text-red-500 text-xl text-bold">{errorForm}</span>}
 
 							<form>
 								<div className="mb-4">
@@ -233,7 +233,7 @@ const SignIn: React.FC = () => {
 											}}
 											className={`w-full 
 											rounded-lg border 
-											${error.username != '' ? 'border-red' : 'border-stroke'} bg-transparent 
+											${error.username != '' ? 'border-red-500' : 'border-stroke'} bg-transparent 
 											py-4 pl-6 pr-10 text-black outline-none 
 											focus:border-primary focus-visible:shadow-none 
 											dark:border-form-strokedark dark:bg-form-input 
@@ -258,7 +258,7 @@ const SignIn: React.FC = () => {
 											</svg>
 										</span>
 									</div>
-									{error.username != '' && <span className="text-red text-xl mt-3">{error.username}</span>}
+									{error.username != '' && <span className="text-red-500 text-xl mt-3">{error.username}</span>}
 								</div>
 
 								<div className="mb-6">
@@ -275,7 +275,7 @@ const SignIn: React.FC = () => {
 											}}
 											placeholder="6+ Characters, 1 Capital letter"
 											className={`w-full rounded-lg border 
-											${error.password != '' ? 'border-red' : 'border-stroke'} 
+											${error.password != '' ? 'border-red-500' : 'border-stroke'} 
 											bg-transparent py-4 pl-6 pr-10 dark:text-white outline-none 
 											focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary`}
 										/>
@@ -301,7 +301,7 @@ const SignIn: React.FC = () => {
 												</g>
 											</svg>
 										</span>
-										{error.password != '' && <span className="text-red text-xl mt-3">{error.password}</span>}
+										{error.password != '' && <span className="text-red-500 text-xl mt-3">{error.password}</span>}
 
 									</div>
 								</div>

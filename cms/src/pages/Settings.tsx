@@ -106,7 +106,7 @@ const Settings = () => {
 							</div>
 							<div className="p-7">
 								<form >
-									{errorForm != '' && <p className="text-red mb-2">{errorForm}</p>}
+									{errorForm != '' && <p className="text-red-500 mb-2">{errorForm}</p>}
 									<div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
 										<div className="w-full sm:w-1/2">
 											<label
@@ -143,7 +143,7 @@ const Settings = () => {
 												</span>
 												<input
 													className={`w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 
-													text-black ${error.name != '' ? 'border-red' : 'border-stroke'}  focus:border-primary focus-visible:outline-none 
+													text-black ${error.name != '' ? 'border-red-500' : 'border-stroke'}  focus:border-primary focus-visible:outline-none 
 													dark:border-strokedark dark:bg-meta-4 dark:text-white 
 													dark:focus:border-primary`} type="text"
 													value={form.name}
@@ -167,7 +167,7 @@ const Settings = () => {
 											</label>
 											<input
 												className={`w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 
-												text-black ${error.phone != '' ? 'border-red' : 'border-stroke'}  focus:border-primary focus-visible:outline-none 
+												text-black ${error.phone != '' ? 'border-red-500' : 'border-stroke'}  focus:border-primary focus-visible:outline-none 
 												dark:border-strokedark dark:bg-meta-4 dark:text-white 
 												dark:focus:border-primary`}
 												type="text"
@@ -219,7 +219,7 @@ const Settings = () => {
 											</span>
 											<input
 												className={`w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 
-												text-black ${error.email != '' ? 'border-red' : 'border-stroke'}  focus:border-primary focus-visible:outline-none 
+												text-black ${error.email != '' ? 'border-red-500' : 'border-stroke'}  focus:border-primary focus-visible:outline-none 
 												dark:border-strokedark dark:bg-meta-4 dark:text-white 
 												dark:focus:border-primary`}
 												type="email"

@@ -127,9 +127,9 @@ const FormCreateOrUpdateUser: React.FC = ({ open, setOpen, detail, ...props }: a
 																setField(value, 'name', form, setForm)
 															}}
 															className={`w-full rounded-lg border 
-															${errorForm.name != '' ? 'border-red' : 'border-stroke'}  bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary`}
+															${errorForm.name != '' ? 'border-red-500' : 'border-stroke'}  bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary`}
 														/>
-														{errorForm.name != '' && <span className="text-red text-xl mt-3">{errorForm.name}</span>}
+														{errorForm.name != '' && <span className="text-red-500 text-xl mt-3">{errorForm.name}</span>}
 													</div>
 													<div className="mb-4.5">
 														<label
@@ -148,9 +148,9 @@ const FormCreateOrUpdateUser: React.FC = ({ open, setOpen, detail, ...props }: a
 																}
 															}}
 															className={`w-full rounded-lg border 
-															${errorForm.username != '' ? 'border-red' : 'border-stroke'}  bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary`}
+															${errorForm.username != '' ? 'border-red-500' : 'border-stroke'}  bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary`}
 														/>
-														{errorForm.username != '' && <span className="text-red text-xl mt-3">{errorForm.username}</span>}
+														{errorForm.username != '' && <span className="text-red-500 text-xl mt-3">{errorForm.username}</span>}
 													</div>
 													<div className="mb-4.5">
 														<label
@@ -169,9 +169,9 @@ const FormCreateOrUpdateUser: React.FC = ({ open, setOpen, detail, ...props }: a
 																}
 															}}
 															className={`w-full rounded-lg border 
-															${errorForm.email != '' ? 'border-red' : 'border-stroke'}  bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary`}
+															${errorForm.email != '' ? 'border-red-500' : 'border-stroke'}  bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary`}
 														/>
-														{errorForm.email != '' && <span className="text-red text-xl mt-3">{errorForm.email}</span>}
+														{errorForm.email != '' && <span className="text-red-500 text-xl mt-3">{errorForm.email}</span>}
 													</div>
 													{!detail && <div className="mb-4.5">
 														<label
@@ -187,11 +187,11 @@ const FormCreateOrUpdateUser: React.FC = ({ open, setOpen, detail, ...props }: a
 															}}
 															placeholder="6+ Characters, 1 Capital letter"
 															className={`w-full rounded-lg border 
-															${errorForm.password != '' ? 'border-red' : 'border-stroke'} 
+															${errorForm.password != '' ? 'border-red-500' : 'border-stroke'} 
 															bg-transparent py-4 pl-6 pr-10 dark:text-white outline-none 
 															focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary`}
 														/>
-														{errorForm.password != '' && <span className="text-red text-xl mt-3">{errorForm.password}</span>}
+														{errorForm.password != '' && <span className="text-red-500 text-xl mt-3">{errorForm.password}</span>}
 
 													</div>}
 													<div className="mb-4.5">
