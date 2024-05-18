@@ -8,6 +8,7 @@ import { formatTime, getItem } from "../../services/helpers.service.ts";
 import { useDispatch } from 'react-redux';
 import { toggleShowLoading } from '../../hooks/redux/actions/common.tsx';
 import { PagingPage } from '../../components/common/paging/PagingCpn.tsx';
+import { Link } from 'react-router-dom';
 
 const CompetitionsPage: React.FC = () => {
 
@@ -56,18 +57,18 @@ const CompetitionsPage: React.FC = () => {
 	return (
 		<DefaultLayout>
 			<Breadcrumb pageName="Quản lý cuộc thi" />
-			<FormCreateOrUpdateCompetition 
+			{/* <FormCreateOrUpdateCompetition 
 			open={open} setOpen={setOpen} 
-			detail={detail} getDataList={getDataList} params={paging} />
+			detail={detail} getDataList={getDataList} params={paging} /> */}
 			<div className="flex flex-col gap-10">
 				<div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
 					<div className={'mb-3 flex justify-end'}>
-						<div
-							onClick={() => triggerModalForm()}
+						<Link to={"/competitions/create"} 
+							
 							className="inline-flex items-center justify-center bg-primary py-2 px-5 text-center font-medium text-white hover:bg-opacity-90 lg:px-5 xl:px-5 rounded-md cursor-pointer"
 						>
 							Thêm mới
-						</div>
+						</Link>
 					</div>
 					<div className="max-w-full overflow-x-auto">
 						<table className="w-full table-auto">
@@ -94,9 +95,11 @@ const CompetitionsPage: React.FC = () => {
 								{dataList.map((packageItem, key) => (
 									<tr key={key}>
 										<td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
-											<h5 className="font-medium text-black dark:text-white cursor-pointer" onClick={() => updateData(packageItem)}>
+											<Link to={`/competitions/edit/${packageItem.id}`} className="font-medium text-black dark:text-white cursor-pointer" onClick={() => {
+												
+											}}>
 												{packageItem.name}
-											</h5>
+											</Link>
 										</td>
 										<td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
 											<p className="text-black dark:text-white">{packageItem.contents}</p>

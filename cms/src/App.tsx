@@ -22,6 +22,7 @@ import CompetitionsPage from "./pages/competitions/Competitions.tsx";
 import CriteriasPage from "./pages/criterias/Criterias.tsx";
 import CompetitionsMe from "./pages/competitions/CompetitionsMe.tsx";
 import CompetitionsResult from "./pages/competitions/CompetitionsResult.tsx";
+import CompetitionForm from './pages/competitions/CompetitionForm.tsx';
 
 function App() {
 	const [loading, setLoading] = useState<boolean>(true);
@@ -72,6 +73,24 @@ function App() {
 						<>
 							<PageTitle title="Quản lý cuộc thi" />
 							<CompetitionsPage />
+						</>
+					}
+				/>
+				<Route
+					path="/competitions/create"
+					element={
+						<>
+							<PageTitle title="Quản lý cuộc thi" />
+							<CompetitionForm />
+						</>
+					}
+				/>
+				<Route
+					path="/competitions/edit/:id"
+					element={
+						<>
+							<PageTitle title="Quản lý cuộc thi" />
+							<CompetitionForm />
 						</>
 					}
 				/>
