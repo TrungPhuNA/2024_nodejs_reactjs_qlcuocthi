@@ -86,7 +86,7 @@ const CompetitionsPage: React.FC = () => {
 									<th className="min-w-[150px] py-4 px-4 font-medium text-black dark:text-white">
 										Ngày tạo
 									</th>
-									<th className="py-4 px-4 font-medium text-black dark:text-white">
+									<th className="py-4 px-4 font-medium text-black dark:text-white text-nowrap">
 										Thao tác
 									</th>
 								</tr>
@@ -95,14 +95,14 @@ const CompetitionsPage: React.FC = () => {
 								{dataList.map((packageItem, key) => (
 									<tr key={key}>
 										<td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
-											<Link to={`/competitions/edit/${packageItem.id}`} className="font-medium text-black dark:text-white cursor-pointer" onClick={() => {
+											<Link to={`/competitions/edit/${packageItem.id}`} className="font-medium break-words text-black dark:text-white cursor-pointer" onClick={() => {
 												
 											}}>
 												{packageItem.name}
 											</Link>
 										</td>
 										<td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-											<p className="text-black dark:text-white">{packageItem.contents}</p>
+											<p className="text-black dark:text-white break-words">{packageItem.contents}</p>
 										</td>
 										<td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
 											<p className="text-black dark:text-white">

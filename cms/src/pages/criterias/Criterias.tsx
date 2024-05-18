@@ -72,10 +72,10 @@ const CriteriasPage: React.FC = () => {
 						<table className="w-full table-auto">
 							<thead>
 								<tr className="bg-gray-2 text-left dark:bg-meta-4">
-									<th className="min-w-[220px] py-4 px-4 font-medium text-black dark:text-white xl:pl-11">
+									<th className="min-w-[220px] max-w-[300px] py-4 px-4 font-medium text-black dark:text-white xl:pl-11">
 										Tiêu chí
 									</th>
-									<th className="min-w-[150px] py-4 px-4 font-medium text-black dark:text-white">
+									<th className="min-w-[150px] py-4 px-4 max-w-[400px] font-medium text-black dark:text-white">
 										Mô tả
 									</th>
 									<th className="min-w-[150px] py-4 px-4 font-medium text-black dark:text-white">
@@ -90,12 +90,12 @@ const CriteriasPage: React.FC = () => {
 								{dataList.map((packageItem: any, key: any) => (
 									<tr key={key}>
 										<td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
-											<h5 className="font-medium text-black dark:text-white cursor-pointer" onClick={() => updateData(packageItem)}>
+											<h5 className="font-medium text-black dark:text-white cursor-pointer break-words max-w-[400px]" onClick={() => updateData(packageItem)}>
 												{packageItem.name}
 											</h5>
 										</td>
 										<td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-											<p className="text-black dark:text-white">
+											<p className="text-black dark:text-white break-words">
 												{packageItem.contents}
 											</p>
 										</td>
