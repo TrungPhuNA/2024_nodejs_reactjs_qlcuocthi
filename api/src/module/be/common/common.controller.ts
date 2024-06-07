@@ -37,7 +37,7 @@ export class CommonController {
 	async findById(@Request() req: any) {
 		try {
 			
-			return BaseResponse('success', {}, '', 'Successful');
+			return BaseResponse('success', await this.service.statistic(req.query), '', 'Successful');
 		} catch (e) {
 			console.log('dashboard list-------------> ', e);
 			return BaseResponse(e.status, e.response, e.code || 'E0001', e.message);

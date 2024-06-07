@@ -36,13 +36,14 @@ export class RegisterDto {
 
 	@ApiProperty()
 	@IsOptional()
+	@Transform(({ value }) => Number(value || 1))
 	@IsIn([1,-1])
 	status?: number;
 
 	@ApiProperty()
 	@IsOptional()
 	@Transform(({ value }) => value?.toString().toUpperCase())
-	@IsIn(['TEACHER', 'STUDENT', 'RECTOR'])
+	@IsIn(['TEACHER', 'STUDENT', 'RECTOR', 'ADMIN'])
 	type: string;
 
 	@ApiProperty()
@@ -59,6 +60,17 @@ export class RegisterDto {
 	@ApiProperty()
 	@IsOptional()
 	competition_ids: number[];
+
+	updated_at = new Date();
+}
+
+export class UpdatePasswordDto {
+	@ApiProperty()
+	@IsNotEmpty()
+	@IsString()
+	@MaxLength(20, {message: 'Password max length is 20 characters'})
+	@MinLength(6, {message: 'Password min length is 6 characters'})
+	password: string;
 
 	updated_at = new Date();
 }

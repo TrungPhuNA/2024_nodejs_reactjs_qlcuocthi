@@ -23,6 +23,8 @@ import CriteriasPage from "./pages/criterias/Criterias.tsx";
 import CompetitionsMe from "./pages/results/CompetitionsMe.tsx";
 import CompetitionsResult from "./pages/results/CompetitionsResult.tsx";
 import CompetitionForm from './pages/competitions/CompetitionForm.tsx';
+import UserForm from './pages/user/UserForm.tsx';
+import DashboardPage from './pages/home/Dashboard.tsx';
 
 function App() {
 	const [loading, setLoading] = useState<boolean>(true);
@@ -46,6 +48,15 @@ function App() {
 						<>
 							<PageTitle title="Trang chủ" />
 							<HomePage />
+						</>
+					}
+				/>
+				<Route
+					path="/dashboard"
+					element={
+						<>
+							<PageTitle title="Dashboard" />
+							<DashboardPage />
 						</>
 					}
 				/>
@@ -127,6 +138,24 @@ function App() {
 						<>
 							<PageTitle title="Quản lý thành viên" />
 							<UserPage />
+						</>
+					}
+				/>
+				<Route
+					path="/user/update/:id"
+					element={
+						<>
+							<PageTitle title="Quản lý thành viên" />
+							<UserForm />
+						</>
+					}
+				/>
+				<Route
+					path="/user/store"
+					element={
+						<>
+							<PageTitle title="Quản lý thành viên" />
+							<UserForm />
 						</>
 					}
 				/>

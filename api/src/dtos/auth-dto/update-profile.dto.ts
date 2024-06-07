@@ -29,13 +29,14 @@ export class UpdateProfileDto {
 
 	@ApiProperty()
 	@IsOptional()
+	@Transform(({ value }) => Number(value || 1))
 	@IsIn([1,-1])
 	status?: number;
 
 	@ApiProperty()
 	@IsOptional()
 	@Transform(({ value }) => value?.toString().toUpperCase())
-	@IsIn(['TEACHER', 'STUDENT', 'RECTOR'])
+	@IsIn(['TEACHER', 'STUDENT', 'RECTOR', 'ADMIN'])
 	type: string;
 
 	@ApiProperty()

@@ -78,6 +78,10 @@ export const USER_SERVICE = {
 		await timeDelay(1000)
 		return await putMethod(`cms/user/update/` + id, data);
 	},
+	async updatePassword(id: any, data: any) {
+		await timeDelay(1000)
+		return await putMethod(`cms/user/update-password/` + id, data);
+	},
 	async delete(id: any) {
 		await timeDelay(1000)
 		return await deleteMethod(`cms/user/delete/` + id);

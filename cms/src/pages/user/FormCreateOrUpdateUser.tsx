@@ -9,16 +9,9 @@ import { toast } from "react-toastify";
 
 
 const formData = {
-	email: "",
-	phone: "",
-	name: "",
-	avatar: "",
-	address: "",
-	type: "",
-	status: "",
-	username: "",
 	password: "",
-	cf_password: "",
+	name:  "",
+	username:  "",
 }
 
 // @ts-ignore
@@ -26,7 +19,6 @@ const FormCreateOrUpdateUser: React.FC = ({ open, setOpen, detail, ...props }: a
 
 	const cancelButtonRef = useRef(null)
 
-	const dispatch = useDispatch();
 
 	const [form, setForm]: any = useState({ ...formData });
 	const [errorForm, setErroForm] = useState({ ...formData });
@@ -36,19 +28,12 @@ const FormCreateOrUpdateUser: React.FC = ({ open, setOpen, detail, ...props }: a
 	const handleSubmit = async (event: any) => {
 		event.preventDefault();
 		event.stopPropagation();
-		let data = { ...form };
-		let response = null;
-		if (detail || detail != null) {
-			response = await USER_SERVICE.update(detail.id, data);
-		} else {
-			response = await USER_SERVICE.store(data);
-		}
-
+		let response = await USER_SERVICE.updatePassword(detail.id, {password: form.password});
 		console.log('============ response: ', response);
 		if (response.status != 'success') {
-			toast.error(response?.message || `${detail ? 'Cập nhật thất bại' : 'Tạo mới thất bại' }`)
+			toast.error(response?.message || `${detail ? 'Cập nhật thất bại' : 'Tạo mới thất bại'}`)
 		} else {
-			toast.success(`${detail ? 'Cập nhật thành công' : 'Tạo mới thành công' }`)
+			toast.success(`${detail ? 'Cập nhật thành công' : 'Tạo mới thành công'}`)
 			setOpen(false);
 			props.getDataList({ ...props.params })
 		}
@@ -62,13 +47,11 @@ const FormCreateOrUpdateUser: React.FC = ({ open, setOpen, detail, ...props }: a
 		if (detail) {
 			setForm({
 				name: detail?.name || "",
-				type: detail?.type || "",
-				email: detail?.email || "",
+				password: "",
 				username: detail?.username || "",
-				phone: detail?.phone || "",
-				status: detail?.status || "",
-				address: detail?.address || "",
 			})
+		} else {
+			resetForm()
 		}
 	}, [open]);
 
@@ -109,7 +92,7 @@ const FormCreateOrUpdateUser: React.FC = ({ open, setOpen, detail, ...props }: a
 										<div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
 											<Dialog.Title as="h3"
 												className="text-base font-semibold leading-6 text-gray-900">
-												{detail ? 'Cập nhật thành viên' : 'Thêm mới thành viên'}
+												Cập nhật mật khẩu
 											</Dialog.Title>
 											<div className="mt-2">
 												<form onSubmit={handleSubmit}>
@@ -122,10 +105,8 @@ const FormCreateOrUpdateUser: React.FC = ({ open, setOpen, detail, ...props }: a
 															type="text"
 															value={form.name}
 															placeholder="Enter your full name"
-															onChange={(e) => {
-																let value = e && e.target.value?.trim() || null
-																setField(value, 'name', form, setForm)
-															}}
+															readOnly={true}
+															
 															className={`w-full rounded-lg border 
 															${errorForm.name != '' ? 'border-red-500' : 'border-stroke'}  bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary`}
 														/>
@@ -140,19 +121,13 @@ const FormCreateOrUpdateUser: React.FC = ({ open, setOpen, detail, ...props }: a
 															type="text"
 															value={form.username}
 															placeholder="Enter your user name"
-															readOnly={detail ? true : false}
-															onChange={(e) => {
-																if (!detail) {
-																	let value = e && e.target.value?.trim() || null
-																	setField(value, 'username', form, setForm)
-																}
-															}}
+															readOnly={true}
 															className={`w-full rounded-lg border 
 															${errorForm.username != '' ? 'border-red-500' : 'border-stroke'}  bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary`}
 														/>
 														{errorForm.username != '' && <span className="text-red-500 text-xl mt-3">{errorForm.username}</span>}
 													</div>
-													<div className="mb-4.5">
+													{/* <div className="mb-4.5">
 														<label
 															className="mb-2.5 block text-black dark:text-white">
 															Email
@@ -172,8 +147,8 @@ const FormCreateOrUpdateUser: React.FC = ({ open, setOpen, detail, ...props }: a
 															${errorForm.email != '' ? 'border-red-500' : 'border-stroke'}  bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary`}
 														/>
 														{errorForm.email != '' && <span className="text-red-500 text-xl mt-3">{errorForm.email}</span>}
-													</div>
-													{!detail && <div className="mb-4.5">
+													</div> */}
+													<div className="mb-4.5">
 														<label
 															className="mb-2.5 block text-black dark:text-white">
 															Mật khẩu
@@ -193,8 +168,8 @@ const FormCreateOrUpdateUser: React.FC = ({ open, setOpen, detail, ...props }: a
 														/>
 														{errorForm.password != '' && <span className="text-red-500 text-xl mt-3">{errorForm.password}</span>}
 
-													</div>}
-													<div className="mb-4.5">
+													</div>
+													{/* <div className="mb-4.5">
 														<label
 															className="mb-2.5 block text-black dark:text-white">
 															Số điện thoại
@@ -284,14 +259,14 @@ const FormCreateOrUpdateUser: React.FC = ({ open, setOpen, detail, ...props }: a
 															form={form}
 															setForm={setForm}
 														/>
-													</div>
+													</div> */}
 													<div
 														className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
 														<button
 															type="submit"
 															className="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto"
 														>
-															Thêm mới
+															Cập nhật
 														</button>
 														<button
 															type="button"

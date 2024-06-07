@@ -37,12 +37,21 @@ export class UserService {
 	}
 
 	async update(id: number, data: any) {
+		
 		const updateData: any = await this.repository.create({...data});
 		delete updateData.competition_ids;
 		await this.repository.update(id, updateData);
 		await this.createOrUpdateJudge(id, data)
 		return await this.findById(id);
 	}
+
+	async updatePassword(id: number, data: any) {
+		data.password = await bcrypt.hash(data.password.trim(), 10);
+		const updateData: any = await this.repository.create({...data});
+		await this.repository.update(id, updateData);
+		return await this.findById(id);
+	}
+
 
 	async createOrUpdateJudge(id: any,data: any) {
 		if(data.competition_ids?.length > 0) {

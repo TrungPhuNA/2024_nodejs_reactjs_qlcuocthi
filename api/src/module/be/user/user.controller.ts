@@ -4,7 +4,7 @@ import { BadRequestException, BaseResponse, HTTP_STATUS, IPaging } from 'src/hel
 import { JwtGuard } from 'src/module/auth/guards/jwt/jwt.guard';
 import { UserService } from 'src/service/user.service';
 import * as _ from 'lodash';
-import { RegisterDto, UpdateProfileDto } from 'src/dtos';
+import { RegisterDto, UpdatePasswordDto, UpdateProfileDto } from 'src/dtos';
 
 @Controller('cms/user')
 @ApiTags('CMS User')
@@ -80,6 +80,23 @@ export class UserController {
 
 			return BaseResponse(HTTP_STATUS.success,
 				await this.service.update(id, updateDto), '', 'Updated successfully!');
+		} catch (e) {
+			console.log('put user ---------->', e.message);
+			return BaseResponse(e.status, e.response, e.code || 'E0001', e.message);
+		}
+	}
+
+	@Put('update-password/:id')
+	@HttpCode(HttpStatus.OK)
+	@ApiResponse({ status: 200, description: 'success' })
+	async updatePassword(@Param('id') id: number, @Body() updateDto: UpdatePasswordDto) {
+		try {
+			const check = await this.service.findById(id);
+			if (!check) return BaseResponse(HTTP_STATUS.fail, {}, 'E0001', 'Dữ liệu không tồn tại');
+			if (_.isEmpty(updateDto)) throw new BadRequestException({ code: 'F0001' });
+
+			return BaseResponse(HTTP_STATUS.success,
+				await this.service.updatePassword(id, updateDto), '', 'Updated successfully!');
 		} catch (e) {
 			console.log('put user ---------->', e.message);
 			return BaseResponse(e.status, e.response, e.code || 'E0001', e.message);

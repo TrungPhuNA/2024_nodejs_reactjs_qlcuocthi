@@ -3,21 +3,22 @@ import { CommonController } from './common.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DashboardService } from 'src/service/dashboard.service';
 import { UserService } from 'src/service/user.service';
-import { UserRepository } from 'src/repository';
+import { CompetitionEntityRepository, ResultEntityRepository, UserRepository } from 'src/repository';
 import { UserValidatorService } from 'src/service/user-validator.service';
 import { UserModule } from '../user/user.module';
-import { User } from 'src/entities';
+import { CompetitionEntity, ResultEntity, User } from 'src/entities';
 
 @Module({
 	imports: [
 		TypeOrmModule.forFeature([
-			User,
+			User, CompetitionEntity, ResultEntity
 		])
 	],
 	providers: [
 		UserRepository,
 		DashboardService,
-
+		CompetitionEntityRepository,
+		ResultEntityRepository
 	],
 	controllers: [CommonController]
 })

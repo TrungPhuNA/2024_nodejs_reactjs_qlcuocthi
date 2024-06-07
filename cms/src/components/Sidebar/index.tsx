@@ -2,6 +2,7 @@ import {useEffect, useRef, useState} from 'react';
 import {NavLink, useLocation} from 'react-router-dom';
 import {FaUser, FaGraduationCap, FaInbox, FaFolder, FaCode} from "react-icons/fa";
 import {getItem} from "../../services/helpers.service.ts";
+import { FaRankingStar } from 'react-icons/fa6';
 
 interface SidebarProps {
     sidebarOpen: boolean;
@@ -9,12 +10,19 @@ interface SidebarProps {
 }
 
 const configRoute = [
+	{
+        name: "Dashboard",
+        route: "/dashboard",
+        icon: FaRankingStar,
+        role: ['RECTOR', 'ADMIN']
+    },
     {
         name: "QL Trường",
         route: "/school",
         icon: FaGraduationCap,
         role: ['RECTOR']
     },
+	
     {
         name: "QL Lớp",
         route: "/class",
