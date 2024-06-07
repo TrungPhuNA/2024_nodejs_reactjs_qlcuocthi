@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import DefaultLayout from '../../layout/DefaultLayout';
+import DefaultLayout from '../../layout/DefaultLayout.tsx';
 import Breadcrumb from "../../components/Breadcrumbs/Breadcrumb.tsx";
 import { COMPETITION_SERVICE, RESULT_SERVICE } from "../../services/api.service.ts";
 import { INIT_PAGING } from "../../services/constant.ts";
-import FormCreateOrUpdateCompetition from "./FormCreateOrUpdateCompetition.tsx";
+import FormCreateOrUpdateCompetition from "../competitions/FormCreateOrUpdateCompetition.tsx";
 import { buildFile, formatTime, getItem } from "../../services/helpers.service.ts";
 import { useDispatch } from 'react-redux';
 import { toggleShowLoading } from '../../hooks/redux/actions/common.tsx';
@@ -107,7 +107,7 @@ const CompetitionsResult: React.FC = () => {
 										</td>
 										<td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
 											<p className="text-black dark:text-white">
-												{formatTime(packageItem.created_at, 'dd-m-Y')}
+												{formatTime(packageItem.created_at, 'DD/MM/yyyy')}
 											</p>
 										</td>
 										<td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">

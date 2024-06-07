@@ -14,7 +14,10 @@
     "url": "https://tailadmin.com"
   },
   "dependencies": {
+    "@ckeditor/ckeditor5-build-classic": "^41.4.2",
+    "@ckeditor/ckeditor5-react": "^7.0.0",
     "@headlessui/react": "^1.7.18",
+    "antd": "^5.18.0",
     "apexcharts": "^3.41.0",
     "axios": "^1.6.8",
     "flatpickr": "^4.6.13",

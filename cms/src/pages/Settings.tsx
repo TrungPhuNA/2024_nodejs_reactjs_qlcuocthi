@@ -83,9 +83,10 @@ const Settings = () => {
 				phone: response?.data.phone,
 				gender: response?.data.gender,
 				name: response?.data.name,
+				type: response?.data.type,
 				avatar: response?.data.avatar,
 			}
-			setItem('user', data);
+			setItem('user', response?.data);
 			setErrorForm('');
 		} else {
 			setErrorForm(response?.message || 'Lỗi khi cập nhật')

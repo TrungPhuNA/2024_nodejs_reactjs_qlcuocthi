@@ -12,7 +12,7 @@ const SelectGroupTwo: React.FC = (props: any) => {
 
 	return (
 		<div>
-			{props.labelName && <label className="mb-3 block text-xl text-sm font-medium text-black dark:text-white">
+			{props.labelName && <label className="mb-2.5 block text-black dark:text-white">
 				{props.labelName || 'Select Option'}
 			</label>}
 

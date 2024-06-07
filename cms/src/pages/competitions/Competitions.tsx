@@ -32,7 +32,7 @@ const CompetitionsPage: React.FC = () => {
 
 	const getDataList = async (filters: any) => {
 		dispatch(toggleShowLoading(true));
-		if(user?.type == 'TEACHER') {
+		if (user?.type == 'TEACHER') {
 			filters.judge_id = user.id
 		}
 		const response: any = await COMPETITION_SERVICE.getList(filters);
@@ -45,7 +45,7 @@ const CompetitionsPage: React.FC = () => {
 	}
 
 	useEffect(() => {
-		if(!open) {
+		if (!open) {
 			setDetail(null)
 		}
 	}, [open]);
@@ -63,8 +63,8 @@ const CompetitionsPage: React.FC = () => {
 			<div className="flex flex-col gap-10">
 				<div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
 					<div className={'mb-3 flex justify-end'}>
-						<Link to={"/competitions/create"} 
-							
+						<Link to={"/competitions/create"}
+
 							className="inline-flex items-center justify-center bg-primary py-2 px-5 text-center font-medium text-white hover:bg-opacity-90 lg:px-5 xl:px-5 rounded-md cursor-pointer"
 						>
 							Thêm mới
@@ -77,7 +77,7 @@ const CompetitionsPage: React.FC = () => {
 									<th className="min-w-[220px] py-4 px-4 font-medium text-black dark:text-white xl:pl-11">
 										Tên cuộc thi
 									</th>
-									<th className="min-w-[150px] py-4 px-4 font-medium text-black dark:text-white">
+									<th className="py-4 px-4 font-medium text-black dark:text-white">
 										Nội dung
 									</th>
 									<th className="min-w-[150px] py-4 px-4 font-medium text-black dark:text-white">
@@ -96,26 +96,28 @@ const CompetitionsPage: React.FC = () => {
 									<tr key={key}>
 										<td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
 											<Link to={`/competitions/edit/${packageItem.id}`} className="font-medium break-words text-black dark:text-white cursor-pointer" onClick={() => {
-												
+
 											}}>
 												{packageItem.name}
 											</Link>
 										</td>
-										<td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-											<p className="text-black dark:text-white break-words">{packageItem.contents}</p>
+										<td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark break-words">
+											<div style={{ wordBreak: 'break-word' }} className="text-break"  style={{ maxWidth: 300 }} 
+											dangerouslySetInnerHTML={{ __html: packageItem.contents }}>
+											</div>
 										</td>
 										<td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
 											<p className="text-black dark:text-white">
-												{formatTime(packageItem.created_at, 'dd-m-Y')}
+												{formatTime(packageItem.created_at, 'DD/MM/yyyy')}
 											</p>
 										</td>
 										<td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
 											<p
 												className={`inline-flex rounded-full bg-opacity-10 py-1 px-3 text-sm font-medium ${packageItem.status === 1
-														? 'bg-success text-success'
-														: packageItem.status === -1
-															? 'bg-danger text-danger'
-															: 'bg-warning text-warning'
+													? 'bg-success text-success'
+													: packageItem.status === -1
+														? 'bg-danger text-danger'
+														: 'bg-warning text-warning'
 													}`}
 											>
 												{packageItem.status == 1 ? "Hoạt động" : "Tạm dừng"}

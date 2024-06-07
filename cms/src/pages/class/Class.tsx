@@ -101,7 +101,7 @@ const ClassPage: React.FC = () => {
 										</td>
 										<td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
 											<p className="text-black dark:text-white">
-												{formatTime(packageItem.created_at, 'dd-m-Y')}
+												{formatTime(packageItem.created_at, 'DD/MM/yyyy')}
 											</p>
 										</td>
 										<td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">

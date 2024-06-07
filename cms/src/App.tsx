@@ -20,8 +20,8 @@ import SchoolPage from "./pages/schools/School.tsx";
 import ClassPage from "./pages/class/Class.tsx";
 import CompetitionsPage from "./pages/competitions/Competitions.tsx";
 import CriteriasPage from "./pages/criterias/Criterias.tsx";
-import CompetitionsMe from "./pages/competitions/CompetitionsMe.tsx";
-import CompetitionsResult from "./pages/competitions/CompetitionsResult.tsx";
+import CompetitionsMe from "./pages/results/CompetitionsMe.tsx";
+import CompetitionsResult from "./pages/results/CompetitionsResult.tsx";
 import CompetitionForm from './pages/competitions/CompetitionForm.tsx';
 
 function App() {

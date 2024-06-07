@@ -10,6 +10,8 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import SelectGroupTwo from '../../components/Forms/SelectGroup/SelectGroupTwo.tsx';
 import MultiSelect from '../../components/Forms/MultiSelect.tsx';
+import SelectMultipleAnt from '../../components/Forms/SelectGroup/SelectMultiple.tsx';
+import CkeditorPage from '../../components/Forms/CkEditorPage.tsx';
 
 
 const formData: any = {
@@ -31,7 +33,10 @@ const CompetitionForm: React.FC = () => {
 	const [criteria, setCriteria] = useState([]);
 	const [user] = useState(getItem('user'));
 
-	const {id} = useParams();
+	const [content, setContent]: any = useState(null);
+
+
+	const { id } = useParams();
 
 	const navigate = useNavigate();
 
@@ -40,14 +45,12 @@ const CompetitionForm: React.FC = () => {
 		event.preventDefault();
 		event.stopPropagation();
 		let data = { ...form };
-
 		data.author_id = user.id;
-
+		data.contents = content;
 		let response = null;
-		if(data?.judge_ids) {
-			data.judge_ids =  data.judge_ids + ""
+		if (data?.judge_ids) {
+			data.judge_ids = data.judge_ids + ""
 			data.judge_ids = data.judge_ids?.split(',')
-
 		}
 		dispatch(toggleShowLoading(true));
 		if (detail || detail != null) {
@@ -59,9 +62,9 @@ const CompetitionForm: React.FC = () => {
 
 		console.log('============ response: ', response);
 		if (response.status != 'success') {
-			toast.error(response?.message || `${detail ? 'Cập nhật thất bại' : 'Tạo mới thất bại' }`);
+			toast.error(response?.message || `${detail ? 'Cập nhật thất bại' : 'Tạo mới thất bại'}`);
 		} else {
-			toast.success(`${detail ? 'Cập nhật thành công' : 'Tạo mới thành công' }`);
+			toast.success(`${detail ? 'Cập nhật thành công' : 'Tạo mới thành công'}`);
 			navigate('/competitions')
 		}
 	};
@@ -79,11 +82,12 @@ const CompetitionForm: React.FC = () => {
 		if (id) {
 			getDetail(id);
 		} else {
-			resetForm()
+			resetForm();
+			console.log(123123);
 		}
 	}, [id]);
 
-	
+
 
 	const getUserList = async () => {
 		const response: any = await USER_SERVICE.getList({ page: 1, page_size: 1000, type: 'TEACHER' });
@@ -94,12 +98,14 @@ const CompetitionForm: React.FC = () => {
 	const getCriteriaList = async () => {
 		const response: any = await CRITERIA_SERVICE.getList({ page: 1, page_size: 1000 });
 		if (response?.status == 'success') {
-			console.log(response);
-			setCriteria(response.data.result || []);
+			let data = response?.data?.result?.map((item: any) => {
+				item.value = item.id;
+				item.label = item.name;
+				return item;
+			})
+			setCriteria(data || []);
 		}
 	}
-
-	console.log(criteria);
 
 	const getDetail = async (id: any) => {
 		dispatch(toggleShowLoading(true));
@@ -112,13 +118,13 @@ const CompetitionForm: React.FC = () => {
 				name: data?.name || "",
 				author_id: data?.author_id || user.id,
 				status: data?.status || "",
-				contents: data?.contents || "",
+				contents: data?.contents || null,
 				criteria_ids: data?.criteria_ids || [],
-				judge_ids: data?.judges?.length > 0 ? data?.judges[0]?.id : null				,
+				judge_ids: data?.judges?.length > 0 ? data?.judges[0]?.id : null,
 			});
+			setContent(data?.contents)
 		}
 	}
-
 
 	return (
 		<DefaultLayout>
@@ -150,34 +156,44 @@ const CompetitionForm: React.FC = () => {
 								/>
 							</div>
 							<div className="mb-4.5">
-								<label
-									className="mb-2.5 block text-black dark:text-white">
-									Nội dung cuộc thi
-								</label>
-								<textarea
-									rows={8}
-									value={form.contents}
-									onChange={e => {
-										setField(e?.target?.value, 'contents', form, setForm);
+								<CkeditorPage
+									title={'Nội dung cuộc thi'}
+									value={content}
+									onChange={(e:any) => {
+										setContent(e);
 									}}
-									placeholder="Nội dung"
-									className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
 								/>
 							</div>
 							<div className="mb-4.5">
-								{criteria?.length > 0 && <MultiSelect id="criteria_list"
-									title={'Tiêu chí'}
-									data={criteria}
-									form={form}
-									setForm={setForm}
-									placeholder='Chọn tiêu chí'
-									obj_key={'criteria_ids'}
-									value_data={form.criteria_ids}
-								/>}
+								<label
+									className="mb-2.5 block text-black dark:text-white">
+									Tiêu chí
+								</label>
+								{criteria?.length > 0 &&
+									// <MultiSelect id="criteria_list"
+									// 	title={'Tiêu chí'}
+									// 	data={criteria}
+									// 	form={form}
+									// 	setForm={setForm}
+									// 	placeholder='Chọn tiêu chí'
+									// 	obj_key={'criteria_ids'}
+									// 	value_data={form.criteria_ids}
+									// />
+
+									<SelectMultipleAnt
+										title={'Tiêu chí'}
+										data={criteria}
+										mode='multiple'
+										key_obj={'criteria_ids'}
+										value={form.criteria_ids}
+										form={form}
+										setForm={setForm}
+									/>
+								}
 							</div>
 							<div className="mb-4.5">
 								<SelectGroupTwo
-									labelName={'Ban dám khảo'}
+									labelName={'Ban giám khảo'}
 									options={dataList}
 									key_obj={'judge_ids'}
 									value={form.judge_ids}
