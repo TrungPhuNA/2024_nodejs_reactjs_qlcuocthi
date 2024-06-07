@@ -213,3 +213,6 @@ span.flatpickr-weekday,
 [x-cloak] {
   display: none !important;
 }
+.ant-select-selection-overflow {
+	padding: 5px !important;
+}

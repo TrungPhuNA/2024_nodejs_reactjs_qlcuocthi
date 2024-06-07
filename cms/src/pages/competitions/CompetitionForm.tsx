@@ -83,7 +83,6 @@ const CompetitionForm: React.FC = () => {
 			getDetail(id);
 		} else {
 			resetForm();
-			console.log(123123);
 		}
 	}, [id]);
 
@@ -92,7 +91,12 @@ const CompetitionForm: React.FC = () => {
 	const getUserList = async () => {
 		const response: any = await USER_SERVICE.getList({ page: 1, page_size: 1000, type: 'TEACHER' });
 		if (response?.status == 'success') {
-			setDataList(response.data.result || []);
+			let data = response?.data?.result?.map((item: any) => {
+				item.value = item.id;
+				item.label = item.name;
+				return item;
+			})
+			setDataList(data || []);
 		}
 	}
 	const getCriteriaList = async () => {
@@ -159,7 +163,7 @@ const CompetitionForm: React.FC = () => {
 								<CkeditorPage
 									title={'Nội dung cuộc thi'}
 									value={content}
-									onChange={(e:any) => {
+									onChange={(e: any) => {
 										setContent(e);
 									}}
 								/>
@@ -192,9 +196,22 @@ const CompetitionForm: React.FC = () => {
 								}
 							</div>
 							<div className="mb-4.5">
-								<SelectGroupTwo
+								{/* <SelectGroupTwo
 									labelName={'Ban giám khảo'}
 									options={dataList}
+									key_obj={'judge_ids'}
+									value={form.judge_ids}
+									form={form}
+									setForm={setForm}
+								/> */}
+								<label
+									className="mb-2.5 block text-black dark:text-white">
+									Ban giám khảo
+								</label>
+								<SelectMultipleAnt
+									title={'Ban giám khảo'}
+									data={dataList}
+									mode='multiple'
 									key_obj={'judge_ids'}
 									value={form.judge_ids}
 									form={form}
@@ -202,9 +219,14 @@ const CompetitionForm: React.FC = () => {
 								/>
 							</div>
 							<div className="mb-4.5">
-								<SelectGroupTwo
-									labelName={'Trạng thái'}
-									options={STATUSES}
+								<label
+									className="mb-2.5 block text-black dark:text-white">
+									Trạng thái
+								</label>
+								<SelectMultipleAnt
+									title={'Ban giám khảo'}
+									data={STATUSES}
+									mode=''
 									key_obj={'status'}
 									value={form.status}
 									form={form}

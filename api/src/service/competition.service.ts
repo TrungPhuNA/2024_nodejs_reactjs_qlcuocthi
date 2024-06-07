@@ -110,7 +110,7 @@ export class CompetitionService {
 		data.criteria_ids = d?.map((e: any) => e.criterias_id);
 
 		let j: any = await this.judgeRepo.find({ where: { competition_id: data.id } })
-		data.judge_ids = j?.map((e: any) => e.criterias_id);
+		data.judge_ids = j?.map((e: any) => e.user_id);
 		return data
 	}
 

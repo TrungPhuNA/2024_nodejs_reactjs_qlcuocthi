@@ -33,11 +33,15 @@ export const INIT_PAGING = {
 export const STATUSES = [
 	{
 		id: 1,
-		name: 'Hoạt động'
+		name: 'Hoạt động',
+		value: 1,
+		label: 'Hoạt động'
 	},
 	{
 		id: -1,
-		name: 'Tạm dừng'
+		name: 'Tạm dừng',
+		value: -1,
+		label: 'Tạm dừng'
 	},
 	
 ];

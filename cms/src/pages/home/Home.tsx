@@ -47,11 +47,11 @@ const HomePage: React.FC = () => {
 						{dataList.length > 0 && dataList.map((item: any, key: number) => {
 							return (
 								<li className={'mb-4'} key={key}>
-									<p className='mb-0'><b>{item.name}</b></p>
-									<p>{item.contents}</p>
+									<p className='mb-0 text-xl'><b>{item.name}</b></p>
+									<p dangerouslySetInnerHTML={{ __html: item.contents }}></p>
 									{item.criterias && item.criterias.length > 0 && (
 										<>
-											<h3 className={'text-xl pb-2 pt-2'}>Danh sách tiêu chí</h3>
+											<h3 className={'text-medium pb-2 pt-2'}><b>Danh sách tiêu chí</b></h3>
 											<ul className={'pl-5 list-disc'}>
 												{item.criterias.map((criteria: any, key2: number) => {
 													return (
