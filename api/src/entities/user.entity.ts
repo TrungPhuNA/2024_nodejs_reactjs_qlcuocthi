@@ -1,4 +1,4 @@
-import { Column, Entity, Index, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, Index, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { SchoolEntity } from "./school.entity";
 import { ResultEntity } from "./result.entity";
 import { ManyToMany } from "typeorm";
@@ -40,6 +40,12 @@ export class User {
 
 	@Column('smallint', { name: 'status', nullable: true, default: 1 })
 	status: number;
+
+	@Column('int', { name: 'school_id', nullable: true })
+	school_id: number;
+
+	@Column('int', { name: 'class_id', nullable: true })
+	class_id: number;
 	
 	@Column('timestamp', {
 		name: 'created_at',
@@ -74,4 +80,8 @@ export class User {
 		inverseJoinColumn: { name: 'competition_id', referencedColumnName: 'id' },
 	})
 	judge_competitions: CompetitionEntity[];
+
+	@ManyToOne(() => SchoolEntity, (d) => d.data_user)
+	@JoinColumn([{ name: "school_id", referencedColumnName: "id" }])
+    school: SchoolEntity;
 }

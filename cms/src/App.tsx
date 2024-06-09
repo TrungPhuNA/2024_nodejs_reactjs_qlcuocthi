@@ -61,6 +61,15 @@ function App() {
 					}
 				/>
 				<Route
+					path="/competitions-list"
+					element={
+						<>
+							<PageTitle title="Danh sách cuộc thi" />
+							<HomePage />
+						</>
+					}
+				/>
+				<Route
 					path="/school"
 					element={
 						<>
@@ -124,10 +133,28 @@ function App() {
 					}
 				/>
 				<Route
-					path="/competitions-result"
+					path="/result/round-one"
 					element={
 						<>
-							<PageTitle title="Chấm thi" />
+							<PageTitle title="Vòng 1" />
+							<CompetitionsResult />
+						</>
+					}
+				/>
+				<Route
+					path="/result/round-two"
+					element={
+						<>
+							<PageTitle title="Vòng 2" />
+							<CompetitionsResult />
+						</>
+					}
+				/>
+				<Route
+					path="/result/round-three"
+					element={
+						<>
+							<PageTitle title="Vòng 3" />
 							<CompetitionsResult />
 						</>
 					}

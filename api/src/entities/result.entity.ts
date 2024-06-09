@@ -17,11 +17,11 @@ export class ResultEntity {
 	@Column({nullable: true})
 	competition_id: number;
 
-	// @Column({nullable: true, default: 1})
-	// round_number: number;
+	@Column({nullable: true, default: 1})
+	round_number: number;
 
-	// @Column({nullable: true})
-	// status: number;
+	@Column({nullable: true})
+	status: string;
 
 	@Column('float', {nullable: true})
 	point: number;
@@ -29,12 +29,8 @@ export class ResultEntity {
 	@Column( {nullable: true})
 	content: string;
 
-	// @Column('longtext', {nullable: true})
-	// round_one: any;
-	// @Column('longtext', {nullable: true})
-	// round_two: any;
-	// @Column('longtext', {nullable: true})
-	// round_three: any;
+	@Column('longtext', {nullable: true})
+	meta_data: any;
 	
 	@Column('timestamp', {
 		name: 'created_at',

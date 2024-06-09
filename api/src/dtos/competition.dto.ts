@@ -17,6 +17,15 @@ export class CompetitionDto {
 
 	@ApiProperty()
 	@IsOptional()
+	school_id: number;
+
+	@ApiProperty()
+	@IsOptional()
+	deadline: any;
+
+
+	@ApiProperty()
+	@IsOptional()
 	contents: string;
 
 	@ApiProperty()

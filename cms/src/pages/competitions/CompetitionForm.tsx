@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import DefaultLayout from '../../layout/DefaultLayout';
 import Breadcrumb from "../../components/Breadcrumbs/Breadcrumb.tsx";
-import { COMPETITION_SERVICE, CRITERIA_SERVICE, USER_SERVICE } from "../../services/api.service.ts";
+import { COMPETITION_SERVICE, CRITERIA_SERVICE, SCHOOL_SERVICE, USER_SERVICE } from "../../services/api.service.ts";
 import { STATUSES } from "../../services/constant.ts";
-import { getItem, setField } from "../../services/helpers.service.ts";
+import { formatTime, getItem, setField } from "../../services/helpers.service.ts";
 import { useDispatch } from 'react-redux';
 import { toggleShowLoading } from '../../hooks/redux/actions/common.tsx';
 import { Link, useNavigate, useParams } from 'react-router-dom';
@@ -19,9 +19,11 @@ const formData: any = {
 	author_id: "",
 	status: "",
 	contents: "",
-	// image: "",
+	image: null,
+	school_id: null,
 	criteria_ids: [],
-	judge_ids: ""
+	judge_ids: "",
+	deadline: null
 }
 const CompetitionForm: React.FC = () => {
 
@@ -31,10 +33,10 @@ const CompetitionForm: React.FC = () => {
 	const [detail, setDetail]: any = useState(null);
 	const [dataList, setDataList] = useState([]);
 	const [criteria, setCriteria] = useState([]);
+	const [schools, setSchool] = useState([]);
 	const [user] = useState(getItem('user'));
 
 	const [content, setContent]: any = useState(null);
-
 
 	const { id } = useParams();
 
@@ -71,6 +73,7 @@ const CompetitionForm: React.FC = () => {
 	useEffect(() => {
 		getUserList();
 		getCriteriaList();
+		getSchoolData()
 	}, []);
 
 	const resetForm = () => {
@@ -111,6 +114,18 @@ const CompetitionForm: React.FC = () => {
 		}
 	}
 
+	const getSchoolData = async () => {
+		const response: any = await SCHOOL_SERVICE.getList({ page: 1, page_size: 1000, rector_id: user?.id });
+		if (response?.status == 'success') {
+			let data = response?.data?.result?.map((item: any) => {
+				item.value = item.id;
+				item.label = item.name;
+				return item;
+			})
+			setSchool(data || []);
+		}
+	}
+
 	const getDetail = async (id: any) => {
 		dispatch(toggleShowLoading(true));
 		const response: any = await COMPETITION_SERVICE.show(id);
@@ -122,7 +137,9 @@ const CompetitionForm: React.FC = () => {
 				name: data?.name || "",
 				author_id: data?.author_id || user.id,
 				status: data?.status || "",
+				deadline: formatTime(data?.deadline, 'yyyy-MM-DD'),
 				contents: data?.contents || null,
+				school_id: data?.school_id || null,
 				criteria_ids: data?.criteria_ids || [],
 				judge_ids: data?.judges?.length > 0 ? data?.judges[0]?.id : null,
 			});
@@ -144,20 +161,37 @@ const CompetitionForm: React.FC = () => {
 					</div>
 					<div className="mt-2">
 						<form onSubmit={handleSubmit}>
-							<div className="mb-4.5">
-								<label
-									className="mb-2.5 block text-black dark:text-white">
-									Tên cuôc thi
-								</label>
-								<input
-									type="text"
-									value={form.name}
-									onChange={e => {
-										setField(e?.target?.value, 'name', form, setForm);
-									}}
-									placeholder="Họ tên"
-									className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-								/>
+							<div className="md:grid md:grid-cols-2 md:gap-5">
+								<div className="mb-4.5">
+									<label
+										className="mb-2.5 block text-black dark:text-white">
+										Tên cuôc thi
+									</label>
+									<input
+										type="text"
+										value={form.name}
+										onChange={e => {
+											setField(e?.target?.value, 'name', form, setForm);
+										}}
+										placeholder="Họ tên"
+										className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+									/>
+								</div>
+								<div className="mb-4.5">
+									<label
+										className="mb-2.5 block text-black dark:text-white">
+										Trường học
+									</label>
+									<SelectMultipleAnt
+										title={'Ban giám khảo'}
+										data={schools}
+										mode=''
+										key_obj={'school_id'}
+										value={form.school_id}
+										form={form}
+										setForm={setForm}
+									/>
+								</div>
 							</div>
 							<div className="mb-4.5">
 								<CkeditorPage
@@ -174,16 +208,6 @@ const CompetitionForm: React.FC = () => {
 									Tiêu chí
 								</label>
 								{criteria?.length > 0 &&
-									// <MultiSelect id="criteria_list"
-									// 	title={'Tiêu chí'}
-									// 	data={criteria}
-									// 	form={form}
-									// 	setForm={setForm}
-									// 	placeholder='Chọn tiêu chí'
-									// 	obj_key={'criteria_ids'}
-									// 	value_data={form.criteria_ids}
-									// />
-
 									<SelectMultipleAnt
 										title={'Tiêu chí'}
 										data={criteria}
@@ -196,14 +220,6 @@ const CompetitionForm: React.FC = () => {
 								}
 							</div>
 							<div className="mb-4.5">
-								{/* <SelectGroupTwo
-									labelName={'Ban giám khảo'}
-									options={dataList}
-									key_obj={'judge_ids'}
-									value={form.judge_ids}
-									form={form}
-									setForm={setForm}
-								/> */}
 								<label
 									className="mb-2.5 block text-black dark:text-white">
 									Ban giám khảo
@@ -218,20 +234,37 @@ const CompetitionForm: React.FC = () => {
 									setForm={setForm}
 								/>
 							</div>
-							<div className="mb-4.5">
-								<label
-									className="mb-2.5 block text-black dark:text-white">
-									Trạng thái
-								</label>
-								<SelectMultipleAnt
-									title={'Ban giám khảo'}
-									data={STATUSES}
-									mode=''
-									key_obj={'status'}
-									value={form.status}
-									form={form}
-									setForm={setForm}
-								/>
+							<div className="md:grid md:grid-cols-2 md:gap-5">
+								<div className="mb-4.5">
+									<label
+										className="mb-2.5 block text-black dark:text-white">
+										Deadline
+									</label>
+									<input
+										type="date"
+										value={form.deadline}
+										onChange={e => {
+											setField(e?.target?.value, 'deadline', form, setForm);
+										}}
+										placeholder="Thời gian"
+										className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+									/>
+								</div>
+								<div className="mb-4.5">
+									<label
+										className="mb-2.5 block text-black dark:text-white">
+										Trạng thái
+									</label>
+									<SelectMultipleAnt
+										title={'Ban giám khảo'}
+										data={STATUSES}
+										mode=''
+										key_obj={'status'}
+										value={form.status}
+										form={form}
+										setForm={setForm}
+									/>
+								</div>
 							</div>
 							<div
 								className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">

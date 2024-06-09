@@ -84,6 +84,9 @@ const CompetitionsPage: React.FC = () => {
 										Trạng thái
 									</th>
 									<th className="min-w-[150px] py-4 px-4 font-medium text-black dark:text-white">
+										Deadline
+									</th>
+									<th className="min-w-[150px] py-4 px-4 font-medium text-black dark:text-white">
 										Ngày tạo
 									</th>
 									<th className="py-4 px-4 font-medium text-black dark:text-white text-nowrap">
@@ -106,11 +109,7 @@ const CompetitionsPage: React.FC = () => {
 											dangerouslySetInnerHTML={{ __html: packageItem.contents }}>
 											</div>
 										</td>
-										<td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-											<p className="text-black dark:text-white">
-												{formatTime(packageItem.created_at, 'DD/MM/yyyy')}
-											</p>
-										</td>
+										
 										<td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
 											<p
 												className={`inline-flex rounded-full bg-opacity-10 py-1 px-3 text-sm font-medium ${packageItem.status === 1
@@ -121,6 +120,16 @@ const CompetitionsPage: React.FC = () => {
 													}`}
 											>
 												{packageItem.status == 1 ? "Hoạt động" : "Tạm dừng"}
+											</p>
+										</td>
+										<td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+											<p className="text-black dark:text-white">
+												{formatTime(packageItem.deadline, 'DD/MM/yyyy')}
+											</p>
+										</td>
+										<td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+											<p className="text-black dark:text-white">
+												{formatTime(packageItem.created_at, 'DD/MM/yyyy')}
 											</p>
 										</td>
 										<td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">

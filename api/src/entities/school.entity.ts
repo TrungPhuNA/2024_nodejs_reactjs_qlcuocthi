@@ -1,6 +1,7 @@
 import { Column, Entity, Index, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { ClassEntity } from "./classEntity.entity";
 import { User } from "./user.entity";
+import { CompetitionEntity } from "./competition.entity";
 
 @Index('schools_pkey', ['id'], { unique: true })
 @Entity("schools")
@@ -35,7 +36,15 @@ export class SchoolEntity {
 	@JoinColumn([{ name: "id", referencedColumnName: "school_id" }])
 	classrooms: ClassEntity[];
 
+	@OneToMany(() => CompetitionEntity, o => o.school)
+	@JoinColumn([{ name: "id", referencedColumnName: "school_id" }])
+	competitions: CompetitionEntity[];
+
 	@ManyToOne(() => User, (d) => d.schools)
 	@JoinColumn([{ name: "rector_id", referencedColumnName: "id" }])
     user: User;
+
+	@OneToMany(() => User, o => o.school)
+	@JoinColumn([{ name: "id", referencedColumnName: "school_id" }])
+	data_user: User[];
 }

@@ -122,7 +122,8 @@ export class CompetitionService {
 				relations: {
 					judges: true,
 					author: true,
-					criterias: true
+					criterias: true,
+					school: true
 				},
 			}
 		);

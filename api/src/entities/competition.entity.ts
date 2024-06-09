@@ -2,6 +2,7 @@ import { Column, Entity, Index, JoinColumn, JoinTable, ManyToMany, ManyToOne, On
 import { ResultEntity } from "./result.entity";
 import { User } from "./user.entity";
 import { CriteriaEntity } from "./criterias.entity";
+import { SchoolEntity } from "./school.entity";
 
 @Index('competitions_pkey', ['id'], { unique: true })
 @Entity("competitions")
@@ -19,10 +20,19 @@ export class CompetitionEntity {
 	author_id: number;
 
 	@Column({nullable: true })
+	school_id: number;
+
+	@Column({nullable: true })
 	status: number;
 
 	@Column('varchar', {nullable: true , length: 255})
 	image: string;
+
+	@Column('timestamp', {
+		name: 'deadline',
+		nullable: true
+	})
+	deadline: Date;
 
 	@Column('timestamp', {
 		name: 'created_at',
@@ -46,6 +56,10 @@ export class CompetitionEntity {
 	@JoinColumn([{ name: "author_id", referencedColumnName: "id" }])
     author: User;
 
+	@ManyToOne(() => SchoolEntity, (d) => d.competitions)
+	@JoinColumn([{ name: "school_id", referencedColumnName: "id" }])
+    school: SchoolEntity;
+
 	@ManyToMany(() => CriteriaEntity)
 	@JoinTable({
 		name: 'competitions_criterias',
@@ -62,4 +76,6 @@ export class CompetitionEntity {
 		inverseJoinColumn: { name: 'user_id', referencedColumnName: 'id' },
 	})
 	judges: User[];
+
+	
 }

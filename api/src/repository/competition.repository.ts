@@ -37,7 +37,8 @@ export class CompetitionEntityRepository extends Repository<CompetitionEntity>{
 			relations: {
 				judges: true,
 				author: true,
-				criterias: true
+				criterias: true,
+				school: true
 			},
             take: paging.page_size,
             skip: (paging.page - 1) * paging.page_size
@@ -55,7 +56,8 @@ export class CompetitionEntityRepository extends Repository<CompetitionEntity>{
 			relations: {
 				judges: true,
 				author: true,
-				criterias: true
+				criterias: true,
+				school: true
 			},
         });
     }

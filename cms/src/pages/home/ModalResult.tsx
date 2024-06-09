@@ -23,7 +23,6 @@ const ModalResult: React.FC = ({ open, setOpen, criteria, ...props }) => {
 	const [files, setFiles] = useState([]);
 
 	const dispatch = useDispatch();
-	const [form, setForm] = useState({ ...formData });
 	const [file, setFile] = useState(null);
 	const [user] = useState(getItem('user'))
 
@@ -38,6 +37,8 @@ const ModalResult: React.FC = ({ open, setOpen, criteria, ...props }) => {
 			let data : any = {
 			    file: fileResponse?.data?.filename,
 			    user_id: user.id,
+				round_number: 1,
+				status: 'PENDING',
 			    point: 0,
 			    competition_id: criteria.id
 			};

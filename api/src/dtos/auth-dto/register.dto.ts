@@ -52,6 +52,14 @@ export class RegisterDto {
 
 	@ApiProperty()
 	@IsOptional()
+	school_id: any;
+
+	@ApiProperty()
+	@IsOptional()
+	class_id: any;
+
+	@ApiProperty()
+	@IsOptional()
 	address: string;
 	@ApiProperty()
 	@IsOptional()

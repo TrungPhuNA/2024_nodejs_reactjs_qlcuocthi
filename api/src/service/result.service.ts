@@ -16,7 +16,10 @@ export class ResultService   {
 	}
 
 	async store(data: any) {
-		data.created_at = new Date()
+		data.created_at = new Date();
+		if(data?.meta_data && typeof data?.meta_data != 'string') {
+			data.meta_data = JSON.stringify(data.meta_data);
+		}
 		const newData: any = await this.repository.create({ ...data });
 		await this.repository.save(newData);
 		return newData;
@@ -24,7 +27,11 @@ export class ResultService   {
 
 	async update(id: number, data: any) {
 		const newData: any = await this.repository.create({ ...data });
-		await this.repository.update(id, newData);
+		console.log("newData: -------> ", newData);
+		if(data?.meta_data && typeof data?.meta_data != 'string') {
+			data.meta_data = JSON.stringify(data.meta_data);
+		}
+		await this.repository.update(id, {...data});
 		return await this.findById(id);
 	}
 
@@ -40,7 +47,12 @@ export class ResultService   {
 	async findOneByCondition(condition: any = {}) {
 		return await this.repository.findOne(
 			{
-				where: condition
+				where: condition,
+				relations: {
+					competition: true,
+					user: true,
+					judges: true
+				}
 			}
 		);
 	}

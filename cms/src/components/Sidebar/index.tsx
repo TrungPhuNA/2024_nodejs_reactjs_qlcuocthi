@@ -16,6 +16,12 @@ const configRoute = [
         icon: FaRankingStar,
         role: ['RECTOR', 'ADMIN']
     },
+	{
+        name: "Danh sách cuộc thi",
+        route: "/competitions-list",
+        icon: FaRankingStar,
+        role: ['STUDENT']
+    },
     {
         name: "QL Trường",
         route: "/school",
@@ -54,11 +60,24 @@ const configRoute = [
         role: ['STUDENT']
     },
     {
-        name: "Chấm bài thi",
-        route: "/competitions-result",
+        name: "Chấm thi vòng 1",
+        route: "/result/round-one",
         icon: FaCode,
         role: ['RECTOR','TEACHER']
     },
+	{
+		name: "Chấm thi vòng 2",
+		route: "/result/round-two",
+		icon: null,
+		role: ['RECTOR','TEACHER']
+	},
+	{
+		name: "Chấm thi vòng 3",
+		route: "/result/round-three",
+		icon: null,
+		role: ['RECTOR','TEACHER']
+	}
+    
 ]
 const Sidebar = ({sidebarOpen, setSidebarOpen}: SidebarProps) => {
     const location = useLocation();
@@ -116,7 +135,7 @@ const Sidebar = ({sidebarOpen, setSidebarOpen}: SidebarProps) => {
     return (
         <aside
             ref={sidebar}
-            className={`absolute left-0 top-0 z-9999 flex h-screen w-72.5 flex-col overflow-y-hidden bg-black duration-300 ease-linear dark:bg-boxdark lg:static lg:translate-x-0 ${
+            className={`absolute left-0 top-0 flex h-screen w-72.5 flex-col overflow-y-hidden bg-black duration-300 ease-linear dark:bg-boxdark lg:static lg:translate-x-0 ${
                 sidebarOpen ? 'translate-x-0' : '-translate-x-full'
             }`}
         >
@@ -168,7 +187,7 @@ const Sidebar = ({sidebarOpen, setSidebarOpen}: SidebarProps) => {
                                                     'bg-graydark dark:bg-meta-4'
                                                 }`}
                                             >
-                                                <item.icon/>
+                                                {item.icon ? <item.icon/> : '  '}
                                                 {item.name}
                                             </NavLink>
                                         </li>

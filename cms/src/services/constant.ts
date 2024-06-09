@@ -6,6 +6,19 @@ export const URL_API_PREFIX = {
 	CATEGORY: 'category'
 };
 
+import defaultUser from '../images/image/default-avatar.png';
+import emptyImg from '../images/image/logo-empty.png';
+import defaultImg from '../images/image/image_faildoad.png';
+import errorImg from '../images/image/cancel.png';
+import success from '../images/image/success-v2.png';
+
+export const DEFAULT_IMG = defaultUser;
+export const EMPTY_IMG = emptyImg;
+export const DEFAULT_IMAGE = defaultImg;
+
+export const ERROR_PAYMENT = errorImg;
+export const SUCCESS_PAYMENT = success;
+
 
 
 export const Gender = [

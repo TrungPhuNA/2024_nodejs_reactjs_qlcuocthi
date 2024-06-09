@@ -1,6 +1,6 @@
 
 import moment from 'moment';
-import { URL_API } from './constant';
+import { DEFAULT_IMAGE, URL_API } from './constant';
 
 export const getItem = (key: any) => {
 	let value: any = localStorage.getItem(key) ;
@@ -88,7 +88,7 @@ export const setField = (value: any, name: any, form: any, setForm: any) => {
 	});
 }
 
-export const buildFile = (value: any) => {
+export const buildFile = (value: any, type?: any) => {
 	if(value) return URL_API + 'upload/' + value
-	return null
+	return type ? DEFAULT_IMAGE : null
 }

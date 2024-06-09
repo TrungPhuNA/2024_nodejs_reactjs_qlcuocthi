@@ -59,11 +59,11 @@ const SignIn: React.FC = () => {
 			setErrorForm('');
 			toast.success('Đăng nhập thành công', {
 				onClose: (() => {
-					if (response?.data?.user.type === "TEACHER") window.location.href = '/competitions-result';
+					if (response?.data?.user.type === "TEACHER") window.location.href = '/result/round-one';
 					window.location.href = '/';
 				})
 			})
-			//competitions-result
+			//result/round-one
 
 		} else {
 			toast.error(response?.message || 'Lỗi khi đăng nhập')

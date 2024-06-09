@@ -32,6 +32,18 @@ export class ResultDto {
 
 	@ApiProperty()
 	@IsOptional()
+	status: string;
+
+	@ApiProperty()
+	@IsOptional()
+	meta_data: any;
+
+	@ApiProperty()
+	@IsOptional()
+	round_number: number;
+
+	@ApiProperty()
+	@IsOptional()
 	created_at?: Date;
 
 	updated_at = new Date();
