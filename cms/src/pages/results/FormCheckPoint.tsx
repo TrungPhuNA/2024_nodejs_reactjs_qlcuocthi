@@ -36,7 +36,6 @@ const FormCheckPoint: React.FC = ({ open, setOpen, detail, ...props }: any) => {
 		let response = null;
 		let data = detail?.meta_data || [];
 		let newMetaData = {...form, type: detail?.round_number};
-		console.log(newMetaData);
 		if(data?.length > 0) {
 			let index = data?.findIndex((item: any) => Number(item?.type) == Number(detail?.round_number));
 			if(index < 0) data.push(newMetaData);
@@ -45,11 +44,19 @@ const FormCheckPoint: React.FC = ({ open, setOpen, detail, ...props }: any) => {
 			data.push(newMetaData);
 		}
 
+		if(((!form.comment || form.comment?.toString() == "") || (!form.argue || form.argue?.toString() == "")) && detail?.status == "PENDING") {
+			toast.error(`Điền đầy đủ các trường thông tin`);
+			return;
+		}
+		if((!form.point || form.point?.toString() == "") && detail?.status == "PROCESSING") {
+			toast.error(`Điền đầy đủ các trường thông tin`);
+			return;
+		}
 		dispatch(toggleShowLoading(true));
 		response = await RESULT_SERVICE.update(detail.id, {
 			meta_data: data, 
 			round_number: detail?.round_number || 1,
-			status: props.typeAction,
+			status: "PROCESSING",
 			point: Number(form.point)
 		});
 		dispatch(toggleShowLoading(false));
@@ -127,8 +134,9 @@ const FormCheckPoint: React.FC = ({ open, setOpen, detail, ...props }: any) => {
 							Điểm số
 						</label>
 						<input
-							type="text"
+							type="number"
 							value={form.point}
+							min={0}
 							onChange={e => {
 								let value = e?.target?.value;
 								if (value.match(/^[0-9]+\.?([0-9]+)?$/g)) {

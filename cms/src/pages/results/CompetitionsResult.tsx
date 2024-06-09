@@ -87,7 +87,7 @@ const CompetitionsResult: React.FC = () => {
 			getDataList({ ...paging, round_number: 3 });
 			setTitle("Chấm thi vòng 3")
 		} else {
-			setParams({ round_number:1 });
+			setParams({ round_number: 1 });
 			setTitle("Chấm thi vòng 1")
 			getDataList({ ...paging, round_number: 1 });
 		}
@@ -123,7 +123,7 @@ const CompetitionsResult: React.FC = () => {
 										Tên cuộc thi
 									</th>
 									<th className="min-w-[150px] py-4 px-4 font-medium text-black dark:text-white">
-										Người nộp
+										Vòng thi
 									</th>
 									<th className="min-w-[150px] py-4 px-4 font-medium text-black dark:text-white">
 										Điểm
@@ -135,13 +135,19 @@ const CompetitionsResult: React.FC = () => {
 										Ngày nộp bài
 									</th>
 									<th className="min-w-[150px] py-4 px-4 font-medium text-black dark:text-white">
+										File bài nộp
+									</th>
+									<th className="min-w-[150px] py-4 px-4 font-medium text-black dark:text-white">
 										Giám khảo
 									</th>
 									<th className="min-w-[150px] py-4 px-4 font-medium text-black dark:text-white">
 										Nhận xét
 									</th>
 									<th className="min-w-[150px] py-4 px-4 font-medium text-black dark:text-white">
-										File bài nộp
+										Phản biện
+									</th>
+									<th className="min-w-[150px] py-4 px-4 font-medium text-black dark:text-white">
+										Đánh giá
 									</th>
 									<th className="min-w-[150px] py-4 px-4 font-medium text-black dark:text-white">
 										Action
@@ -158,13 +164,13 @@ const CompetitionsResult: React.FC = () => {
 											</h5>
 										</td>
 										<td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-											<p className="text-black dark:text-white">{packageItem?.user?.name}</p>
+											<p className="text-black dark:text-white">{packageItem?.round_number ? 'Vòng ' + packageItem.round_number : 'Vòng 1'}</p>
 										</td>
 										<td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
 											<p className="text-black dark:text-white">{packageItem.point}</p>
 										</td>
 										<td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-											{packageItem?.status == 'FAIL' ? 'Trượt' : (packageItem?.status == 'PASS' ? 'Hoàn thành' : ((packageItem?.status == 'PENDING' || !packageItem?.status) ? 'Chờ chấm' : 'Đang chấm'))}
+											{packageItem?.status == 'FAIL' ? 'Loại' : (packageItem?.status == 'PASS' ? 'Hoàn thành' : ((packageItem?.status == 'PENDING' || !packageItem?.status) ? 'Chờ chấm' : 'Đang chấm'))}
 										</td>
 										<td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
 											<p className="text-black dark:text-white">
@@ -172,54 +178,47 @@ const CompetitionsResult: React.FC = () => {
 											</p>
 										</td>
 										<td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-											<ul>
-												<li className='text-nowrap'>
-													Nhận xét: <b>{packageItem?.user_comment}</b>
-												</li>
-												<li className='text-nowrap'>
-													Phản biện: <b>{packageItem?.user_argue}</b>
-												</li>
-												<li className='text-nowrap'>
-													Đánh giá: <b>{packageItem?.user_point}</b>
-												</li>
-											</ul>
-										</td>
-										<td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-											<ul>
-												<li>
-													Nhận xét: <p className='ml-2'>{packageItem?.comment}</p>
-												</li>
-												<li>
-													Phản biện: <p className='ml-2'>{packageItem?.argue}</p>
-												</li>
-												<li>
-													Đánh giá: <p className='ml-2'>{packageItem?.content}</p>
-												</li>
-											</ul>
-										</td>
-										<td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
 											{packageItem?.file &&
 												<a className="text-sky-500 dark:text-white " href={buildFile(packageItem?.file)} target={'_blank'}>
 													{buildFile(packageItem?.file)}
 												</a>}
 										</td>
-										<td className="py-5 px-4 dark:border-strokedark">
-											{(packageItem?.status != 'PASS' && packageItem?.status != 'FAIL') &&
+										<td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+											<ul>
+												<li className='text-nowrap'>
+													{packageItem?.user_comment && <p>	Nhận xét:<b>{packageItem?.user_comment}</b></p>}
+												</li>
+												<li className='text-nowrap'>
+													{packageItem?.user_argue && <p>	Phản biện: <b>{packageItem?.user_argue}</b></p>}
+												</li>
+												<li className='text-nowrap'>
+													{packageItem?.user_point && <p>Đánh giá: <b>{packageItem?.user_point}</b></p>}
+												</li>
+											</ul>
+										</td>
+										<td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+											{packageItem?.comment}
+										</td>
+										<td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+											{packageItem?.argue}
+										</td>
+										<td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+											{packageItem?.content}
+										</td>
+										<td className="border-[#eee] border-b py-5 px-4 dark:border-strokedark">
+											{(packageItem?.status != 'PASS' && packageItem?.status != 'FAIL') && <>
 												<div className="md:grid md:grid-cols-2 md:gap-5 min-w-[200px] ">
-													{(packageItem?.status != 'POINT') ? <>
-														<a className=" flex  text-nowrap mx-2 min-w-[100px]
+													<a className=" flex  text-nowrap mx-2 min-w-[100px]
 												justify-center bg-primary py-2 px-5 text-center font-medium text-white hover:bg-opacity-90 
 												lg:px-5 xl:px-5 rounded-md cursor-pointer" onClick={() => updateData(packageItem, 'COMMENT')}>
-															Đánh giá
-														</a>
-														<a className="  flex  text-nowrap mx-2  min-w-[100px]
+														Đánh giá
+													</a>
+													<a className="  flex  text-nowrap mx-2  min-w-[100px]
 												justify-center bg-warning py-2 px-5 text-center font-medium text-white hover:bg-opacity-90 
 												lg:px-5 xl:px-5 rounded-md cursor-pointer" onClick={() => updateData(packageItem, 'ARGUE')}>
-															Phản biện
-														</a>
-													</> : ''}
-
-													{(packageItem?.status == 'COMMENT' || packageItem?.status == 'ARGUE') ? <>
+														Phản biện
+													</a>
+													{(packageItem?.status == 'PROCESSING') ? <>
 														<a className="flex text-nowrap mx-2  min-w-[100px]
 												justify-center bg-sky-500 py-2 px-5 text-center font-medium text-white hover:bg-opacity-90 
 												lg:px-5 xl:px-5 rounded-md cursor-pointer" onClick={() => updateData(packageItem, 'POINT')}>
@@ -227,21 +226,22 @@ const CompetitionsResult: React.FC = () => {
 														</a>
 
 													</> : ''}
-
-													{packageItem?.status == 'POINT' ? <>
-														<a className="flex text-nowrap mx-2  min-w-[100px]
+												</div>
+											</>}
+											{((user?.type == 'RECTOR' || user?.type == 'ADMIN') && packageItem?.status == 'PROCESSING' && (Number(packageItem?.point || 0)) > 0) &&
+												<div className="md:grid md:grid-cols-2 md:gap-5 min-w-[200px] mt-5">
+													<a className="flex text-nowrap mx-2  min-w-[100px]
 												justify-center bg-success py-2 px-5 text-center font-medium text-white hover:bg-opacity-90 
 												lg:px-5 xl:px-5 rounded-md cursor-pointer" onClick={() => passData(packageItem, 'PASS')}>
-															Qua vòng
-														</a>
-														<a className="flex text-nowrap mx-2  min-w-[100px]
+														Qua vòng
+													</a>
+													<a className="flex text-nowrap mx-2  min-w-[100px]
 												justify-center bg-red-500 py-2 px-5 text-center font-medium text-white hover:bg-opacity-90 
 												lg:px-5 xl:px-5 rounded-md cursor-pointer" onClick={() => passData(packageItem, 'FAIL')}>
-															Hủy
-														</a>
-
-													</> : ''}
-												</div>}
+														Hủy
+													</a>
+												</div>
+											}
 										</td>
 									</tr>
 								))}
@@ -257,7 +257,7 @@ const CompetitionsResult: React.FC = () => {
 					</div>
 				</div>
 			</div>
-		</DefaultLayout>
+		</DefaultLayout >
 	);
 };
 

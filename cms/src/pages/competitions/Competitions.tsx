@@ -4,7 +4,7 @@ import Breadcrumb from "../../components/Breadcrumbs/Breadcrumb.tsx";
 import { COMPETITION_SERVICE } from "../../services/api.service.ts";
 import { INIT_PAGING } from "../../services/constant.ts";
 import FormCreateOrUpdateCompetition from "./FormCreateOrUpdateCompetition.tsx";
-import { formatTime, getItem } from "../../services/helpers.service.ts";
+import { buildFile, formatTime, getItem } from "../../services/helpers.service.ts";
 import { useDispatch } from 'react-redux';
 import { toggleShowLoading } from '../../hooks/redux/actions/common.tsx';
 import { PagingPage } from '../../components/common/paging/PagingCpn.tsx';
@@ -77,6 +77,9 @@ const CompetitionsPage: React.FC = () => {
 									<th className="min-w-[220px] py-4 px-4 font-medium text-black dark:text-white xl:pl-11">
 										Tên cuộc thi
 									</th>
+									<th className="py-4 px-4 font-medium text-black dark:text-white text-nowrap">
+										Hình ảnh
+									</th>
 									<th className="py-4 px-4 font-medium text-black dark:text-white">
 										Nội dung
 									</th>
@@ -103,6 +106,11 @@ const CompetitionsPage: React.FC = () => {
 											}}>
 												{packageItem.name}
 											</Link>
+										</td>
+										<td className="py-3 border-[#eee] border-b">
+											<img src={buildFile(packageItem.image, 'image')} alt={packageItem.id} 
+											width={80} height={80} style={{width: '80px', height: '80px'}}
+											/>
 										</td>
 										<td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark break-words">
 											<div style={{ wordBreak: 'break-word' }} className="text-break"  style={{ maxWidth: 300 }} 

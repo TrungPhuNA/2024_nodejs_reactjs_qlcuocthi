@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import DefaultLayout from '../../layout/DefaultLayout';
 import Breadcrumb from "../../components/Breadcrumbs/Breadcrumb.tsx";
-import { COMPETITION_SERVICE, CRITERIA_SERVICE, SCHOOL_SERVICE, USER_SERVICE } from "../../services/api.service.ts";
-import { STATUSES } from "../../services/constant.ts";
-import { formatTime, getItem, setField } from "../../services/helpers.service.ts";
+import { COMPETITION_SERVICE, CRITERIA_SERVICE, SCHOOL_SERVICE, UPLOAD_SERVICE, USER_SERVICE } from "../../services/api.service.ts";
+import { DEFAULT_IMAGE, STATUSES } from "../../services/constant.ts";
+import { buildFile, formatTime, getItem, readFile, setField } from "../../services/helpers.service.ts";
 import { useDispatch } from 'react-redux';
 import { toggleShowLoading } from '../../hooks/redux/actions/common.tsx';
 import { Link, useNavigate, useParams } from 'react-router-dom';
@@ -31,6 +31,8 @@ const CompetitionForm: React.FC = () => {
 	const dispatch = useDispatch();
 	const [form, setForm] = useState({ ...formData });
 	const [detail, setDetail]: any = useState(null);
+	const [file, setFile]: any = useState(null);
+	const [imgBase64, setImgBase64]: any = useState(null);
 	const [dataList, setDataList] = useState([]);
 	const [criteria, setCriteria] = useState([]);
 	const [schools, setSchool] = useState([]);
@@ -42,10 +44,13 @@ const CompetitionForm: React.FC = () => {
 
 	const navigate = useNavigate();
 
+	let refFile = useRef(null);
+
 
 	const handleSubmit = async (event: any) => {
 		event.preventDefault();
 		event.stopPropagation();
+		
 		let data = { ...form };
 		data.author_id = user.id;
 		data.contents = content;
@@ -53,6 +58,18 @@ const CompetitionForm: React.FC = () => {
 		if (data?.judge_ids) {
 			data.judge_ids = data.judge_ids + ""
 			data.judge_ids = data.judge_ids?.split(',')
+		}
+		dispatch(toggleShowLoading(true));
+		if(file) {
+			const responseFile = await UPLOAD_SERVICE.upload(file);
+			if(responseFile?.status == "success") {
+				data.image = responseFile?.data?.filename
+			} else {
+				toast.error(`Có lỗi xảy ra khi upload image`);
+				dispatch(toggleShowLoading(false));
+				return;
+			}
+			
 		}
 		dispatch(toggleShowLoading(true));
 		if (detail || detail != null) {
@@ -139,11 +156,21 @@ const CompetitionForm: React.FC = () => {
 				status: data?.status || "",
 				deadline: formatTime(data?.deadline, 'yyyy-MM-DD'),
 				contents: data?.contents || null,
+				image: data?.image || null,
 				school_id: data?.school_id || null,
 				criteria_ids: data?.criteria_ids || [],
 				judge_ids: data?.judges?.length > 0 ? data?.judges[0]?.id : null,
 			});
-			setContent(data?.contents)
+			setContent(data?.contents);
+			setImgBase64(buildFile(data?.image))
+		}
+	}
+
+	const changeFile = async (e: any) => {
+		e.preventDefault();
+		if (e.target.files) {
+			setFile(e.target.files[0]);
+			readFile(e?.target?.files[0], setFile, setImgBase64)
 		}
 	}
 
@@ -192,6 +219,26 @@ const CompetitionForm: React.FC = () => {
 										setForm={setForm}
 									/>
 								</div>
+							</div>
+							<div className="mb-5 form">
+								<label className="mb-3 text-xl block text-sm font-medium text-black dark:text-white">
+									Hình ảnh
+								</label>
+								<input
+									type="file"
+									ref={refFile}
+									style={{ visibility: 'hidden' }}
+									accept="image/*"
+
+									onChange={(e) => changeFile(e)}
+								/>
+								<img src={imgBase64 || DEFAULT_IMAGE} className="avatar d-flex cursor-pointer" 
+								style={{width: '150px', height: '150px'}}
+								onClick={
+									e => {
+										if (refFile?.current) refFile.current.click();
+									}
+								} />
 							</div>
 							<div className="mb-4.5">
 								<CkeditorPage

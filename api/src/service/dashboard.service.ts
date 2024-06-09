@@ -85,7 +85,9 @@ export class DashboardService {
 		
 		let [resultTop, totalTop]: any = await this.resultRepo.findAndCount({
 			where: {
-				point: MoreThan(0)
+				point: MoreThan(0),
+				round_number: 3,
+				status: 'PASS'
 			},
 			order: {
 				point: 'DESC'

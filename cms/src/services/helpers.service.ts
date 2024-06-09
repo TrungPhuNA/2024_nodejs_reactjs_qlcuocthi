@@ -92,3 +92,19 @@ export const buildFile = (value: any, type?: any) => {
 	if(value) return URL_API + 'upload/' + value
 	return type ? DEFAULT_IMAGE : null
 }
+
+export const readFile = ( fileValues: any, setFile: any, setImgBase64: any ) =>
+	{
+		let fileValue = fileValues;
+		setFile( fileValues );
+		let fileReader = new FileReader();
+		fileReader.onload = ( e ) =>
+		{
+			const { result }: any = e.target;
+			if ( result )
+			{
+				setImgBase64( result )
+			}
+		}
+		fileReader.readAsDataURL( fileValue );
+	}

@@ -25,6 +25,7 @@ import CompetitionsResult from "./pages/results/CompetitionsResult.tsx";
 import CompetitionForm from './pages/competitions/CompetitionForm.tsx';
 import UserForm from './pages/user/UserForm.tsx';
 import DashboardPage from './pages/home/Dashboard.tsx';
+import CompetitionDetail from './pages/competitions/CompetitionDetail.tsx';
 
 function App() {
 	const [loading, setLoading] = useState<boolean>(true);
@@ -66,6 +67,15 @@ function App() {
 						<>
 							<PageTitle title="Danh sách cuộc thi" />
 							<HomePage />
+						</>
+					}
+				/>
+				<Route
+					path="/competitions/:id"
+					element={
+						<>
+							<PageTitle title="Chi tiết cuộc thi" />
+							<CompetitionDetail />
 						</>
 					}
 				/>

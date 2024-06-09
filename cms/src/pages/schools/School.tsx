@@ -5,7 +5,7 @@ import Breadcrumb from "../../components/Breadcrumbs/Breadcrumb.tsx";
 import FormCreateOrUpdateSchool from "./FormCreateOrUpdate.tsx";
 import {INIT_PAGING} from "../../services/constant.ts";
 import {SCHOOL_SERVICE} from "../../services/api.service.ts";
-import {formatTime} from "../../services/helpers.service.ts";
+import {formatTime, getItem} from "../../services/helpers.service.ts";
 import { PagingPage } from '../../components/common/paging/PagingCpn.tsx';
 import { toggleShowLoading } from '../../hooks/redux/actions/common.tsx';
 import { useDispatch } from 'react-redux';
@@ -21,6 +21,7 @@ const SchoolPage: React.FC = () => {
     const [dataList, setDataList] = useState([]);
     const [paging, setPaging] = useState(INIT_PAGING);
     const [school, setSchool] = useState(null);
+    const [user, setUser] = useState(getItem('user'));
 	const dispatch = useDispatch();
 
     useEffect(() => {
@@ -31,7 +32,7 @@ const SchoolPage: React.FC = () => {
     }, [open]);
 
 	useEffect(() => {
-		getDataList({ ...paging })
+		getDataList({ ...paging, rector_id: user?.id })
 	}, [])
 
     const getDataList = async (filters: any) => {
@@ -90,7 +91,7 @@ const SchoolPage: React.FC = () => {
                             </tr>
                             </thead>
                             <tbody>
-                            {dataList.map((packageItem, key) => (
+                            {dataList.map((packageItem: any, key) => (
                                 <tr key={key}>
                                     <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
                                         <div className={'flex'}>
