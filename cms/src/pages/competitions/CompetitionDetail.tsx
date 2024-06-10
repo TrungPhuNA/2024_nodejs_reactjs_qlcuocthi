@@ -95,10 +95,10 @@ const CompetitionDetail: React.FC = () => {
 									{detail?.status != 1 ? <div className={'col-span-12 md:flex md:justify-between my-2'}>
 										<div
 											className='inline-flex items-center 
-																justify-center gap-2.5 bg-sky-500 py-2 
+																justify-center gap-2.5 py-2 
 																px-2 text-center bg-red-500/20 text-red-500
 																font-medium hover:bg-opacity-90 lg:px-2 xl:2'
-										>Đã kết thúc</div>
+										>Kết thúc</div>
 									</div> : ''}
 									{user?.type == 'STUDENT' && <div className='col-span-12 md:flex md:justify-between items-center'>
 
@@ -113,7 +113,7 @@ const CompetitionDetail: React.FC = () => {
 										</div> : <div className={'flex mt-2'}>
 											<Link to="/competitions-me"
 												className='inline-flex items-center justify-center gap-2.5 bg-sky-500 py-2 px-2 text-center font-medium text-white hover:bg-opacity-90 lg:px-2 xl:2'
-											>Đã nộp bài</Link>
+											>Đã tham gia</Link>
 										</div>}
 									</div>}
 								</div>

@@ -21,6 +21,11 @@ const HomePage: React.FC = () => {
 
 	const getDataList = async (filters: any) => {
 		dispatch(toggleShowLoading(true));
+		if(user?.type == 'RECTOR') {
+			filters.author_id = user?.id
+		} else if(user?.type == "TEACHER" || user?.type == "STUDENT") {
+			filters.school_id = user?.school_id
+		}
 		const response: any = await COMPETITION_SERVICE.getList(filters);
 		dispatch(toggleShowLoading(false));
 
@@ -51,7 +56,7 @@ const HomePage: React.FC = () => {
 
 			<div className="py-10 container  bg-white">
 				<h2 className={'text-2xl p-3'}><b>Danh sách cuộc thi</b></h2>
-				<div className="m-5 md:grid md:grid-cols-3 xl:grid-cols-4 md:gap-5 xl:gap-3">
+				<div className="m-5 md:m-10 md:grid md:grid-cols-3  md:gap-10">
 					{dataList?.length > 0 ? dataList?.map((item: any, key: any) => {
 						return <CompetitionItem item={item} key={key} user={user} clickResult={clickResult}/>
 					})

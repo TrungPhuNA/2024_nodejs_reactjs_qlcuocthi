@@ -19,6 +19,8 @@ export class CompetitionEntityRepository extends Repository<CompetitionEntity>{
 	async buildCondition(filters?: any) {
 		let condition: any = {};
 		if (filters?.type) condition.type = filters?.type;
+		if (filters?.school_id) condition.school_id = filters?.school_id;
+		if (filters?.author_id) condition.author_id = filters?.author_id;
 		if (filters?.name) condition.name = Like(`%${filters.name.trim()}%`);
 		if (filters?.judge_id) condition.judges = {
 			id: filters?.judge_id

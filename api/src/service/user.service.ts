@@ -83,7 +83,7 @@ export class UserService {
 	async findOneByCondition(condition: any = {}) {
 		return await this.repository.findOne(
 			{
-				where: condition
+				where: condition,
 			}
 		);
 	}

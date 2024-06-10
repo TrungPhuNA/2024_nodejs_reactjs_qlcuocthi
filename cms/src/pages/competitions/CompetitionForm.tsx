@@ -130,7 +130,7 @@ const CompetitionForm: React.FC = () => {
 			setCriteria(data || []);
 		}
 	}
-
+//
 	const getSchoolData = async () => {
 		const response: any = await SCHOOL_SERVICE.getList({ page: 1, page_size: 1000, rector_id: user?.id });
 		if (response?.status == 'success') {

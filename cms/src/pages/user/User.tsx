@@ -4,7 +4,7 @@ import Breadcrumb from "../../components/Breadcrumbs/Breadcrumb.tsx";
 import FormCreateOrUpdateUser from "./FormCreateOrUpdateUser.tsx";
 import { INIT_PAGING } from "../../services/constant.ts";
 import { USER_SERVICE } from "../../services/api.service.ts";
-import { formatTime } from "../../services/helpers.service.ts";
+import { formatTime, getItem } from "../../services/helpers.service.ts";
 import { PagingPage } from '../../components/common/paging/PagingCpn.tsx';
 import { useDispatch } from 'react-redux';
 import { toggleShowLoading } from '../../hooks/redux/actions/common.tsx';
@@ -17,6 +17,7 @@ const UserPage: React.FC = () => {
 	const [dataList, setDataList] = useState([]);
 	const [paging, setPaging] = useState(INIT_PAGING);
 	const [detail, setDetail] = useState(null);
+	const [user, setUser] = useState(getItem('user'));
 	const dispatch = useDispatch();
 
 	const navigate = useNavigate()
@@ -45,7 +46,8 @@ const UserPage: React.FC = () => {
 		// setOpen(!open);
 		// setDetail(item);
 		// console.log('-------------- update: ', item);
-		navigate('/user/update/' + item.id)
+		if (user?.type == "RECTOR" || user?.type == "ADMIN")
+			navigate('/user/update/' + item.id)
 	}
 
 	useEffect(() => {
@@ -116,10 +118,10 @@ const UserPage: React.FC = () => {
 										<td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
 											<p
 												className={`inline-flex rounded-full bg-opacity-10 py-1 px-3 text-sm font-medium ${packageItem.status === 1
-														? 'bg-success text-success'
-														: packageItem.status === -1
-															? 'bg-danger text-danger'
-															: 'bg-warning text-warning'
+													? 'bg-success text-success'
+													: packageItem.status === -1
+														? 'bg-danger text-danger'
+														: 'bg-warning text-warning'
 													}`}
 											>
 												{packageItem.status == 1 ? "Hoạt động" : "Tạm dừng"}

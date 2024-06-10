@@ -9,6 +9,7 @@ import { useDispatch } from 'react-redux';
 import { toggleShowLoading } from '../../hooks/redux/actions/common.tsx';
 import { PagingPage } from '../../components/common/paging/PagingCpn.tsx';
 import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const CompetitionsPage: React.FC = () => {
 
@@ -54,6 +55,19 @@ const CompetitionsPage: React.FC = () => {
 		getDataList({ ...paging })
 	}, []);
 
+	const deleteItem = async (id: any) => {
+		dispatch(toggleShowLoading(true));
+		const response = await COMPETITION_SERVICE.delete(id);
+		dispatch(toggleShowLoading(false));
+		if(response?.status == "success") {
+			toast.success("Xóa thành công");
+			getDataList({...paging, page: 1})
+		} else {
+			toast.error("Xóa thất bại")
+		}
+		
+	}
+
 	return (
 		<DefaultLayout>
 			<Breadcrumb pageName="Quản lý cuộc thi" />
@@ -98,7 +112,7 @@ const CompetitionsPage: React.FC = () => {
 								</tr>
 							</thead>
 							<tbody>
-								{dataList.map((packageItem, key) => (
+								{dataList.map((packageItem: any, key) => (
 									<tr key={key}>
 										<td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
 											<Link to={`/competitions/edit/${packageItem.id}`} className="font-medium break-words text-black dark:text-white cursor-pointer" onClick={() => {
@@ -113,7 +127,7 @@ const CompetitionsPage: React.FC = () => {
 											/>
 										</td>
 										<td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark break-words">
-											<div style={{ wordBreak: 'break-word' }} className="text-break"  style={{ maxWidth: 300 }} 
+											<div style={{ wordBreak: 'break-word',  maxWidth: '300px', width: '300px' }} className="text-break"
 											dangerouslySetInnerHTML={{ __html: packageItem.contents }}>
 											</div>
 										</td>
@@ -141,8 +155,11 @@ const CompetitionsPage: React.FC = () => {
 											</p>
 										</td>
 										<td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-											<div className="flex items-center space-x-3.5">
-												<button className="hover:text-primary">
+											{(user?.type == 'ADMIN' || user?.type == "RECTOR") ? <div className="flex items-center space-x-3.5">
+												<button className="hover:text-primary" onClick={(e) => {
+													e.preventDefault();
+													deleteItem(packageItem.id)
+												}}>
 													<svg
 														className="fill-current"
 														width="18"
@@ -169,7 +186,7 @@ const CompetitionsPage: React.FC = () => {
 														/>
 													</svg>
 												</button>
-											</div>
+											</div> : ''} 
 										</td>
 									</tr>
 								))}

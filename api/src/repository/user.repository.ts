@@ -44,7 +44,8 @@ export class UserRepository extends Repository<User>{
 				id: 'DESC'
 			},
 			relations: {
-				judge_competitions: true
+				judge_competitions: true,
+				school: true
 			},
             take: paging.page_size,
             skip: (paging.page - 1) * paging.page_size
@@ -60,7 +61,8 @@ export class UserRepository extends Repository<User>{
                 id: id
             },
 			relations: {
-				judge_competitions: true
+				judge_competitions: true,
+				school: true
 			}
         });
     }

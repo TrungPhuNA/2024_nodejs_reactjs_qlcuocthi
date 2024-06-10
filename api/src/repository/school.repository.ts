@@ -19,6 +19,7 @@ export class SchoolEntityRepository extends Repository<SchoolEntity>{
 	async buildCondition(filters: any) {
 		let condition: any = {};
 		if (filters?.name && filters?.name?.trim() != '') condition.name = Like(`%${filters.name.trim()}%`);
+		if (filters?.rector_id) condition.rector_id = filters.rector_id;
 		return condition;
 	}
 

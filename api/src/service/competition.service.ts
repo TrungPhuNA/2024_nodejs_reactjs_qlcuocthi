@@ -18,7 +18,6 @@ export class CompetitionService {
 
 	async getLists(paging: IPaging, filters: any) {
 		let response: any = await this.repository.getLists(paging, filters);
-		console.log(response);
 		if (response?.result?.length > 0) {
 			for (let item of response?.result) {
 				if(filters?.user?.type == USER_TYPE.STUDENT) {
@@ -36,6 +35,12 @@ export class CompetitionService {
 
 				let j: any = await this.judgeRepo.find({ where: { competition_id: item.id } })
 				item.judge_ids = j?.map((e: any) => e.user_id);
+
+				item.total_result = await this.resultRepo.count({
+					where: {
+						competition_id: item.id
+					}
+				})
 			}
 		}
 		return response;

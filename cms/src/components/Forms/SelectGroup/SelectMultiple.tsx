@@ -19,8 +19,8 @@ const SelectMultipleAnt: React.FC = (props: any) => {
 				} else {
 					setField(null, props.key_obj, props.form, props.setForm)
 				}
-				if (props.data?.length > 0) {
-					let data = props.data?.filter((item: any) => e.includes(item.id));
+				if (props.data?.length > 0 && props.setDataList) {
+					let data = props.data?.filter((item: any) => e?.includes(item.id));
 					props.setDataList(data);
 				}
 			}}
