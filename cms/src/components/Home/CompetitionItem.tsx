@@ -12,7 +12,7 @@ const CompetitionItem: React.FC = ({ item, user, key, ...props }: any) => {
 			<Link to={'/competitions/' + item.id} className="mb-4 text-center mb-md-0">
 				<img src={buildFile(item?.image, 'image')}
 					alt={item.id} className="img-fluid rounded-3 w-full"
-					style={{ maxHeight: '200px', objectFit: 'cover' }} />
+					style={{ maxHeight: '130px', objectFit: 'cover' }} />
 			</Link>
 			<div className="p-3 flex flex-col justify-between" style={{ height: 'calc(100% - 200px)' }}>
 				<div>
@@ -43,7 +43,7 @@ const CompetitionItem: React.FC = ({ item, user, key, ...props }: any) => {
 						<div className="col-span-12 lg:col-span-6">
 							<ul className="flex flex-wrap gap-2 text-gray-700 dark:text-gray-50">
 								<li><i className="uil uil-tag"></i>Thời gian cuộc thi :</li>
-								<li>
+								<li className='md:text-nowrap'>
 									<b>{formatTime(item.created_at, 'DD/MM/yyyy')}</b> - <b>{formatTime(item.deadline, 'DD/MM/yyyy')}</b>
 								</li>
 							</ul>
