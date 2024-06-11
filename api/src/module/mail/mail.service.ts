@@ -34,10 +34,10 @@ export class MailService {
 	async sendUserConfirmation(data: any) {
 		try {
 			const result = await this.transporter.sendMail({
-				from: `[Dịch vụ đặt sân] noreply@gmail.com`,
+				from: `[Cuộc thi] noreply@gmail.com`,
 				to: data.email,
 				bcc: ['letxhe140798@fpt.edu.vn'],
-				subject: `[Dịch vụ đặt sân] Chào mừng bạn đến với trang web`,
+				subject: `[Cuộc thi] Chào mừng bạn đến với trang web`,
 				html: `
 			  <div style="background-color: #003375; margin: 0 auto; max-width: 600px; ">
 			  <div style="padding: 10px; background-color: white;">
@@ -50,7 +50,7 @@ export class MailService {
 				  hoặc gửi email về địa chỉ datsan@gmail.com. Chúng tôi luôn sẵn lòng giúp đỡ bạn.</p>
 				  
 				  <p>Trân trọng,</p>
-				  <p><b>Dịch vụ đặt sân</b></p>
+				  <p><b>Cuộc thi</b></p>
 			  </div>
 		  </div>
 					  `,
@@ -59,38 +59,87 @@ export class MailService {
 		}
 	}
 
+	async sendUserResult(data: any) {
+		try {
+			const result = await this.transporter.sendMail({
+				from: `[Cuộc thi] noreply@gmail.com`,
+				to: data.email,
+				bcc: ['letxhe140798@fpt.edu.vn'],
+				subject: `[Kết quả cuộc thi] ${data?.name}`,
+				html: `
+			  <div style="background-color: #003375; margin: 0 auto; max-width: 600px; ">
+			  <div style="padding: 10px; background-color: white;">
+				  <h4 style="color: #0d6efd">Xin chào, ${data.username}</h4>
+				  <p style="color: black; margin-top: 10px">${data?.message} </p>
+				  <p style="color: black; margin-top: 10px">Với các giám khảo: ${data?.judges || ''}</p>
+				 <p style="color: black; margin: 10px 0px;">Dưới đây là kết quả thi của bạn:</p> 
+				  <ul>
+				 		<li>
+				  			<p style="color: black">Vòng thi:  ${data?.round_number || 1}</p>
+						</li>
+						<li>
+				  			<p style="color: black">Nhận xét: ${data?.comment ? data?.comment : 'Đang chấm'}</p>
+						</li>
+						<li>
+				  			<p style="color: black">Phản biện: ${data?.argue ? data?.argue : 'Đang chấm'}</p>
+						</li>
+						<li>
+				  			<p style="color: black">Đánh giá: ${data?.content ? data?.content : 'Đang chấm'}</p>
+						</li> 
+						<li>
+				  			<p style="color: black">Điểm: ${data?.point ? '<strong>' + data?.point + '</strong>' : 'Đang chấm'}</p>
+						</li> 
+				  </ul>
+				  
+
+				  <p>Nếu bạn có bất kỳ câu hỏi hoặc yêu cầu bổ sung nào, 
+				  xin hãy liên hệ với chúng tôi qua số Hotline <b>0987654321</b> 
+				  hoặc gửi email về địa chỉ cuocthi@gmail.com. Chúng tôi luôn sẵn lòng giúp đỡ bạn.</p>
+				  <p>Trân trọng,</p>
+				  <p><b>Cuộc thi</b></p>
+			  </div>
+		  </div>
+					  `,
+			});
+			console.log("result send mail-------> ",result);
+		} catch (error) {
+			console.log("error send mail-------> ",error);
+
+		}
+	}
+
 	// async sendOrderData(data: any) {
 	// 	try {
 	// 		console.log("gửi mail-------> ", moment(data?.created_at));
 	// 		const result = await this.transporter.sendMail({
-	// 			from: `[Dịch vụ đặt sân] noreply@gmail.com`,
+	// 			from: `[Cuộc thi] noreply@gmail.com`,
 	// 			to: data.email || data.receiver_email,
 	// 			cc: ['letxhe140798@fpt.edu.vn'],
-	// 			subject: `[Dịch vụ đặt sân] Đặt hàng thành công ${data?.code ? '#'+ data?.code : ''}`,
+	// 			subject: `[Cuộc thi] Đặt hàng thành công ${data?.code ? '#'+ data?.code : ''}`,
 	// 			html: `
-    //             <div style='margin-left: 20px; font-size: 14px; overflow: auto; height: 400px; display: block;'>
-    //                 <div style='color:#000;'>Bạn đã đặt thành công đơn hàng</div>
-    //                 <br>
-                                      
-    //                 <div style='margin-top: 0; color:#000;'>Ngày đặt: ${moment(data?.created_at).format('DD/MM/yyyy HH:mm')
+	//             <div style='margin-left: 20px; font-size: 14px; overflow: auto; height: 400px; display: block;'>
+	//                 <div style='color:#000;'>Bạn đã đặt thành công đơn hàng</div>
+	//                 <br>
+
+	//                 <div style='margin-top: 0; color:#000;'>Ngày đặt: ${moment(data?.created_at).format('DD/MM/yyyy HH:mm')
 	// 				}</div>
-    //                 <br>
-    //                 <div style=' color:#000;'>Tên khách hàng: ${data.receiver_name
+	//                 <br>
+	//                 <div style=' color:#000;'>Tên khách hàng: ${data.receiver_name
 	// 				}</div>
-    //                 <div style=' color:#000;'>Email: <a style='color: #007bff !important;text-decoration: none;'>${data.receiver_email
+	//                 <div style=' color:#000;'>Email: <a style='color: #007bff !important;text-decoration: none;'>${data.receiver_email
 	// 				}</a></div>
-    //                 <div style=' color:#000;'>Phone: ${data.receiver_phone}</div>
-    //                 <br>
+	//                 <div style=' color:#000;'>Phone: ${data.receiver_phone}</div>
+	//                 <br>
 	// 				<div style=' color:#000;'>Hình thức thanh toán: ${data.payment_type == 1 ? 'Online(VNPay' : 'Tiền mặt'}</div>
 	// 				<div style=' color:#000;'>Trạng thái: ${data.payment_status == 1 && 'Đã thanh toán' || 'Chưa thanh toán'}</div>
-    //                 <div style='font-weight: 700; color:#000;'>Sản phẩm</div>
-    //                 <div style=' color:#000;'>${this.genTemplateWSOrder(
+	//                 <div style='font-weight: 700; color:#000;'>Sản phẩm</div>
+	//                 <div style=' color:#000;'>${this.genTemplateWSOrder(
 	// 					data.transactions
 	// 				)}</div>
-    //                 <br>
-    //                 <div style='color:#000;'>Total: ${data.total_price}</div>
-    //             </div>
-                
+	//                 <br>
+	//                 <div style='color:#000;'>Total: ${data.total_price}</div>
+	//             </div>
+
 	// 				  `,
 	// 		});
 	// 		console.log(result);
@@ -115,10 +164,10 @@ export class MailService {
 	// async sendEmailContact(data: CreateContactDto) {
 	// 	try {
 	// 		const result = await this.transporter.sendMail({
-	// 			from: `[Dịch vụ đặt sân] noreply@gmail.com`,
+	// 			from: `[Cuộc thi] noreply@gmail.com`,
 	// 			to: [this.config.get('MAIL_TO')],
 	// 			bcc: ['letxhe140798@fpt.edu.vn'],
-	// 			subject: `[Dịch vụ đặt sân - liên hệ] ${data.title} `,
+	// 			subject: `[Cuộc thi - liên hệ] ${data.title} `,
 	// 			html: `
 	// 		  <div style="background-color: #003375; margin: 0 auto;">
 	// 		  <div style="padding: 10px; background-color: white;">
@@ -139,10 +188,10 @@ export class MailService {
 	async resetPassword(data: any) {
 		try {
 			const result = await this.transporter.sendMail({
-				from: `[Dịch vụ đặt sân] noreply@gmail.com`,
+				from: `[Cuộc thi] noreply@gmail.com`,
 				to: [data.email],
 				bcc: ['letxhe140798@fpt.edu.vn'],
-				subject: `[Dịch vụ đặt sân] Thay đổi mật khẩu `,
+				subject: `[Cuộc thi] Thay đổi mật khẩu `,
 				html: `
 				<div style="background-color: #003375; margin: 0 auto; max-width: 600px; ">
 				<div style="padding: 10px; background-color: white;">
@@ -155,7 +204,7 @@ export class MailService {
 					<p>Nếu bạn có bất kỳ câu hỏi hoặc yêu cầu bổ sung nào, xin hãy liên hệ với chúng tôi qua số Hotline <b>0865.405.630</b> hoặc gửi email về địa chỉ admin@gmail.com. Chúng tôi luôn sẵn lòng giúp đỡ bạn.</p>
 					
 					<p>Trân trọng,</p>
-					<p><b>Dịch vụ đặt sân</b></p>
+					<p><b>Cuộc thi</b></p>
 				</div>
 			</div>
 					  `,
