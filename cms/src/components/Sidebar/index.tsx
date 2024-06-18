@@ -178,7 +178,7 @@ const Sidebar = ({sidebarOpen, setSidebarOpen}: SidebarProps) => {
                         <ul className="mb-6 flex flex-col gap-1.5">
                             { configRoute.map((item: any, key: number) => {
                                 return (
-                                    (checkRole(user.type, item.role) === true && (
+                                    (checkRole(user?.type, item.role) === true && (
                                         <li key={key}>
                                             <NavLink
                                                 to={`${item.route}`}
@@ -187,7 +187,6 @@ const Sidebar = ({sidebarOpen, setSidebarOpen}: SidebarProps) => {
                                                     'bg-graydark dark:bg-meta-4'
                                                 }`}
                                             >
-                                                {item.icon ? <item.icon/> : '  '}
                                                 {item.name}
                                             </NavLink>
                                         </li>

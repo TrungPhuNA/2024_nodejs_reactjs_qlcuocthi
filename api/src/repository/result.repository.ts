@@ -57,14 +57,17 @@ export class ResultEntityRepository extends Repository<ResultEntity>{
 
     async findById(id: number)
     {
-        return await this.findOne({
+        const result = await this.findOne({
             where: {
                 id: id
             },
 			relations: {
 				user: true,
-				competition: true
+				competition: true,
+				judges: true
 			},
         });
+		if(result?.meta_data) result.meta_data = JSON.parse(result?.meta_data);
+		return result
     }
 }
