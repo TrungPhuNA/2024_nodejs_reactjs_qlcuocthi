@@ -3,7 +3,7 @@ import {NavLink, useLocation} from 'react-router-dom';
 import {FaUser, FaGraduationCap, FaInbox, FaFolder, FaCode} from "react-icons/fa";
 import {getItem} from "../../services/helpers.service.ts";
 import { FaRankingStar } from 'react-icons/fa6';
-
+import Logo from "../../images/logo.png";
 interface SidebarProps {
     sidebarOpen: boolean;
     setSidebarOpen: (arg: boolean) => void;
@@ -28,7 +28,7 @@ const configRoute = [
         icon: FaGraduationCap,
         role: ['RECTOR']
     },
-	
+
     {
         name: "QL Lớp",
         route: "/class",
@@ -68,16 +68,16 @@ const configRoute = [
 	{
 		name: "Chấm thi vòng 2",
 		route: "/result/round-two",
-		icon: null,
+        icon: FaCode,
 		role: ['RECTOR','TEACHER']
 	},
 	{
 		name: "Chấm thi vòng 3",
 		route: "/result/round-three",
-		icon: null,
+        icon: FaCode,
 		role: ['RECTOR','TEACHER']
 	}
-    
+
 ]
 const Sidebar = ({sidebarOpen, setSidebarOpen}: SidebarProps) => {
     const location = useLocation();
@@ -142,7 +142,7 @@ const Sidebar = ({sidebarOpen, setSidebarOpen}: SidebarProps) => {
             {/* <!-- SIDEBAR HEADER --> */}
             <div className="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5">
                 <NavLink to="/">
-                    <img src={'https://123code.net/images/logo.png'} style={{width: '100px', paddingLeft: '10px'}}
+                    <img src={Logo} style={{width: '100px', paddingLeft: '10px'}}
                          alt="Logo"/>
                 </NavLink>
 

@@ -65,14 +65,14 @@ const CompetitionsPage: React.FC = () => {
 		} else {
 			toast.error("Xóa thất bại")
 		}
-		
+
 	}
 
 	return (
 		<DefaultLayout>
 			<Breadcrumb pageName="Quản lý cuộc thi" />
-			{/* <FormCreateOrUpdateCompetition 
-			open={open} setOpen={setOpen} 
+			{/* <FormCreateOrUpdateCompetition
+			open={open} setOpen={setOpen}
 			detail={detail} getDataList={getDataList} params={paging} /> */}
 			<div className="flex flex-col gap-10">
 				<div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
@@ -93,9 +93,6 @@ const CompetitionsPage: React.FC = () => {
 									</th>
 									<th className="py-4 px-4 font-medium text-black dark:text-white text-nowrap">
 										Hình ảnh
-									</th>
-									<th className="py-4 px-4 font-medium text-black dark:text-white">
-										Nội dung
 									</th>
 									<th className="min-w-[150px] py-4 px-4 font-medium text-black dark:text-white">
 										Trạng thái
@@ -122,16 +119,16 @@ const CompetitionsPage: React.FC = () => {
 											</Link>
 										</td>
 										<td className="py-3 border-[#eee] border-b">
-											<img src={buildFile(packageItem.image, 'image')} alt={packageItem.id} 
+											<img src={buildFile(packageItem.image, 'image')} alt={packageItem.id}
 											width={80} height={80} style={{width: '80px', height: '80px'}}
 											/>
 										</td>
-										<td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark break-words">
-											<div style={{ wordBreak: 'break-word',  maxWidth: '300px', width: '300px' }} className="text-break"
-											dangerouslySetInnerHTML={{ __html: packageItem.contents }}>
-											</div>
-										</td>
-										
+										{/*<td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark break-words">*/}
+										{/*	<div style={{ wordBreak: 'break-word',  maxWidth: '300px', width: '300px' }} className="text-break"*/}
+										{/*	dangerouslySetInnerHTML={{ __html: packageItem.contents }}>*/}
+										{/*	</div>*/}
+										{/*</td>*/}
+
 										<td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
 											<p
 												className={`inline-flex rounded-full bg-opacity-10 py-1 px-3 text-sm font-medium ${packageItem.status === 1
@@ -186,7 +183,7 @@ const CompetitionsPage: React.FC = () => {
 														/>
 													</svg>
 												</button>
-											</div> : ''} 
+											</div> : ''}
 										</td>
 									</tr>
 								))}

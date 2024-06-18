@@ -3,7 +3,7 @@ import DefaultLayout from '../../layout/DefaultLayout';
 import Breadcrumb from "../../components/Breadcrumbs/Breadcrumb.tsx";
 import FormCreateOrUpdateUser from "./FormCreateOrUpdateUser.tsx";
 import { INIT_PAGING } from "../../services/constant.ts";
-import { USER_SERVICE } from "../../services/api.service.ts";
+import {USER_SERVICE} from "../../services/api.service.ts";
 import { formatTime, getItem } from "../../services/helpers.service.ts";
 import { PagingPage } from '../../components/common/paging/PagingCpn.tsx';
 import { useDispatch } from 'react-redux';
@@ -40,6 +40,12 @@ const UserPage: React.FC = () => {
 			setDataList(response.data.result || []);
 			setPaging(response.data.meta || INIT_PAGING);
 		}
+	}
+
+	const deleteItem = async (item: any) => {
+		console.info("===========[] ===========[item] : ",item);
+		await USER_SERVICE.delete(item.id);
+		getDataList({ ...paging })
 	}
 
 	const updateData = async (item: any) => {
@@ -129,7 +135,7 @@ const UserPage: React.FC = () => {
 										</td>
 										<td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
 											<div className="flex items-center space-x-3.5 justify-center">
-												<button className="hover:text-primary">
+												<button className="hover:text-primary" onClick={() => deleteItem(packageItem)}>
 													<svg
 														className="fill-current"
 														width="18"

@@ -8,6 +8,7 @@ export const SCHOOL_SERVICE = {
 		await timeDelay(1000)
 
 		const params = buildFilter(filters);
+		console.info("===========[] ===========[params] : ",params);
 		return await getMethod(`cms/school/list`, params);
 	},
 	async store(data: any) {

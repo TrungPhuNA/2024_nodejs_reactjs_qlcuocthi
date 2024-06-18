@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import DefaultLayout from '../../layout/DefaultLayout';
 import Breadcrumb from "../../components/Breadcrumbs/Breadcrumb.tsx";
 import { INIT_PAGING } from "../../services/constant.ts";
-import { CRITERIA_SERVICE } from "../../services/api.service.ts";
+import {CRITERIA_SERVICE} from "../../services/api.service.ts";
 import FormCreateOrUpdateCriteria from "./FormCreateOrUpdateCriteria.tsx";
 import { formatTime } from "../../services/helpers.service.ts";
 import { PagingPage } from '../../components/common/paging/PagingCpn.tsx';
@@ -47,15 +47,18 @@ const CriteriasPage: React.FC = () => {
 		getDataList({ ...paging })
 	}, [])
 
-
-
+	const deleteItem = async (item: any) => {
+		console.info("===========[] ===========[item] : ",item);
+		await CRITERIA_SERVICE.delete(item.id);
+		getDataList({ ...paging })
+	}
 
 
 	return (
 		<DefaultLayout>
 			<Breadcrumb pageName="Quản lý tiêu chí cuộc thi" />
-			<FormCreateOrUpdateCriteria open={open} 
-			setOpen={setOpen} detail={detail} 
+			<FormCreateOrUpdateCriteria open={open}
+			setOpen={setOpen} detail={detail}
 			getDataList={getDataList} params={paging}
 			/>
 			<div className="flex flex-col gap-10">
@@ -106,7 +109,7 @@ const CriteriasPage: React.FC = () => {
 										</td>
 										<td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
 											<div className="flex items-center space-x-3.5">
-												<button className="hover:text-primary">
+												<button className="hover:text-primary" onClick={() => deleteItem(packageItem)}>
 													<svg
 														className="fill-current"
 														width="18"

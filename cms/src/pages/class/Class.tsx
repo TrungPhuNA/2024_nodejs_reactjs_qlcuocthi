@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import DefaultLayout from '../../layout/DefaultLayout';
 import Breadcrumb from "../../components/Breadcrumbs/Breadcrumb.tsx";
-import { CLASS_SERVICE } from "../../services/api.service.ts";
+import {CLASS_SERVICE} from "../../services/api.service.ts";
 import { INIT_PAGING } from "../../services/constant.ts";
 import FormCreateOrUpdateClass from "./FormCreateOrUpdateClass.tsx";
 import { formatTime } from "../../services/helpers.service.ts";
-import Loader from '../../components/common/Loader/index.tsx';
 import { PagingPage } from '../../components/common/paging/PagingCpn.tsx';
 import { useDispatch } from 'react-redux';
 import { toggleShowLoading } from '../../hooks/redux/actions/common.tsx';
@@ -27,6 +26,12 @@ const ClassPage: React.FC = () => {
 	const updateData = async (item: any) => {
 		setOpen(!open);
 		setDetail(item);
+	}
+
+	const deleteItem = async (item: any) => {
+		console.info("===========[] ===========[item] : ",item);
+		await CLASS_SERVICE.delete(item.id);
+		getDataList({ ...paging })
 	}
 
 	const getDataList = async (filters: any) => {
@@ -128,7 +133,7 @@ const ClassPage: React.FC = () => {
 										</td>
 										<td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
 											<div className="flex items-center space-x-3.5">
-												<button className="hover:text-primary">
+												<button className="hover:text-primary" onClick={() => deleteItem(packageItem)}>
 													<svg
 														className="fill-current"
 														width="18"

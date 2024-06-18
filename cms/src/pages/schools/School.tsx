@@ -25,7 +25,7 @@ const SchoolPage: React.FC = () => {
 	const dispatch = useDispatch();
 
     useEffect(() => {
-        
+
 		if(!open) {
 			setSchool(null);
 		}
@@ -45,6 +45,12 @@ const SchoolPage: React.FC = () => {
         }
     }
 
+    const deleteItem = async (item: any) => {
+        console.info("===========[] ===========[item] : ",item);
+        await SCHOOL_SERVICE.delete(item.id);
+        getDataList({ ...paging, rector_id: user?.id })
+    }
+
     const updateData = async (item: any) => {
         setOpen(!open);
         setSchool(item);
@@ -54,8 +60,8 @@ const SchoolPage: React.FC = () => {
     return (
         <DefaultLayout>
             <Breadcrumb pageName="Quản lý trường học"/>
-            <FormCreateOrUpdateSchool open={open} 
-			setOpen={setOpen} school={school} 
+            <FormCreateOrUpdateSchool open={open}
+			setOpen={setOpen} school={school}
 			getDataList={getDataList} params={paging}
 			/>
             <div className="flex flex-col gap-10">
@@ -128,7 +134,7 @@ const SchoolPage: React.FC = () => {
                                     </td>
                                     <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                                         <div className="flex items-center space-x-3.5 justify-center">
-                                            <button className="hover:text-primary">
+                                            <button className="hover:text-primary" onClick={() => deleteItem(packageItem)}>
                                                 <svg
                                                     className="fill-current"
                                                     width="18"
